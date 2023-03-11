@@ -1,311 +1,110 @@
-#!/usr/bin/env vpython3
-import os
-import sys
-import wx
-from ctypes import *
+import logging
+from . import liblitehtmlpy
 
-tFont = c_ulonglong
+logger = logging.getLogger(__name__)
 
-class CreateFont(Structure):
-    _fields_ = (
-        ('face', c_char_p),
-        ('size', c_int),
-        ('weight', c_int),
-        ('italic', c_int),
-        ('decor', c_uint),
-        # out
-        ('ascent', c_int),
-        ('descent', c_int),
-        ('height', c_int),
-        ('xheight', c_int),
-        ('font', tFont),
-    )
-
-class DeleteFont(Structure):
-    _fields_ = (
-        ('font', tFont),
-    )
-
-class TextWidth(Structure):
-    _fields_ = (
-        ('text', c_char_p),
-        ('font', tFont),
-        # out
-        ('width', c_int),
-    )
-
-class DrawText(Structure):
-    _fields_ = (
-        ('dc', c_int),
-        ('text', c_char_p),
-        ('font', tFont),
-        ('color', c_uint),
-        ('x', c_int),
-        ('y', c_int),
-    )
-
-class DrawBackground(Structure):
-    _fields_ = (
-        ('dc', c_int),
-        ('x', c_int),
-        ('y', c_int),
-        ('w', c_int),
-        ('h', c_int),
-        ('color', c_uint),
-    )
-
-class DrawBorders(Structure):
-    _fields_ = (
-        ('dc', c_int),
-        ('left', c_int),
-        ('right', c_int),
-        ('top', c_int),
-        ('bottom', c_int),
-        ('colorLeft', c_uint),
-        ('colorRight', c_uint),
-        ('colorTop', c_uint),
-        ('colorBottom', c_uint),
-        ('widthLeft', c_uint),
-        ('widthRight', c_uint),
-        ('widthTop', c_uint),
-        ('widthBottom', c_uint),
-    )
-
-class DrawMarker(Structure):
-    _fields_ = (
-        ('dc', c_int),
-        ('x', c_int),
-        ('y', c_int),
-        ('w', c_int),
-        ('h', c_int),
-        ('mt', c_int),
-        ('color', c_uint),
-    )
-
-class ClientRect(Structure):
-    _fields_ = (
-        ('x', c_int),
-        ('y', c_int),
-        ('width', c_int),
-        ('height', c_int),
-    )
-
-class DocumentRender(Structure):
-    _fields_ = (
-        ('width', c_int),
-        ('height', c_int),
-    )
-
-class PT2PX(Structure):
-    _fields_ = (
-        ('pt', c_int),
-    )
-
-class LiteHtml:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
+class LiteHtml(liblitehtmlpy.LiteHtml):
+    def __init__(self):
+        super().__init__()
+        self.hfont = 0
         self.fonts = {}
-        if os.name == "posix":
-            pylib = CDLL("./liblitehtmlpy.so")
-        elif os.name == "nt":
-            pylib = WinDLL(os.path.join(os.getcwd(), "liblitehtmlpy.dll"))
-        else:
-            raise ValueError("unsuported os")
-        self.pylib = pylib
+        v = 3.96 * 96 / 72
+        self.size = [int(210 * v), int(297 * v)]
+        self.ppi = (96, 96)
 
-        self.pylib.container_create.argtypes = (c_void_p, )
-        self.pylib.container_create.restype = c_void_p
-        self.pylib.container_delete.argtypes = (c_void_p, )
-        self.pylib.document_create.argtypes = (c_void_p, c_void_p)
-        self.pylib.document_render.argtypes = (c_void_p, c_int, c_void_p)
-        self.pylib.document_draw.argtypes = (c_void_p, c_int, c_int, c_int, c_int, c_int, c_int)
+    def create_font(self, face, size, weight, italic, decoration):
+        logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
+        self.hfont += 1
+        self.fonts[self.hfont] = None
+        return [self.hfont, 15, 4, 19, 19]
 
-        self.pycb = CFUNCTYPE(None, c_char_p, POINTER(None))(self.cbproc)
-        self.pyclass = self.pylib.container_create(self.pycb)
-        #print('self.pyclass    =%016X'%self.pyclass)
+    def delete_font(self, hFont):
+        logger.debug('delete_font(%d)', hFont)
+        del self.fonts[hFont]
 
-    def reset(self):
-        self.bmp = wx.Bitmap(self.width, self.height, 32)
-        self.dc = wx.MemoryDC()
-        self.dc.SelectObject(self.bmp)
-        self.ppi = self.dc.GetPPI()
+    def text_width(self, text, hFont):
+        logger.debug('text_width(%s, %s)', text, hFont)
+        return 12
 
-    def close(self):
-        self.pylib.container_delete(self.pyclass)
-        assert len(self.fonts) == 0
+    def draw_text(self, hdc, text, hFont, color, pos):
+        logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, pos)
 
-    def GetColourFromRGBA(self, rgba):
-        a = rgba & 0xff; rgba >>= 8
-        b = rgba & 0xff; rgba >>= 8
-        g = rgba & 0xff; rgba >>= 8
-        r = rgba & 0xff; rgba >>= 8
-        return wx.Colour(r, g, b, a)
+    def pt_to_px(self, pt):
+        logger.debug('pt_to_px(%d)', pt)
+        pt = int(pt * self.ppi[1] / 72)
+        return pt
 
-    def cbproc(self, name, argp):
-        #print("cbproc", name, argp)
-        name = name.decode('utf8')
-        getattr(self, name)(argp)
+    def get_default_font_size(self):
+        return 12
 
-    def createFont(self, argp):
-        pfi = cast(argp, POINTER(CreateFont))
-        fi = pfi.contents
-        face = fi.face
-        if not face:
-            face = 'Times New Roman'
-        else:
-            face = face.split(b',')[0].strip()
-            if face[0] == b'"':
-                face = face.split(b'"')[1]
-            elif face[0] == b"'":
-                face = face.split(b"'")[1]
-            face = face.decode('utf8')
-        if fi.italic:
-            style = wx.FONTSTYLE_ITALIC
-        else:
-            style = wx.FONTSTYLE_NORMAL
-        weigths = {
-            100:wx.FONTWEIGHT_THIN,
-            200:wx.FONTWEIGHT_EXTRALIGHT,
-            300:wx.FONTWEIGHT_LIGHT,
-            400:wx.FONTWEIGHT_NORMAL,
-            500:wx.FONTWEIGHT_MEDIUM,
-            600:wx.FONTWEIGHT_SEMIBOLD,
-            700:wx.FONTWEIGHT_BOLD,
-            800:wx.FONTWEIGHT_EXTRABOLD,
-            900:wx.FONTWEIGHT_HEAVY,
-            1000:wx.FONTWEIGHT_EXTRAHEAVY,
-        }
-        weight = weigths.get(fi.weight, wx.FONTWEIGHT_NORMAL)
-        underline = fi.decor != 0
-        font = wx.Font(fi.size, wx.FONTFAMILY_DEFAULT, style, weight, underline, face)
-        nfont = id(font)
-        self.fonts[nfont] = font
-        if 0:
-            w, h, d, e = self.dc.GetFullTextExtent('H', font)
-            xw, xh, xd, xe = self.dc.GetFullTextExtent('x', font)
-            a = 0
-        else:
-            self.dc.SetFont(font)
-            fm = self.dc.GetFontMetrics()
-            a = fm.ascent
-            d = fm.descent
-            h = fm.height
-            xh = h
-        fi.ascent = a
-        fi.descent = d
-        fi.height = h
-        fi.xheight = xh
-        fi.font = nfont
+    def get_default_font_name(self):
+        return 'Times New Roman'
 
-    def deleteFont(self, argp):
-        pfi = cast(argp, POINTER(DeleteFont))
-        fi = pfi.contents
-        del self.fonts[fi.font]
+    def draw_list_marker(self, hdc, marker):
+        logger.debug('draw_list_marker(%d, %s)', hdc, marker)
 
-    def textWidth(self, argp):
-        pfi = cast(argp, POINTER(TextWidth))
-        fi = pfi.contents
+    def load_image(self, src, baseurl, redraw_on_ready):
+        logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
 
-        font = self.fonts[fi.font]
-        text = fi.text.decode('utf8')
-        w, h, d, e = self.dc.GetFullTextExtent(text, font)
-        fi.width = w
+    def get_image_size(self, src, baseurl):
+        logger.debug('get_image_size(%s, %s)', src, baseurl)
+        return (0, 0)
 
-    def drawText(self, argp):
-        pfi = cast(argp, POINTER(DrawText))
-        fi = pfi.contents
+    def draw_background(self, hdc, bgs):
+        bg = bgs[-1]
+        image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bg
+        if color == (0, 0, 0, 0):
+            return
+        logger.debug('draw_background(%d, %s)', hdc, bgs)
 
-        font = self.fonts[fi.font]
-        text = fi.text.decode('utf8')
-        color = self.GetColourFromRGBA(fi.color)
-        x = fi.x
-        y = fi.y
+    def draw_borders(self, hdc, borders, draw_pos, root):
+        logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
 
-        self.dc.SetFont(font)
-        self.dc.SetTextForeground(color)
-        self.dc.DrawText(text, x, y)
+    def set_caption(self, caption):
+        logger.debug('set_caption(%s)', caption)
 
-    def drawBackground(self, argp):
-        pfi = cast(argp, POINTER(DrawBackground))
-        fi = pfi.contents
+    def set_base_url(self, url):
+        logger.debug('set_base_url(%s)', url)
 
-        x = fi.x
-        y = fi.y
-        w = fi.w
-        h = fi.h
-        color = self.GetColourFromRGBA(fi.color)
-        pt = [
-            (x, y), (x+w, y), (x+w, y+h), (x, y+h), (x, y)
-        ]
-        self.dc.SetBrush(wx.Brush(color))
-        self.dc.DrawPolygon(pt)
-        self.dc.SetBrush(wx.NullBrush)
+    #void    link(const std::shared_ptr<document>& doc, const element::ptr& el) override 
 
-    def drawMarker(self, argp):
-        pfi = cast(argp, POINTER(DrawMarker))
-        fi = pfi.contents
+    #void    on_anchor_click(const char* url, const element::ptr& el) override 
 
-        x = fi.x
-        y = fi.y
-        w = fi.w
-        h = fi.h
-        mt = fi.mt
-        color = self.GetColourFromRGBA(fi.color)
-        print('drawMarker', x, y, w, h)
+    def set_cursor(self, cursor):
+        logger.debug('set_cursor(%s)', cursor)
 
-    def pt2px(self, argp):
-        pfi = cast(argp, POINTER(PT2PX))
-        fi = pfi.contents
+    def transform_text(self, text, tt):
+        logger.debug('transform_text(%s, %d)', text, tt)
 
-        pt = fi.pt
-        fi.pt = int(pt * self.ppi[1] / 72)
+    def import_css(self, text, url, base_url):
+        logger.debug('import_css(%s, %s, %s)', text, url, base_url)
 
-    def drawBorders(self, argp):
-        pfi = cast(argp, POINTER(DrawBorders))
-        fi = pfi.contents
+    def set_clip(self, pos, radius, x, y):
+        logger.debug('set_clip(%s, %s, %d, %d)', pos, radius, x, y)
 
-        left = fi.left
-        right = fi.right
-        top = fi.top
-        bottom = fi.bottom
-        colorLeft = self.GetColourFromRGBA(fi.colorLeft)
-        colorRight = self.GetColourFromRGBA(fi.colorRight)
-        colorTop = self.GetColourFromRGBA(fi.colorTop)
-        colorBottom = self.GetColourFromRGBA(fi.colorBottom)
-        widthLeft = fi.widthLeft
-        widthRight = fi.widthRight
-        widthTop = fi.widthTop
-        widthBottom = fi.widthBottom
+    def del_clip(self):
+        logger.debug('del_clip()')
 
-        self.dc.SetPen(wx.Pen(colorLeft, widthLeft))
-        self.dc.DrawLine(left, top, left, bottom)
-        self.dc.SetPen(wx.Pen(colorTop, widthTop))
-        self.dc.DrawLine(left, top, right, top)
-        self.dc.SetPen(wx.Pen(colorRight, widthRight))
-        self.dc.DrawLine(right, top, right, bottom)
-        self.dc.SetPen(wx.Pen(colorBottom, widthBottom))
-        self.dc.DrawLine(left, bottom, right, bottom)
+    def get_client_rect(self):
+        logger.debug('get_client_rect()')
+        return[0, 0, self.size[0], self.size[1]]
 
-    def clientRect(self, argp):
-        pfi = cast(argp, POINTER(ClientRect))
-        fi = pfi.contents
-        fi.x = 0
-        fi.y = 0
-        fi.width = self.width
-        fi.height = self.height
+    #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 
-    def render(self, fname, resize=False):
-        self.reset()
-        html = open(fname, 'rb').read()
-        self.pylib.document_create(self.pyclass, html)
-        fi = DocumentRender()
-        self.pylib.document_render(self.pyclass, self.width, byref(fi))
-        if resize and fi.height > self.height:
-            #print('render:', fi.width, fi.height)
-            self.height = fi.height
-            self.reset()
-            self.pylib.document_render(self.pyclass, self.width, byref(fi))
-        self.pylib.document_draw(self.pyclass, 0, 0, 0, 0, self.width, self.height)
-        #bmp = self.dc.GetSelectedBitmap()
-        self.bmp.SaveFile(fname+'.png', wx.BITMAP_TYPE_PNG)
+    def get_media_features(self):
+        logger.debug('get_media_features()')
+        return (
+            2, # media_type_screen
+            self.size[0],
+            self.size[1],
+            1024, # device width (screen width)
+            800, # device height (screen height)
+            8, # color
+            0, # monochrome
+            256, # color index
+            96, # resolution
+        )
+
+    def get_language(self):
+        logger.debug('get_language()')
+        return ('en', '')

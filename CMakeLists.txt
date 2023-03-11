@@ -7,10 +7,12 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subdirectory(litehtml)
 
 set(SOURCES
-    src/py_container.cpp
+    src/litehtmlpy.cpp
 )
 
-find_package(PythonLibs 3.0)
+#find_package(PythonLibs 3.0)
+#find_package(PythonLibs 3.8 REQUIRED)
+find_package(PythonLibs 3.8.10 EXACT REQUIRED)
 
 add_library (litehtmlpy MODULE ${SOURCES})
 
@@ -24,11 +26,13 @@ target_compile_definitions(litehtmlpy PRIVATE
 )
 
 target_include_directories(litehtmlpy PRIVATE
-    .
-)
-target_include_directories(litehtmlpy PRIVATE
     ${PYTHON_INCLUDE_DIRS}
     litehtml/include
+    ${PYBIND11_INCLUDE_DIR}
 )
 
-target_link_libraries(litehtmlpy ${PYTHON_LIBRARIES} litehtml gumbo)
+target_link_libraries(litehtmlpy
+    ${PYTHON_LIBRARIES}
+    litehtml
+    gumbo
+)

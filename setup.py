@@ -4,8 +4,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-from setuptools import Extension, setup
+from setuptools import Extension, setup, find_packages
 from setuptools.command.build_ext import build_ext
+
+from pybind11 import get_include
 
 # Convert distutils Windows platform specifiers to CMake -A arguments
 PLAT_TO_CMAKE = {
@@ -116,6 +118,7 @@ class CMakeBuild(build_ext):
         if not build_temp.exists():
             build_temp.mkdir(parents=True)
 
+        cmake_args += ["-DPYBIND11_INCLUDE_DIR={}".format(get_include())]
         subprocess.run(
             ["cmake", ext.sourcedir] + cmake_args, cwd=build_temp, check=True
         )
@@ -140,4 +143,6 @@ setup(
     zip_safe=False,
 #    extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.7",
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
 )
