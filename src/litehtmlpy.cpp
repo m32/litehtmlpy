@@ -92,8 +92,8 @@ public:
         if (override) {
             auto obj = override(hdc, text, hFont, pycolor, pypos);
         }
-        pypos.release();
-        pycolor.release();
+        //pypos.release();
+        //pycolor.release();
     }
     int     pt_to_px(int pt) const override 
     {
@@ -168,7 +168,7 @@ public:
                 py::list l = obj.cast<py::list>();
                 sz.width = l[0].cast<int>();
                 sz.height = l[0].cast<int>();
-                l.release();
+                //l.release();
             }
         }
     }
@@ -214,7 +214,7 @@ public:
                 pybg.append(l);
             }
             auto obj = override(hdc, pybg);
-            pybg.release();
+            //pybg.release();
         }
     }
     void    draw_borders(uint_ptr hdc, const borders& borders, const position& draw_pos, bool root) override 
@@ -233,8 +233,8 @@ public:
             );
             py::tuple pydraw_pos = fromPosition(draw_pos);
             auto obj = override(hdc, pyborders, pydraw_pos, root);
-            pydraw_pos.release();
-            pyborders.release();
+            //pydraw_pos.release();
+            //pyborders.release();
         }
     }
 
