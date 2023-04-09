@@ -20,8 +20,9 @@ class Main:
         cls.reset()
         cls.fromString(html)
 
-        print('*'*10, 'render')
+        print('*'*10, 'render', 'maxwidth=', cls.size[0])
         cls.render(cls.size[0])
+        print('*'*10, 'render', 'maxwidth=', cls.size[0], 'maxheight=', cls.height())
         cls.size[1] = cls.height()
         cls.reset()
 

@@ -5,14 +5,6 @@ gc.enable()
 import sys
 sys.path.insert(1, 'build/lib.linux-x86_64-3.8')
 
-import logging
-logger = logging.getLogger()
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
-
 import litehtml.litehtml
 
 class LiteHtml(litehtml.litehtml.LiteHtml):

@@ -92,8 +92,8 @@ public:
         if (override) {
             auto obj = override(hdc, text, hFont, pycolor, pypos);
         }
-        //pypos.release();
-        //pycolor.release();
+        pypos.release();
+        pycolor.release();
     }
     int     pt_to_px(int pt) const override 
     {
