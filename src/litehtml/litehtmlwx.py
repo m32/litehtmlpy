@@ -177,8 +177,8 @@ class LiteHtml(liblitehtmlpy.LiteHtml):
         #logger.debug('import_css(%s, %s, %s)', text, url, base_url)
         pass
 
-    def set_clip(self, pos, radius, x, y):
-        #logger.debug('set_clip(%s, %s, %d, %d)', pos, radius, x, y)
+    def set_clip(self, pos, radius):
+        #logger.debug('set_clip(%s, %s, %d, %d)', pos, radius)
         pass
 
     def del_clip(self):

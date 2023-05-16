@@ -5,6 +5,8 @@ gc.enable()
 import sys
 sys.path.insert(1, 'build/lib.linux-x86_64-3.8')
 
+#import logme
+
 import litehtml.litehtml
 
 class LiteHtml(litehtml.litehtml.LiteHtml):

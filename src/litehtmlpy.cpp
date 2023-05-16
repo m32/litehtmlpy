@@ -11,6 +11,7 @@ namespace py = pybind11;
 
 static int debuglog = 0;
 #define ENTERWRAPPER std::cout << "PyLiteHtml::" << __FUNCTION__ << std::endl;
+//#define ENTERWRAPPER
 
 py::tuple fromPosition(const position& pos)
 {
@@ -55,7 +56,7 @@ public:
         return result;
     }
 
-    void    delete_font(uint_ptr hFont) override 
+    void    delete_font(uint_ptr hFont) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -67,7 +68,7 @@ public:
             hFont
         );
     }
-    int     text_width(const char* text, uint_ptr hFont) override 
+    int     text_width(const char* text, uint_ptr hFont) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -79,7 +80,7 @@ public:
             text, hFont
         );
     }
-    void    draw_text(uint_ptr hdc, const char* text, uint_ptr hFont, web_color color, const position& pos) override 
+    void    draw_text(uint_ptr hdc, const char* text, uint_ptr hFont, web_color color, const position& pos) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -95,7 +96,7 @@ public:
         pypos.release();
         pycolor.release();
     }
-    int     pt_to_px(int pt) const override 
+    int     pt_to_px(int pt) const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -107,7 +108,7 @@ public:
             pt
         );
     }
-    int     get_default_font_size() const override 
+    int     get_default_font_size() const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -119,7 +120,7 @@ public:
             // no arguments
         );
     }
-    const char*   get_default_font_name() const override 
+    const char*   get_default_font_name() const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -131,7 +132,7 @@ public:
             // no arguments
         );
     }
-    void    draw_list_marker(uint_ptr hdc, const list_marker& marker) override 
+    void    draw_list_marker(uint_ptr hdc, const list_marker& marker) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -143,7 +144,7 @@ public:
             hdc, marker
         );
     }
-    void    load_image(const char* src, const char* baseurl, bool redraw_on_ready) override 
+    void    load_image(const char* src, const char* baseurl, bool redraw_on_ready) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -155,7 +156,7 @@ public:
             src, baseurl, redraw_on_ready
         );
     }
-    void    get_image_size(const char* src, const char* baseurl, size& sz) override 
+    void    get_image_size(const char* src, const char* baseurl, size& sz) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -172,7 +173,7 @@ public:
             }
         }
     }
-    void    draw_background(uint_ptr hdc, const std::vector<background_paint>& bg) override 
+    void    draw_background(uint_ptr hdc, const std::vector<background_paint>& bg) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -217,7 +218,7 @@ public:
             //pybg.release();
         }
     }
-    void    draw_borders(uint_ptr hdc, const borders& borders, const position& draw_pos, bool root) override 
+    void    draw_borders(uint_ptr hdc, const borders& borders, const position& draw_pos, bool root) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -238,7 +239,7 @@ public:
         }
     }
 
-    void    set_caption(const char* caption) override 
+    void    set_caption(const char* caption) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -250,7 +251,7 @@ public:
             caption
         );
     }
-    void    set_base_url(const char* base_url) override 
+    void    set_base_url(const char* base_url) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -262,19 +263,19 @@ public:
             base_url
         );
     }
-    void    link(const std::shared_ptr<document>& doc, const element::ptr& el) override 
+    void    link(const std::shared_ptr<document>& doc, const element::ptr& el) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
     }
-    void    on_anchor_click(const char* url, const element::ptr& el) override 
+    void    on_anchor_click(const char* url, const element::ptr& el) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
     }
-    void    set_cursor(const char* cursor) override 
+    void    set_cursor(const char* cursor) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -286,7 +287,7 @@ public:
             cursor
         );
     }
-    void    transform_text(string& text, text_transform tt) override 
+    void    transform_text(string& text, text_transform tt) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -298,7 +299,7 @@ public:
             text, (int)tt
         );
     }
-    void    import_css(string& text, const string& url, string& baseurl) override 
+    void    import_css(string& text, const string& url, string& baseurl) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -310,11 +311,17 @@ public:
             text, url, baseurl
         );
     }
-    void    set_clip(const position& pos, const border_radiuses& bdr_radius, bool valid_x, bool valid_y) override 
+    void    set_clip(const litehtml::position& pos, const litehtml::border_radiuses& bdr_radius) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            set_clip,
+            pos, bdr_radius
+        );
     }
     void    del_clip() override 
     {
@@ -328,7 +335,7 @@ public:
             // no arguments
         );
     }
-    void    get_client_rect(position& client) const override 
+    void    get_client_rect(position& client) const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -348,14 +355,14 @@ public:
     }
     element::ptr create_element( const char* tag_name,
               const string_map& attributes,
-              const std::shared_ptr<document>& doc) override 
+              const std::shared_ptr<document>& doc) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
         return nullptr;
     }
-    void    get_media_features(media_features& media) const override 
+    void    get_media_features(media_features& media) const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -378,7 +385,7 @@ public:
             }
         }
     }
-    void    get_language(string& language, string& culture) const override 
+    void    get_language(string& language, string& culture) const override
     {
         if( debuglog ){
             ENTERWRAPPER
