@@ -51,8 +51,10 @@ class CMakeBuild(build_ext):
             f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}{os.sep}{cname}{os.sep}",
             f"-DPYTHON_EXECUTABLE={sys.executable}",
             f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
-            '-DBUILD_TESTING=NO',
-            '-Wno-dev',
+            "-DPYBIND11_INCLUDE_DIR={}".format(get_include()),
+            "-DLITEHTML_BUILD_TESTING=OFF",
+            "-DLITEHTMLPY_BUILD_TESTING=OFF",
+            "-Wno-dev",
         ]
         build_args = []
         # Adding CMake arguments set as environment variable
@@ -114,16 +116,11 @@ class CMakeBuild(build_ext):
                 # CMake 3.12+ only.
                 build_args += [f"-j{self.parallel}"]
 
-        build_temp = Path(self.build_temp) / ext.name
-        if not build_temp.exists():
-            build_temp.mkdir(parents=True)
-
-        cmake_args += ["-DPYBIND11_INCLUDE_DIR={}".format(get_include())]
         subprocess.run(
-            ["cmake", ext.sourcedir] + cmake_args, cwd=build_temp, check=True
+            ["cmake", ext.sourcedir, *cmake_args], check=True
         )
         subprocess.run(
-            ["cmake", "--build", "."] + build_args, cwd=build_temp, check=True
+            ["cmake", "--build", ".", *build_args], check=True
         )
 
 

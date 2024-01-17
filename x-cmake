@@ -1,0 +1,7 @@
+#!/bin/bash
+cmake \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+    -DLITEHTML_BUILD_TESTING=OFF \
+    -DLITEHTMLPY_BUILD_TESTING=ON \
+    -Wno-dev \
+    .

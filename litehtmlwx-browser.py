@@ -3,18 +3,18 @@ import sys
 sys.path.insert(1, 'src')
 
 import wx
-from litehtml import litehtmlwx
+from litehtmlpy import litehtmlwx
 
 class LiteHtml(litehtmlwx.LiteHtml):
     pass
 
-class LiteWindow(wx.Window):
+class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
-        wx.Window.__init__(self, parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
+        super().__init__( parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
+        self.SetScrollbar(wx.VERTICAL, 0, 0, 0, True)
         self.SetBackgroundColour("WHITE")
-        self.InitBuffer()
         self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.Bind(wx.EVT_IDLE, self.OnIdle)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.url = None
         self.cls = LiteHtml()
 
@@ -25,30 +25,38 @@ class LiteWindow(wx.Window):
         dc = wx.BufferedDC(None, self.buffer)
         dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
         dc.Clear()
-        self.reInitBuffer = False
 
     def OnSize(self, event):
-        self.reInitBuffer = True
-
-    def OnIdle(self, event):
-        if self.reInitBuffer:
+        if self.url is not None:
             self.InitBuffer()
-            self.Refresh(False)
+            self.PaintHtml()
+        event.Skip()
 
     def OnPaint(self, event):
-        dc = wx.BufferedPaintDC(self, self.buffer)
+        if self.url is not None:
+            dc = wx.BufferedPaintDC(self, self.buffer)
+            self.PaintHtml()
+            dc.DrawBitmap(self.cls.bmp, wx.Point(0, 0))
+        event.Skip()
 
     def LoadURL(self, url):
-        print('loadURL({})'.format(url))
+        self.InitBuffer()
         html = open(url, 'rt').read()
+        self.url = url
 
         self.cls.reset()
         self.cls.fromString(html)
+
         size = self.GetClientSize()
-        self.cls.size = (size.width, size.height)
+        self.SetScrollbar(wx.VERTICAL, 0, size.height//2, self.cls.size[1]+200, True)
+        self.Refresh(True)
+
+    def PaintHtml(self):
+        size = self.GetClientSize()
         self.cls.render(size.width)
         self.cls.reset()
-        self.cls.draw(0, 0, 0, 0, self.width, self.height)
+        y = self.GetScrollPos(wx.VERTICAL)
+        self.cls.draw(0, -y, 0, 0, self.cls.size[0], self.cls.size[1])
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):
@@ -87,9 +95,12 @@ class LiteHtmlPanel(wx.Panel):
         btnSizer.Add(txt, 0, wx.CENTER|wx.ALL, 2)
 
         self.location = wx.ComboBox(self, -1, "", style=wx.CB_DROPDOWN|wx.TE_PROCESS_ENTER)
-        self.location.AppendItems(['http://wxPython.org',
-                                   'http://wxwidgets.org',
-                                   'http://google.com'])
+        self.location.AppendItems([
+            'demo.html',
+            'http://wxPython.org',
+            'http://wxwidgets.org',
+            'http://google.com'
+        ])
 
         self.Bind(wx.EVT_COMBOBOX, self.OnLocationSelect, self.location)
         self.location.Bind(wx.EVT_TEXT_ENTER, self.OnLocationEnter)

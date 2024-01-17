@@ -6,7 +6,8 @@ project(litehtmlpy)
 
 # https://stackoverflow.com/questions/38296756/what-is-the-idiomatic-way-in-cmake-to-add-the-fpic-compiler-option
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(LITEHTML_BUILD_TESTING OFF)
+
+option(LITEHTMLPY_BUILD_TESTING "enable testing for litehtml" OFF)
 
 add_subdirectory(litehtml)
 add_subdirectory(pybind11)
@@ -15,12 +16,15 @@ pybind11_add_module(
     litehtmlpy
     litehtmlpy.cpp
 )
+
+if(LITEHTMLPY_BUILD_TESTING)
 set_target_properties(litehtmlpy PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "litehtmlpy")
+endif()
 
-#find_package(PythonLibs 3.0)
+find_package(PythonLibs 3.6)
 #find_package(PythonLibs 3.8 REQUIRED)
-find_package(PythonLibs 3.11.2 EXACT REQUIRED)
+#find_package(PythonLibs 3.11.2 EXACT REQUIRED)
 
 set_target_properties(litehtmlpy PROPERTIES
     CXX_STANDARD 11
