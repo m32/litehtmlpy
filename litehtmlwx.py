@@ -1,6 +1,6 @@
 #!/usr/bin/env vpython3
 import sys
-sys.path.insert(1, 'build/lib.linux-x86_64-3.8')
+sys.path.insert(1, 'src')
 
 import wx
 from litehtml import litehtmlwx

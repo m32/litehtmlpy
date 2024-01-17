@@ -3,9 +3,9 @@ import gc
 gc.enable()
 
 import sys
-sys.path.insert(1, 'build/lib.linux-x86_64-3.8')
+sys.path.insert(1, 'src')
 
-#import logme
+import logme
 
 import litehtml.litehtml
 

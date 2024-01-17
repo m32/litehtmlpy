@@ -1,6 +1,6 @@
 #!/usr/bin/env vpython3
 import sys
-sys.path.insert(1, 'build/lib.linux-x86_64-3.8')
+sys.path.insert(1, 'src')
 
 import wx
 from litehtml import litehtmlwx
@@ -16,6 +16,7 @@ class LiteWindow(wx.Window):
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_IDLE, self.OnIdle)
         self.url = None
+        self.cls = LiteHtml()
 
     def InitBuffer(self):
         """Initialize the bitmap used for buffering the display."""
@@ -39,15 +40,15 @@ class LiteWindow(wx.Window):
 
     def LoadURL(self, url):
         print('loadURL({})'.format(url))
-        return
         html = open(url, 'rt').read()
 
-        cls = LiteHtml()
-        cls.reset()
-        cls.fromString(html)
-        cls.render(cls.size[0])
-        cls.size[1] = cls.height()
-        cls.reset()
+        self.cls.reset()
+        self.cls.fromString(html)
+        size = self.GetClientSize()
+        self.cls.size = (size.width, size.height)
+        self.cls.render(size.width)
+        self.cls.reset()
+        self.cls.draw(0, 0, 0, 0, self.width, self.height)
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):

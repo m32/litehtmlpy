@@ -1,9 +1,9 @@
 import logging
-from . import liblitehtmlpy
+from . import litehtmlpy
 
 logger = logging.getLogger(__name__)
 
-class LiteHtml(liblitehtmlpy.LiteHtml):
+class LiteHtml(litehtmlpy.LiteHtml):
     def __init__(self):
         super().__init__()
         self.hfont = 0

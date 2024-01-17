@@ -9,7 +9,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "litehtml"
+name = "litehtmlpy"
 version = "0.1.0"
 authors = [
     { name="Grzegorz Makarewicz", email="mak@trisoft.com.pl" },

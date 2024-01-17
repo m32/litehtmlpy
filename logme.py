@@ -6,5 +6,5 @@ handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
-from litehtml import liblitehtmlpy
-liblitehtmlpy.debuglog(1)
+from litehtml import litehtmlpy
+litehtmlpy.debuglog(1)

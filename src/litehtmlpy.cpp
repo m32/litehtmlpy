@@ -85,10 +85,10 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
+        py::gil_scoped_acquire gil;
         py::tuple pypos = fromPosition(pos);
         py::tuple pycolor = py::make_tuple(color.red, color.green, color.blue, color.alpha);
 
-        py::gil_scoped_acquire gil;
         py::function override = pybind11::get_override(this, "draw_text");
         if (override) {
             auto obj = override(hdc, text, hFont, pycolor, pypos);
@@ -418,7 +418,7 @@ public:
 #endif
 };
 
-PYBIND11_MODULE(liblitehtmlpy, m) {
+PYBIND11_MODULE(litehtmlpy, m) {
     m.def("debuglog", [](int on) {
         debuglog = on;
     })
