@@ -2,6 +2,7 @@
 	path = litehtml
 	url = https://github.com/litehtml/litehtml
 	branch = master
+	ignore = untracked
 [submodule "pybind11"]
 	path = pybind11
 	url = https://github.com/pybind/pybind11.git
