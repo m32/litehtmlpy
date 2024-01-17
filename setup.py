@@ -130,19 +130,19 @@ class CMakeBuild(build_ext):
 # The information here can also be placed in setup.cfg - better separation of
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
-    name="litehtml",
+    name="litehtmlpy",
     version="0.1.0",
     author="Grzegorz Makarewicz",
     author_email="mak@trisoft.com.pl",
     description="LiteHtmlPy is a solution that helps python developers to create printouts and previews of html5/css3 pages without using a web browser.",
     long_description="",
     ext_modules=[
-        CMakeExtension("litehtml")
+        CMakeExtension("litehtmlpy")
     ],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
 #    extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.7",
-    packages=find_packages(where="src"),
-    package_dir={"": "src"},
+    packages=find_packages(where="."),
+    package_dir={"": "."},
 )

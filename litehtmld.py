@@ -2,14 +2,11 @@
 import gc
 gc.enable()
 
-import sys
-sys.path.insert(1, 'src')
-
 import logme
 
-import litehtml.litehtml
+from litehtmlpy import litehtml
 
-class LiteHtml(litehtml.litehtml.LiteHtml):
+class LiteHtml(litehtml.LiteHtml):
     pass
 
 def main():

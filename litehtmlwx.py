@@ -3,7 +3,7 @@ import sys
 sys.path.insert(1, 'src')
 
 import wx
-from litehtml import litehtmlwx
+from litehtmlpy import litehtmlwx
 
 class LiteHtml(litehtmlwx.LiteHtml):
     pass
