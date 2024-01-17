@@ -6,7 +6,7 @@ project(litehtmlpy)
 
 # https://stackoverflow.com/questions/38296756/what-is-the-idiomatic-way-in-cmake-to-add-the-fpic-compiler-option
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-set(LITEHTML_BUILD_TESTING NO)
+set(LITEHTML_BUILD_TESTING OFF)
 
 add_subdirectory(litehtml)
 add_subdirectory(pybind11)
