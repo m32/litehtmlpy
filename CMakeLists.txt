@@ -14,12 +14,12 @@ add_subdirectory(pybind11)
 
 pybind11_add_module(
     litehtmlpy
-    litehtmlpy.cpp
+    src/litehtmlpy.cpp
 )
 
 if(LITEHTMLPY_BUILD_TESTING)
 set_target_properties(litehtmlpy PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY "litehtmlpy")
+    LIBRARY_OUTPUT_DIRECTORY "src/litehtmlpy")
 endif()
 
 find_package(PythonLibs 3.6)

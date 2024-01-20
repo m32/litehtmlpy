@@ -140,6 +140,6 @@ setup(
     zip_safe=False,
 #    extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.7",
-    packages=find_packages(where="."),
-    package_dir={"": "."},
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
 )

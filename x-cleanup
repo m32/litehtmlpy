@@ -1,7 +1,12 @@
 #!/bin/bash
-rm -rf __pycache__ build CMakeFiles litehtmlpy.egg-info wheelhouse litehtmlpy/__pycache__
+
+rm -rf __pycache__ build dist _deps CMakeFiles
 rm -f .ninja_deps .ninja_log build.ninja cmake_install.cmake CMakeCache.txt
+rm -rf src/litehtmlpy.egg-info  src/litehtmlpy/__pycache__ src/litehtmlpy/*.so
 rm -rf litehtml pybind11
+
+rm -rf wheelhouse
+
 mkdir litehtml
 mkdir pybind11
 git submodule deinit --all -f

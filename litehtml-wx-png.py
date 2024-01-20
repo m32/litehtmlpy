@@ -1,7 +1,5 @@
 #!/usr/bin/env vpython3
-import sys
-sys.path.insert(1, 'src')
-
+import logme
 import wx
 from litehtmlpy import litehtmlwx
 

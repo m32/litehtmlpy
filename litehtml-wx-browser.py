@@ -16,7 +16,7 @@ class LiteWindow(wx.ScrolledWindow):
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.url = None
-        self.cls = LiteHtml()
+        self.litehtml = LiteHtml()
 
     def InitBuffer(self):
         """Initialize the bitmap used for buffering the display."""
@@ -36,7 +36,7 @@ class LiteWindow(wx.ScrolledWindow):
         if self.url is not None:
             dc = wx.BufferedPaintDC(self, self.buffer)
             self.PaintHtml()
-            dc.DrawBitmap(self.cls.bmp, wx.Point(0, 0))
+            dc.DrawBitmap(self.litehtml.bmp, wx.Point(0, 0))
         event.Skip()
 
     def LoadURL(self, url):
@@ -44,19 +44,19 @@ class LiteWindow(wx.ScrolledWindow):
         html = open(url, 'rt').read()
         self.url = url
 
-        self.cls.reset()
-        self.cls.fromString(html)
+        self.litehtml.reset()
+        self.litehtml.fromString(html)
 
         size = self.GetClientSize()
-        self.SetScrollbar(wx.VERTICAL, 0, size.height//2, self.cls.size[1]+200, True)
+        self.SetScrollbar(wx.VERTICAL, 0, size.height//2, self.litehtml.size[1]+200, True)
         self.Refresh(True)
 
     def PaintHtml(self):
         size = self.GetClientSize()
-        self.cls.render(size.width)
-        self.cls.reset()
+        self.litehtml.render(size.width)
+        self.litehtml.reset()
         y = self.GetScrollPos(wx.VERTICAL)
-        self.cls.draw(0, -y, 0, 0, self.cls.size[0], self.cls.size[1])
+        self.litehtml.draw(0, -y, 0, 0, self.litehtml.size[0], self.litehtml.size[1])
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):

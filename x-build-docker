@@ -2,8 +2,7 @@
 #
 # https://stackoverflow.com/questions/50690526/how-to-publish-binary-python-wheels-for-linux-on-a-local-machine
 #
-XNAME=quay.io/pypa/manylinux1_x86_64
-XNAME=quay.io/pypa/manylinux2014_x86_64
+XNAME=quay.io/pypa/manylinux_2_28_x86_64
 
 xrm(){
     docker rmi ${XNAME}
@@ -18,7 +17,8 @@ docker run \
     -i \
     -t \
     --rm \
-    -v `pwd`:/io ${XNAME} \
+    -v `pwd`:/io \
+    ${XNAME} \
     /io/build-wheels.sh
 }
 

@@ -1,0 +1,2 @@
+#!/bin/bash
+vpython3 -m build build_ext
