@@ -2,7 +2,10 @@
 
 rm -rf __pycache__ build dist _deps CMakeFiles
 rm -f .ninja_deps .ninja_log build.ninja cmake_install.cmake CMakeCache.txt
-rm -rf src/litehtmlpy.egg-info  src/litehtmlpy/__pycache__ src/litehtmlpy/*.so
+rm -rf src/litehtmlpy.egg-info  src/litehtmlpy/__pycache__ 
+if [ "$1" == "dist" ]; then
+    rm src/litehtmlpy/*.so
+fi
 rm -rf litehtml pybind11
 
 rm -rf wheelhouse
