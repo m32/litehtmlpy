@@ -6,7 +6,7 @@ lib/
 cmake_install.cmake
 CMakeCache.txt
 Makefile
-litehtmlpy/litehtmlpy.*.so
+src/litehtmlpy/litehtmlpy.*.so
 .ninja_deps
 .ninja_log
 build.ninja
