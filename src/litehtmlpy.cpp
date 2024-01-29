@@ -2,6 +2,7 @@
 
 #include "pybind11/pybind11.h"
 #include <litehtml.h>
+#include <litehtml/render_item.h>
 
 #include <iostream>
 #include <string>
@@ -274,6 +275,13 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            on_anchor_click,
+            url,
+            el
+        );
     }
     void    set_cursor(const char* cursor) override
     {
@@ -360,6 +368,29 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
+        py::gil_scoped_acquire gil;
+        py::function override = pybind11::get_override(this, "create_element");
+        if (override) {
+            py::bool_ create = override(tag_name);
+            if( !bool(create) )
+                return nullptr;
+            auto pyattributes = py::dict();
+			for (auto& cls : attributes)
+                pyattributes[py::str(cls.first)] = py::str(cls.second);
+#if 0
+            py::object obj = override(tag_name, pyattributes, doc);
+            if( py::isinstance<py::none>(obj) )
+                return obj;
+#else
+            auto obj = override(tag_name, pyattributes, doc);
+            if (pybind11::detail::cast_is_temporary_value_reference<html_tag::ptr>::value) {
+                static pybind11::detail::override_caster_t<html_tag::ptr> caster;
+                return pybind11::detail::cast_ref<html_tag::ptr>(std::move(obj), caster);
+            } else {
+                return pybind11::detail::cast_safe<html_tag::ptr>(std::move(obj));
+            }
+#endif
+        }
         return nullptr;
     }
     void    get_media_features(media_features& media) const override
@@ -418,6 +449,25 @@ public:
 #endif
 };
 
+class PyHtmlTag : public html_tag
+{
+public:
+    using html_tag::html_tag;
+
+    void draw(uint_ptr hdc, int x, int y, const position *clip, const std::shared_ptr<render_item> &ri) override
+    {
+std::cout << "PyHtmlTag.draw" << std::endl;
+        py::gil_scoped_acquire gil;
+        py::function override = pybind11::get_override(this, "draw");
+        if (override) {
+            auto pyclip = py::make_tuple(clip->x, clip->y, clip->width, clip->height);
+            auto obj = override(hdc, x, y, pyclip, ri);
+        } else {
+std::cout << "undefined method draw" << std::endl;
+        }
+    }
+};
+
 PYBIND11_MODULE(litehtmlpy, m) {
     m.def("debuglog", [](int on) {
         debuglog = on;
@@ -441,6 +491,72 @@ PYBIND11_MODULE(litehtmlpy, m) {
             py::gil_scoped_release release;
             position clip(clipX, clipY, clipWidth, clipHeight);
             self.m_doc->draw((uint_ptr)NULL, x, y, &clip);
+        })
+    ;
+    py::class_<document, std::shared_ptr<document>>(m, "document")
+        .def("width", [](document &self) {
+            return self.width();
+        })
+        .def("height", [](document &self) {
+            return self.height();
+        })
+    ;
+
+    py::class_<render_item, std::shared_ptr<render_item>>(m, "render_item")
+        .def("pos", &render_item::pos)
+        //.def("skip", &render_item::skip)
+        //void skip(bool val)
+        .def("right", &render_item::right)
+        .def("left", &render_item::left)
+        .def("top", &render_item::top)
+        .def("bottom", &render_item::bottom)
+        .def("height", &render_item::height)
+        .def("width", &render_item::width)
+        .def("padding_right", &render_item::padding_right)
+        .def("padding_left", &render_item::padding_left)
+        .def("padding_top", &render_item::padding_top)
+        .def("padding_bottom", &render_item::padding_bottom)
+        .def("border_right", &render_item::border_right)
+        .def("border_left", &render_item::border_left)
+        .def("border_top", &render_item::border_top)
+        .def("border_bottom", &render_item::border_bottom)
+        .def("margin_right", &render_item::margin_right)
+        .def("margin_left", &render_item::margin_left)
+        .def("margin_top", &render_item::margin_top)
+        .def("margin_bottom", &render_item::margin_bottom)
+/*
+        //std::shared_ptr<render_item> parent() const
+        margins& get_margins()
+        margins& get_paddings()
+		void set_paddings(const margins& val)
+        margins& get_borders()
+        int content_offset_top() const
+        inline int content_offset_bottom() const
+        int content_offset_left() const
+        int content_offset_right() const
+        int content_offset_width() const
+        int content_offset_height() const
+		int box_sizing_left() const
+		int box_sizing_right() const
+		int box_sizing_width() const
+		int box_sizing_top() const
+		int box_sizing_bottom() const
+		int box_sizing_height() const
+        void parent(const std::shared_ptr<render_item>& par)
+        const std::shared_ptr<element>& src_el() const
+		const css_properties& css() const
+        void add_child(const std::shared_ptr<render_item>& ri)
+		bool is_root() const
+        bool collapse_top_margin() const
+        bool collapse_bottom_margin() const
+        bool is_visible() const
+*/
+    ;
+
+    py::class_<html_tag, PyHtmlTag, std::shared_ptr<html_tag>>(m, "PyHtmlTag")
+        .def(py::init<const std::shared_ptr<document>&>())
+        .def("get_tagName",[](PyHtmlTag &self) {
+            return self.get_tagName();
         })
     ;
 }

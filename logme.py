@@ -11,4 +11,4 @@ if 1:
     sys.path.insert(1, 'src')
 
 from litehtmlpy import litehtmlpy
-litehtmlpy.debuglog(1)
+#litehtmlpy.debuglog(1)
