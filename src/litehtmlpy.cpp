@@ -129,12 +129,14 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
+#if 0
         PYBIND11_OVERRIDE_PURE(
             void,
             document_container,
             draw_list_marker,
             hdc, marker
         );
+#endif
     }
     void    load_image(const char* src, const char* baseurl, bool redraw_on_ready) override
     {
@@ -479,6 +481,18 @@ PYBIND11_MODULE(litehtmlpy, m) {
             return self.height();
         })
     ;
+/*
+	struct list_marker
+	{
+		string			image;
+		const char*		baseurl;
+		list_style_type	marker_type;
+		web_color		color;
+		position		pos;
+		int				index;
+		uint_ptr		font;
+	};
+*/
     py::class_<web_color>(m, "web_color")
         .def(py::init<int,int,int,int>())
         .def_readwrite("red", &web_color::red)

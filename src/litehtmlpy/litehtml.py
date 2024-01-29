@@ -46,9 +46,10 @@ class LiteHtml(litehtmlpy.LiteHtml):
     def load_image(self, src, baseurl, redraw_on_ready):
         logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
 
-    def get_image_size(self, src, baseurl):
+    def get_image_size(self, src, baseurl, size):
         logger.debug('get_image_size(%s, %s)', src, baseurl)
-        return (0, 0)
+        size.width = 0
+        size.height = 0
 
     def draw_background(self, hdc, bgs):
         bg = bgs[-1]

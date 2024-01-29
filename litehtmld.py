@@ -11,7 +11,7 @@ class LiteHtml(litehtml.LiteHtml):
 
 def main():
     #litehtml.litehtml.liblitehtmlpy.debuglog(1)
-    html = open('demo.html', 'rt').read()
+    html = open('wxpython.org.html', 'rt').read()
     cls = LiteHtml()
     cls.fromString(html)
     cls.draw(

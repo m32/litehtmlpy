@@ -1,7 +1,7 @@
 #!/usr/bin/env vpython3
-import sys
-sys.path.insert(1, 'src')
-
+import os
+import logme
+import requests
 import wx
 from litehtmlpy import litehtmlwx
 
@@ -41,7 +41,16 @@ class LiteWindow(wx.ScrolledWindow):
 
     def LoadURL(self, url):
         self.InitBuffer()
-        html = open(url, 'rt').read()
+        if os.path.exists(url):
+            with open(url, 'rt') as fp:
+                html = fp.read()
+        elif url.split(':')[0] in ('http', 'https'):
+            r = requests.get(url)
+            print(r.headers)
+            html = r.text
+        else:
+            print('unknown url', url)
+            return
         self.url = url
 
         self.litehtml.reset()
@@ -97,6 +106,8 @@ class LiteHtmlPanel(wx.Panel):
         self.location = wx.ComboBox(self, -1, "", style=wx.CB_DROPDOWN|wx.TE_PROCESS_ENTER)
         self.location.AppendItems([
             'demo.html',
+            'litehtmlt.html',
+            'wxpython.org.html',
             'http://wxPython.org',
             'http://wxwidgets.org',
             'http://google.com'
