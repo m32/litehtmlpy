@@ -73,10 +73,10 @@ class LiteHtml(litehtmlpy.LiteHtml):
     def draw_text(self, hdc, text, hFont, color, pos):
         #logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, pos)
         font = self.fonts[hFont]
-        color = wx.Colour(*color)
+        color = wx.Colour(color.red, color.green, color.blue, color.alpha)
         self.dc.SetFont(font)
         self.dc.SetTextForeground(color)
-        self.dc.DrawText(text, pos[0], pos[1])
+        self.dc.DrawText(text, pos.x, pos.y)
 
     def pt_to_px(self, pt):
         #logger.debug('pt_to_px(%d)', pt)
@@ -107,8 +107,8 @@ class LiteHtml(litehtmlpy.LiteHtml):
         if color == (0, 0, 0, 0):
             return
         #logger.debug('draw_background(%d, %s)', hdc, bgs)
-        color = wx.Colour(*color)
-        x, y, w, h = border
+        color = wx.Colour(color.red, color.green, color.blue, color.alpha)
+        x, y, w, h = border.x, border.y, border.width, border.height
         pt = [
             (x, y), (x+w, y), (x+w, y+h), (x, y+h), (x, y)
         ]
@@ -123,10 +123,10 @@ class LiteHtml(litehtmlpy.LiteHtml):
 
     def draw_borders(self, hdc, borders, draw_pos, root):
         #logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
-        left = draw_pos[0]
-        top = draw_pos[1]
-        right = left + draw_pos[2]
-        bottom = top + draw_pos[3]
+        left = draw_pos.x
+        top = draw_pos.y
+        right = left + draw_pos.width
+        bottom = top + draw_pos.height
 
         b = borders[0]
         colorLeft = wx.Colour(*b[2])
@@ -185,9 +185,10 @@ class LiteHtml(litehtmlpy.LiteHtml):
         #logger.debug('del_clip()')
         pass
 
-    def get_client_rect(self):
-        #logger.debug('get_client_rect()')
-        return[0, 0, self.size[0], self.size[1]]
+    def get_client_rect(self, client):
+        client.clear()
+        client.width = self.size[0]
+        client.height = self.size[1]
 
     #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 

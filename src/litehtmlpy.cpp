@@ -14,11 +14,6 @@ static int debuglog = 0;
 #define ENTERWRAPPER std::cout << "PyLiteHtml::" << __FUNCTION__ << std::endl;
 //#define ENTERWRAPPER
 
-py::tuple fromPosition(const position& pos)
-{
-    return py::make_tuple(pos.x, pos.y, pos.width, pos.height);
-}
-
 py::tuple fromBorder(const border& b)
 {
     return py::make_tuple(
@@ -86,16 +81,12 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        py::gil_scoped_acquire gil;
-        py::tuple pypos = fromPosition(pos);
-        py::tuple pycolor = py::make_tuple(color.red, color.green, color.blue, color.alpha);
-
-        py::function override = pybind11::get_override(this, "draw_text");
-        if (override) {
-            auto obj = override(hdc, text, hFont, pycolor, pypos);
-        }
-        pypos.release();
-        pycolor.release();
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            draw_text,
+            hdc, text, hFont, color, pos
+        );
     }
     int     pt_to_px(int pt) const override
     {
@@ -162,17 +153,12 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "get_image_size");
-        if (override) {
-            auto obj = override(src, baseurl);
-            if (py::isinstance<py::list>(obj)) {
-                py::list l = obj.cast<py::list>();
-                sz.width = l[0].cast<int>();
-                sz.height = l[0].cast<int>();
-                //l.release();
-            }
-        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            get_image_size,
+            src, baseurl, sz
+        );
     }
     void    draw_background(uint_ptr hdc, const std::vector<background_paint>& bg) override
     {
@@ -186,7 +172,6 @@ public:
             for (int i = 0; i < (int)bg.size(); i++)
             {
                 const auto& b = bg[i];
-                py::tuple pycolor = py::make_tuple(b.color.red, b.color.green, b.color.blue, b.color.alpha);
                 py::tuple pyradius = py::make_tuple(
                     b.border_radius.top_left_x,
                     b.border_radius.top_left_y,
@@ -203,12 +188,12 @@ public:
                     b.baseurl,
                     (int)b.attachment,
                     (int)b.repeat,
-                    pycolor,
-                    fromPosition(b.clip_box),
-                    fromPosition(b.origin_box),
-                    fromPosition(b.border_box),
+                    b.color,
+                    b.clip_box,
+                    b.origin_box,
+                    b.border_box,
                     pyradius,
-                    pysize,
+                    b.image_size,
                     b.position_x,
                     b.position_y,
                     b.is_root
@@ -233,8 +218,7 @@ public:
                 fromBorder(borders.right),
                 fromBorder(borders.bottom)
             );
-            py::tuple pydraw_pos = fromPosition(draw_pos);
-            auto obj = override(hdc, pyborders, pydraw_pos, root);
+            auto obj = override(hdc, pyborders, draw_pos, root);
             //pydraw_pos.release();
             //pyborders.release();
         }
@@ -348,18 +332,12 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "get_client_rect");
-        if (override) {
-            auto obj = override();
-            if (py::isinstance<py::list>(obj)) {
-                py::list l = obj.cast<py::list>();
-                client.x = l[0].cast<int>();
-                client.y = l[1].cast<int>();
-                client.width = l[2].cast<int>();
-                client.height = l[3].cast<int>();
-            }
-        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            get_client_rect,
+            client
+        );
     }
     element::ptr create_element( const char* tag_name,
               const string_map& attributes,
@@ -461,7 +439,7 @@ std::cout << "PyHtmlTag.draw" << std::endl;
         py::function override = pybind11::get_override(this, "draw");
         if (override) {
             auto pyclip = py::make_tuple(clip->x, clip->y, clip->width, clip->height);
-            auto obj = override(hdc, x, y, pyclip, ri);
+            auto obj = override(hdc, x, y, clip, ri);
         } else {
 std::cout << "undefined method draw" << std::endl;
         }
@@ -500,6 +478,47 @@ PYBIND11_MODULE(litehtmlpy, m) {
         .def("height", [](document &self) {
             return self.height();
         })
+    ;
+    py::class_<web_color>(m, "web_color")
+        .def(py::init<int,int,int,int>())
+        .def_readwrite("red", &web_color::red)
+        .def_readwrite("green", &web_color::green)
+        .def_readwrite("blue", &web_color::blue)
+        .def_readwrite("alpha", &web_color::alpha)
+    ;
+    py::class_<margins>(m, "margins")
+        .def(py::init<>())
+        .def_readwrite("left", &margins::left)
+        .def_readwrite("top", &margins::top)
+        .def_readwrite("right", &margins::right)
+        .def_readwrite("bottom", &margins::bottom)
+        .def("width", &margins::width)
+        .def("height", &margins::height)
+    ;
+    py::class_<size>(m, "size")
+        .def(py::init<>())
+        .def(py::init<int, int>())
+        .def_readwrite("width", &size::width)
+        .def_readwrite("height", &size::height)
+    ;
+    py::class_<position>(m, "position")
+        .def(py::init<int,int,int,int>())
+        .def_readwrite("x", &position::x)
+        .def_readwrite("y", &position::y)
+        .def_readwrite("width", &position::width)
+        .def_readwrite("height", &position::height)
+        .def("left", &position::left)
+        .def("top", &position::top)
+        .def("right", &position::right)
+        .def("bottom", &position::bottom)
+        //.def(py::self += margins)
+        //.def(py::self -= margins)
+        //=size
+        .def("clear", &position::clear)
+        .def("move_to", &position::move_to)
+        .def("does_intersect", &position::does_intersect)
+        .def("empty", &position::empty)
+        .def("is_point_inside", &position::is_point_inside)
     ;
 
     py::class_<render_item, std::shared_ptr<render_item>>(m, "render_item")
@@ -555,6 +574,7 @@ PYBIND11_MODULE(litehtmlpy, m) {
 
     py::class_<html_tag, PyHtmlTag, std::shared_ptr<html_tag>>(m, "PyHtmlTag")
         .def(py::init<const std::shared_ptr<document>&>())
+//        .def("draw", &html_tag::draw)
         .def("get_tagName",[](PyHtmlTag &self) {
             return self.get_tagName();
         })

@@ -85,9 +85,11 @@ class LiteHtml(litehtmlpy.LiteHtml):
     def del_clip(self):
         logger.debug('del_clip()')
 
-    def get_client_rect(self):
-        logger.debug('get_client_rect()')
-        return[0, 0, self.size[0], self.size[1]]
+    def get_client_rect(self, client):
+        logger.debug('get_client_rect(%s, %s, %s, %s)', client.x, client.y, client.width, client.height)
+        client.clear()
+        client.width = self.size[0]
+        client.height = self.size[1]
 
     #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 

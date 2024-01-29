@@ -14,9 +14,11 @@ class Button(litehtml.litehtmlpy.PyHtmlTag):
         print('tt=', tt)
         print(dir(self))
     def draw(self, hdc, x, y, clip, ri):
-        print('Button.draw', hdc, x, y, clip, ri)
+        p = ri.pos()
+        print('Button.draw', hdc, x, y, clip.x, clip.y, clip.width, clip.height, p.x, p.y, p.width, p.height)
         print(ri.left(), ri.top(), ri.right(), ri.bottom())
         print(dir(ri))
+        #super().draw(hdc, x, y, clip, ri)
 
 class LiteHtml(litehtml.LiteHtml):
     def __init__(self):
