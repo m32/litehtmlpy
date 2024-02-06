@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ ! -d litehtml ]; then
+git clone --depth 1 https://github.com/m32/litehtml -b master
+fi
+if [ ! -d pybind11 ]; then
+git clone --depth 1 https://github.com/pybind/pybind11.git -b v2.11
+fi
 cmake \
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     -DLITEHTML_BUILD_TESTING=OFF \

@@ -1,0 +1,19 @@
+#!/bin/bash
+if [ ! -d litehtml ]; then
+git clone --depth 1 https://github.com/m32/litehtml -b master
+fi
+if [ ! -d pybind11 ]; then
+git clone --depth 1 https://github.com/pybind/pybind11.git -b v2.9
+fi
+cmake \
+    -DCMAKE_CROSSCOMPILING=ON \
+    -DCMAKE_TOOLCHAIN_FILE=/devel/bin/root/mingw32/mingw-cross.cmake \
+    -DMY_TARGET_PYTHON_INCLUDE_DIRS=/devel/lib/python-2.7-win/include \
+    -DPYTHON_LIBRARIES= \
+    -DPYTHON_LIBRARY=/devel/lib/python-2.7-win/libs/libpython27.a \
+    -DPYBIND11_FINDPYTHON=OFF \
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+    -DLITEHTML_BUILD_TESTING=OFF \
+    -DLITEHTMLPY_BUILD_TESTING=ON \
+    -Wno-dev \
+    .

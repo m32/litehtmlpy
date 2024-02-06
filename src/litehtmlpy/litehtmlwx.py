@@ -7,7 +7,8 @@ logger = logging.getLogger(__name__)
 
 class LiteHtml(litehtmlpy.LiteHtml):
     def __init__(self):
-        super().__init__()
+        #super().__init__()
+        litehtmlpy.LiteHtml.__init__(self)
         self.hfont = 0
         self.fonts = {}
         v = 3.96 * 96 / 72

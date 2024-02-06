@@ -1,5 +1,10 @@
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 
+#ifdef MS_WIN64
+#define _hypot hypot
+#include <cmath>
+#endif
+
 #include "pybind11/pybind11.h"
 #include <litehtml.h>
 #include <litehtml/render_item.h>
@@ -440,11 +445,11 @@ std::cout << "PyHtmlTag.draw" << std::endl;
         py::gil_scoped_acquire gil;
         py::function override = pybind11::get_override(this, "draw");
         if (override) {
-            auto pyclip = py::make_tuple(clip->x, clip->y, clip->width, clip->height);
             auto obj = override(hdc, x, y, clip, ri);
         } else {
 std::cout << "undefined method draw" << std::endl;
         }
+std::cout << "/PyHtmlTag.draw" << std::endl;
     }
 };
 
