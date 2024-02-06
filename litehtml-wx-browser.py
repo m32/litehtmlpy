@@ -10,7 +10,8 @@ class LiteHtml(litehtmlwx.LiteHtml):
 
 class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
-        super().__init__( parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
+        #super().__init__( parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
+        wx.ScrolledWindow.__init__(self, parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.SetScrollbar(wx.VERTICAL, 0, 0, 0, True)
         self.SetBackgroundColour("WHITE")
         self.Bind(wx.EVT_SIZE, self.OnSize)
@@ -170,7 +171,8 @@ class LiteHtmlPanel(wx.Panel):
 
 class SampleFrame(wx.Frame):
     def __init__(self, parent, url=None):
-        super().__init__(parent, title="litehtml", size=(800,900))
+        #super().__init__(parent, title="litehtml", size=(800,900))
+        wx.Frame.__init__(self, parent, title="litehtml", size=(800,900))
         # add a statusbar
         self.CreateStatusBar()
 

@@ -1,4 +1,10 @@
 #!/bin/bash
+if [ ! -d litehtml ]; then
+git clone --depth 1 https://github.com/m32/litehtml -b master
+fi
+if [ ! -d pybind11 ]; then
+git clone --depth 1 https://github.com/pybind/pybind11.git -b v2.9
+fi
 cmake \
     -DCMAKE_CROSSCOMPILING=ON \
     -DCMAKE_TOOLCHAIN_FILE=/devel/bin/root/mingw32/mingw-cross.cmake \

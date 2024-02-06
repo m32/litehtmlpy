@@ -11,7 +11,7 @@ option(LITEHTMLPY_BUILD_TESTING "enable testing for litehtml" OFF)
 
 add_subdirectory(litehtml)
 
-if(DEFINED CMAKE_CROSSCOMPILING)
+if(CMAKE_CROSSCOMPILING)
     # Tell pybind11 where the target python installation is
     set(PYTHON_INCLUDE_DIR ${MY_TARGET_PYTHON_INCLUDE_DIRS} CACHE INTERNAL "Cross python include path")
     set(PYTHON_INCLUDE_DIRS ${MY_TARGET_PYTHON_INCLUDE_DIRS} CACHE INTERNAL "Cross python include path")
@@ -37,7 +37,7 @@ set_target_properties(litehtmlpy PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "src/litehtmlpy")
 endif()
 
-if(NOT DEFINED CMAKE_CROSSCOMPILING)
+if(NOT CMAKE_CROSSCOMPILING)
     find_package(PythonLibs 3.6)
     #find_package(PythonLibs 3.8 REQUIRED)
     #find_package(PythonLibs 3.11.2 EXACT REQUIRED)
@@ -65,7 +65,7 @@ target_link_libraries(litehtmlpy PRIVATE
     ${PYTHON_LIBRARY}
 )
 
-if(DEFINED CMAKE_CROSSCOMPILING)
+if(CMAKE_CROSSCOMPILING)
 target_compile_definitions(litehtmlpy PRIVATE
     -DMS_WIN64
 )
@@ -73,11 +73,5 @@ target_link_options(litehtmlpy PRIVATE
     -static
     -static-libgcc
     -static-libstdc++
-)
-add_custom_command(TARGET litehtmlpy PRE_LINK
-    DEPENDS litehtml/liblitehtml.a 
-    DEPENDS litehtml/src/gumbo/libgumbo.a
-    COMMAND x86_64-w64-mingw32-ranlib litehtml/liblitehtml.a 
-    COMMAND x86_64-w64-mingw32-ranlib litehtml/src/gumbo/libgumbo.a
 )
 endif()

@@ -11,8 +11,9 @@ class Main:
         self.wxapp = wx.App(False)
 
     def save(self, i, htmlstart, htmldata, htmlend):
-        with open(f'demo-{i:04d}.html', 'wt') as fp:
-            fp.write(htmlstart+htmldata+htmlend)
+        fp = open('demo-{i:04d}.html'.format(i=i), 'wt')
+        fp.write(htmlstart+htmldata+htmlend)
+        fp.close()
         cls = LiteHtml()
         cls.reset()
         cls.fromString(htmlstart+htmldata+htmlend)
@@ -23,7 +24,7 @@ class Main:
         cls.draw(
             0, 0,
             0, 0, cls.size[0], cls.size[1])
-        cls.bmp.SaveFile(f'demo-{i:04d}.png', wx.BITMAP_TYPE_PNG)
+        cls.bmp.SaveFile('demo-{i:04d}.png'.format(i=i), wx.BITMAP_TYPE_PNG)
 
     def main(self):
         html = open('demo.html', 'rt').read()
