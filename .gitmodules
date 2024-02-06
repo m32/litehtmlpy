@@ -1,6 +1,6 @@
 [submodule "litehtml"]
 	path = litehtml
-	url = https://github.com/litehtml/litehtml
+	url = git@github.com:m32/litehtml.git
 	branch = master
 	ignore = untracked
 [submodule "pybind11"]
