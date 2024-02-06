@@ -3,6 +3,9 @@
 #ifdef MS_WIN64
 #define _hypot hypot
 #include <cmath>
+#else
+#include <signal.h>
+#define DebugBreak() raise(SIGTRAP)
 #endif
 
 #include "pybind11/pybind11.h"
@@ -27,6 +30,22 @@ py::tuple fromBorder(const border& b)
         py::make_tuple(b.color.red, b.color.green, b.color.blue, b.color.alpha)
     );
 }
+
+class PyHtmlTag : public html_tag
+{
+public:
+    using html_tag::html_tag;
+
+    void draw(uint_ptr hdc, int x, int y, const position *clip, const std::shared_ptr<render_item> &ri) override
+    {
+        //DebugBreak();
+        py::gil_scoped_acquire gil;
+        py::function override = pybind11::get_override(this, "draw");
+        if (override) {
+            auto obj = override(hdc, x, y, clip, ri);
+        }
+    }
+};
 
 class PyLiteHtml : public document_container
 {
@@ -368,11 +387,12 @@ public:
                 return obj;
 #else
             auto obj = override(tag_name, pyattributes, doc);
-            if (pybind11::detail::cast_is_temporary_value_reference<html_tag::ptr>::value) {
-                static pybind11::detail::override_caster_t<html_tag::ptr> caster;
-                return pybind11::detail::cast_ref<html_tag::ptr>(std::move(obj), caster);
+            //DebugBreak();
+            if (pybind11::detail::cast_is_temporary_value_reference<PyHtmlTag::ptr>::value) {
+                static pybind11::detail::override_caster_t<PyHtmlTag::ptr> caster;
+                return pybind11::detail::cast_ref<PyHtmlTag::ptr>(std::move(obj), caster);
             } else {
-                return pybind11::detail::cast_safe<html_tag::ptr>(std::move(obj));
+                return pybind11::detail::cast_safe<PyHtmlTag::ptr>(std::move(obj));
             }
 #endif
         }
@@ -432,25 +452,6 @@ public:
         }
     }
 #endif
-};
-
-class PyHtmlTag : public html_tag
-{
-public:
-    using html_tag::html_tag;
-
-    void draw(uint_ptr hdc, int x, int y, const position *clip, const std::shared_ptr<render_item> &ri) override
-    {
-std::cout << "PyHtmlTag.draw" << std::endl;
-        py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "draw");
-        if (override) {
-            auto obj = override(hdc, x, y, clip, ri);
-        } else {
-std::cout << "undefined method draw" << std::endl;
-        }
-std::cout << "/PyHtmlTag.draw" << std::endl;
-    }
 };
 
 PYBIND11_MODULE(litehtmlpy, m) {

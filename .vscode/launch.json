@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "litehtmlt.py",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "/devel/bin/python3/bin/python",
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "args": [
+                "litehtmlt.py",
+            ],
+            "environment": [
+            ],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}

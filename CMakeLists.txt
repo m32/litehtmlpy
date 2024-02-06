@@ -21,11 +21,12 @@ if(CMAKE_CROSSCOMPILING)
     set(PYTHONLIBS_FOUND TRUE CACHE INTERNAL "")
 endif()
 
-add_subdirectory(pybind11)
-
+if(CMAKE_CROSSCOMPILING)
 target_compile_definitions(litehtml PRIVATE
     -DLITEHTML_NO_THREADS
 )
+endif()
+add_subdirectory(pybind11)
 
 pybind11_add_module(
     litehtmlpy
