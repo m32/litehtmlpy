@@ -34,19 +34,29 @@ class LiteHtml(litehtmlpy.LiteHtml):
             style = wx.FONTSTYLE_ITALIC
         else:
             style = wx.FONTSTYLE_NORMAL
-        weigths = {
-            100:wx.FONTWEIGHT_THIN,
-            200:wx.FONTWEIGHT_EXTRALIGHT,
-            300:wx.FONTWEIGHT_LIGHT,
-            400:wx.FONTWEIGHT_NORMAL,
-            500:wx.FONTWEIGHT_MEDIUM,
-            600:wx.FONTWEIGHT_SEMIBOLD,
-            700:wx.FONTWEIGHT_BOLD,
-            800:wx.FONTWEIGHT_EXTRABOLD,
-            900:wx.FONTWEIGHT_HEAVY,
-            1000:wx.FONTWEIGHT_EXTRAHEAVY,
-        }
-        weight = weigths.get(weight, wx.FONTWEIGHT_NORMAL)
+        try:
+            wx.FONTWEIGHT_THIN
+            weigths = {
+                100:wx.FONTWEIGHT_THIN,
+                200:wx.FONTWEIGHT_EXTRALIGHT,
+                300:wx.FONTWEIGHT_LIGHT,
+                400:wx.FONTWEIGHT_NORMAL,
+                500:wx.FONTWEIGHT_MEDIUM,
+                600:wx.FONTWEIGHT_SEMIBOLD,
+                700:wx.FONTWEIGHT_BOLD,
+                800:wx.FONTWEIGHT_EXTRABOLD,
+                900:wx.FONTWEIGHT_HEAVY,
+                1000:wx.FONTWEIGHT_EXTRAHEAVY,
+            }
+            weight = weigths.get(weight, wx.FONTWEIGHT_NORMAL)
+        except AttributeError:
+            if weight < 400:
+                wight = wx.FONTWEIGHT_LIGHT
+            elif weight > 500:
+                weight = wx.FONTWEIGHT_BOLD
+            else:
+                weight = wx.FONTWEIGHT_NORMAL
+            
         underline = decoration != 0
         font = wx.Font(size, wx.FONTFAMILY_DEFAULT, style, weight, underline, face)
         self.hfont += 1
