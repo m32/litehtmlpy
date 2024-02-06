@@ -7,7 +7,7 @@ git clone --depth 1 https://github.com/pybind/pybind11.git -b v2.9
 fi
 cmake \
     -DCMAKE_CROSSCOMPILING=ON \
-    -DCMAKE_TOOLCHAIN_FILE=/devel/bin/root/mingw32/mingw-cross.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=mingw-cross.cmake \
     -DMY_TARGET_PYTHON_INCLUDE_DIRS=/devel/lib/python-2.7-win/include \
     -DPYTHON_LIBRARIES= \
     -DPYTHON_LIBRARY=/devel/lib/python-2.7-win/libs/libpython27.a \
