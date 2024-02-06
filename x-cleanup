@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm -rf __pycache__ build dist _deps CMakeFiles
-rm -f .ninja_deps .ninja_log build.ninja cmake_install.cmake CMakeCache.txt
+rm -f .ninja_deps .ninja_log build.ninja cmake_install.cmake CMakeCache.txt Makefile
 rm -rf src/litehtmlpy.egg-info  src/litehtmlpy/__pycache__ 
 if [ "$1" == "dist" ]; then
     rm src/litehtmlpy/*.so src/litehtmlpy/*.pyd
