@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="UTF-8"?><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:etd="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/DefinicjeTypy/" xmlns:kusex="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/12/23/eD/KodyUrzedowSkarbowychExWUS/" xmlns:tns="http://crd.gov.pl/wzor/2022/08/18/11723/" xmlns:zr="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/PITR/" xmlns:zzu="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/ORDZU/" targetNamespace="http://crd.gov.pl/wzor/2022/08/18/11723/" elementFormDefault="qualified" attributeFormDefault="unqualified" xml:lang="pl">
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/PITR/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/PITR/PIT-R(21)_Z_v1-0E.xsd"/>
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/ORDZU/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/ORDZU/ORD-ZU(3)_v9-0E.xsd"/>
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/12/23/eD/KodyUrzedowSkarbowychExWUS/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2021/12/23/eD/KodyUrzedowSkarbowychExWUS/KodyUrzedowSkarbowychExWUS_v8-0E.xsd"/>
+	<xsd:import namespace="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/DefinicjeTypy/" schemaLocation="http://crd.gov.pl/xml/schematy/dziedzinowe/mf/2022/03/15/eD/DefinicjeTypy/StrukturyDanych_v11-0E.xsd"/>
+	<!--Od 1 stycznia 2023 r. art. 35 ust. 6 ustawy zastępuje dotychczasowy art. 35 ust. 10 ustawy. Przepis art. 35 ust. 6 ustawy ma zastosowanie do dochodów (przychodów) uzyskanych od 1 stycznia 2023 r.-->
+	<!-- -->
+	<!--Jeżeli w odniesieniu do dochodów (przychodów) osoby fizycznej uzyskanych w roku, o którym mowa w poz. 4, składający sporządza i przesyła więcej niż jedną informację PIT-11 (niebędącą korektą poprzedniej), w informacji tej nie uwzględnia się kwot wykazanych w uprzednio przesłanych informacjach (nie sumuje się ich). W przypadku gdy sporządzone i przesłane w trakcie roku podatkowego informacje PIT-11 zawierają kompletne dane niezbędne do sporządzenia zeznania podatkowego, płatnik nie przesyła informacji PIT-11 po zakończeniu roku.-->
+	<!-- -->
+	<!--Art. 35a ustawy został uchylony z dniem 26 października 2007 r. ustawą z dnia 24 sierpnia 2007 r. o zmianie ustawy o promocji zatrudnienia i instytucjach rynku pracy oraz o zmianie niektórych innych ustaw (Dz. U. poz. 1243). Uchylony przepis na mocy art. 7 ust. 7 powołanej ustawy ma zastosowanie do płatników do czasu obowiązywania umowy aktywizacyjnej zawartej przed dniem 26 października 2007 r. W tym przypadku płatnik przekazuje informację podatnikowi i urzędowi skarbowemu w terminie do końca lutego roku następującego po roku podatkowym.-->
+	<!-- -->
+	<!--W przypadku przedsiębiorstwa w spadku za dzień zaprzestania działalności uważa się dzień wygaśnięcia zarządu sukcesyjnego albo wygaśnięcia uprawnienia do powołania zarządcy sukcesyjnego, jeżeli zarząd sukcesyjny nie został ustanowiony i dokonano zgłoszenia, o którym mowa w art. 12 ust. 1c ustawy z dnia 13 października 1995 r. o zasadach ewidencji i identyfikacji podatników i płatników (Dz. U. z 2020 r. poz. 170, z późn. zm.).-->
+	<!-- -->
+	<!--Ilekroć w informacji jest mowa o urzędzie skarbowym, w tym o urzędzie skarbowym, do którego adresowana jest informacja - oznacza to urząd skarbowy, przy pomocy którego właściwy dla podatnika naczelnik urzędu skarbowego wykonuje swoje zadania.-->
+	<!-- -->
+	<!--W kwocie kosztów uzyskania przychodów wykazuje się koszty faktycznie uwzględnione przez płatnika przy poborze zaliczek na podatek.-->
+	<!-- -->
+	<!--W przypadku gdy zakład pracy pobierał zaliczki na podatek zarówno od należności ze stosunku: pracy, służbowego, spółdzielczego i z pracy nakładczej, o których mowa w art. 12 ust. 1 ustawy, jak i zasiłków pieniężnych z ubezpieczenia społecznego, o których mowa w art. 20 ust. 1 ustawy, łączną kwotę zaliczek pobranych z tych źródeł wykazuje tylko raz. Kwotę tę płatnik może wykazać w wierszu 1, odpowiednio w wierszach 2, 3, 12, 13, 14 albo 15 części E.-->
+	<xsd:complexType name="TNaglowek">
+		<xsd:annotation>
+			<xsd:documentation>Nagłówek deklaracji</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="KodFormularza">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="tns:TKodFormularza">
+							<xsd:attribute name="kodSystemowy" type="xsd:string" use="required" fixed="PIT-11 (29)"/>
+							<xsd:attribute name="kodPodatku" type="xsd:string" use="required" fixed="PIT"/>
+							<xsd:attribute name="rodzajZobowiazania" type="xsd:token" use="required" fixed="Z"/>
+							<xsd:attribute name="wersjaSchemy" type="xsd:string" use="required" fixed="1-0E"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="WariantFormularza">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:byte">
+						<xsd:enumeration value="29"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+			<xsd:element name="CelZlozenia">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="etd:TCelZlozenia">
+							<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_7"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+				<!--Zgodnie z art. 81 ustawy z dnia 29 sierpnia 1997 r. - Ordynacja podatkowa (Dz. U. z 2021 r. poz. 1540, z późn. zm.), zwanej dalej „Ordynacją podatkową”.-->
+			</xsd:element>
+			<xsd:element name="Rok">
+				<xsd:simpleType>
+					<xsd:restriction base="etd:TRok">
+						<xsd:minInclusive value="2022"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+				<!--Jeżeli w odniesieniu do dochodów (przychodów) osoby fizycznej uzyskanych w roku, o którym mowa w poz. 4, składający sporządza i przesyła więcej niż jedną informację PIT-11 (niebędącą korektą poprzedniej), w informacji tej nie uwzględnia się kwot wykazanych w uprzednio przesłanych informacjach (nie sumuje się ich). W przypadku gdy sporządzone i przesłane w trakcie roku podatkowego informacje PIT-11 zawierają kompletne dane niezbędne do sporządzenia zeznania podatkowego, płatnik nie przesyła informacji PIT-11 po zakończeniu roku.-->
+			</xsd:element>
+			<xsd:element name="KodUrzedu" type="kusex:TKodUS1"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:simpleType name="TKodFormularza">
+		<xsd:annotation>
+			<xsd:documentation>Symbol wzoru formularza</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="PIT-11"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="TRodzajId">
+		<xsd:annotation>
+			<xsd:documentation>Rodzaj Identyfikatora Zagranicznego</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:byte">
+			<xsd:enumeration value="1">
+				<xsd:annotation>
+					<xsd:documentation>numer identyfikacyjny TIN</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="2">
+				<xsd:annotation>
+					<xsd:documentation>numer ubezpieczeniowy</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="3">
+				<xsd:annotation>
+					<xsd:documentation>paszport</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="4">
+				<xsd:annotation>
+					<xsd:documentation>urzędowy dokument stwierdzający tożsamość</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="8">
+				<xsd:annotation>
+					<xsd:documentation>inny rodzaj identyfikacji podatkowej</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="9">
+				<xsd:annotation>
+					<xsd:documentation>inny dokument potwierdzający tożsamość</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="TIdentyfikatorOsobyNiefizycznej">
+		<xsd:annotation>
+			<xsd:documentation>Podstawowy zestaw danych identyfikacyjnych o osobie niefizycznej</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="NIP" type="etd:TNrNIP">
+				<xsd:annotation>
+					<xsd:documentation>Identyfikator podatkowy NIP</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="PelnaNazwa">
+				<xsd:annotation>
+					<xsd:documentation>Pełna nazwa</xsd:documentation>
+				</xsd:annotation>
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:token">
+						<xsd:minLength value="1"/>
+						<xsd:maxLength value="240"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TIdentyfikatorOsobyFizycznej1">
+		<xsd:annotation>
+			<xsd:documentation>Podstawowy zestaw danych identyfikacyjnych o osobie fizycznej z identyfikatorem NIP albo PESEL</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:element name="NIP" type="etd:TNrNIP_Ex">
+					<xsd:annotation>
+						<xsd:documentation>Identyfikator podatkowy NIP</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="PESEL" type="etd:TNrPESEL_Ex">
+					<xsd:annotation>
+						<xsd:documentation>Identyfikator podatkowy numer PESEL</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:choice>
+			<xsd:element name="ImiePierwsze" type="etd:TImie">
+				<xsd:annotation>
+					<xsd:documentation>Pierwsze imię</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="Nazwisko" type="etd:TNazwisko">
+				<xsd:annotation>
+					<xsd:documentation>Nazwisko</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="DataUrodzenia" type="etd:TData">
+				<xsd:annotation>
+					<xsd:documentation>Data urodzenia</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="TPodmiotDowolnyBezAdresu1">
+		<xsd:annotation>
+			<xsd:documentation>Skrócony zestaw danych o osobie fizycznej lub niefizycznej z identyfikatorem NIP albo PESEL</xsd:documentation>
+		</xsd:annotation>
+		<xsd:choice>
+			<xsd:element name="OsobaFizyczna" type="etd:TIdentyfikatorOsobyFizycznej1"/>
+			<xsd:element name="OsobaNiefizyczna" type="tns:TIdentyfikatorOsobyNiefizycznej"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:element name="Deklaracja">
+		<xsd:annotation>
+			<xsd:documentation>INFORMACJA O PRZYCHODACH Z INNYCH ŹRÓDEŁ ORAZ O DOCHODACH I POBRANYCH ZALICZKACH NA PODATEK DOCHODOWY w roku</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Naglowek" type="tns:TNaglowek">
+					<xsd:annotation>
+						<xsd:documentation>Nagłówek deklaracji</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="Podmiot1">
+					<!--W przypadku przedsiębiorstwa w spadku należy podać identyfikator podatkowy NIP zmarłego przedsiębiorcy.-->
+					<!---->
+					<!--W przypadku przedsiębiorstwa w spadku należy podać dane identyfikacyjne zmarłego przedsiębiorcy.-->
+					<xsd:complexType>
+						<xsd:complexContent>
+							<xsd:extension base="tns:TPodmiotDowolnyBezAdresu1">
+								<xsd:attribute name="rola" type="xsd:string" use="required" fixed="Płatnik/Składający"/>
+							</xsd:extension>
+						</xsd:complexContent>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Podmiot2">
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="OsobaFizyczna">
+								<xsd:complexType>
+									<xsd:complexContent>
+										<xsd:extension base="tns:TIdentyfikatorOsobyFizycznej1">
+											<xsd:sequence minOccurs="0">
+												<xsd:element name="NrId">
+													<xsd:annotation>
+														<xsd:documentation>Zagraniczny numer identyfikacyjny podatnika (numer dokumentu stwierdzającego tożsamość)</xsd:documentation>
+													</xsd:annotation>
+													<!--W poz. 13 należy podać numer służący identyfikacji do celów podatkowych lub ubezpieczeń społecznych uzyskany w państwie, w którym podatnik ma miejsce zamieszkania. W przypadku braku takiego numeru w poz. 13 należy podać numer dokumentu stwierdzającego tożsamość podatnika, uzyskanego w tym państwie.-->
+													<xsd:complexType>
+														<xsd:simpleContent>
+															<xsd:extension base="etd:TNrDokumentuStwierdzajacegoTozsamosc">
+																<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_13"/>
+															</xsd:extension>
+														</xsd:simpleContent>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="RodzajNrId">
+													<xsd:annotation>
+														<xsd:documentation>Rodzaj numeru identyfikacyjnego (dokumentu stwierdzającego tożsamość)</xsd:documentation>
+													</xsd:annotation>
+													<!--Poz. 14 i 15 należy wypełnić, jeżeli w poz. 13 podano zagraniczny numer identyfikacyjny podatnika lub numer dokumentu stwierdzającego tożsamość podatnika.-->
+													<xsd:complexType>
+														<xsd:simpleContent>
+															<xsd:extension base="tns:TRodzajId">
+																<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_14"/>
+															</xsd:extension>
+														</xsd:simpleContent>
+													</xsd:complexType>
+												</xsd:element>
+												<xsd:element name="KodKrajuWydania">
+													<xsd:annotation>
+														<xsd:documentation>Kod kraju wydania numeru identyfikacyjnego (dokumentu stwierdzającego tożsamość)</xsd:documentation>
+													</xsd:annotation>
+													<xsd:complexType>
+														<xsd:simpleContent>
+															<xsd:extension base="etd:TKodKrajuWydania">
+																<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_15A"/>
+															</xsd:extension>
+														</xsd:simpleContent>
+													</xsd:complexType>
+												</xsd:element>
+											</xsd:sequence>
+										</xsd:extension>
+									</xsd:complexContent>
+								</xsd:complexType>
+							</xsd:element>
+							<xsd:element name="AdresZamieszkania" minOccurs="0">
+								<xsd:complexType>
+									<xsd:annotation>
+										<xsd:documentation>Informacje opisujące adres</xsd:documentation>
+									</xsd:annotation>
+									<xsd:sequence>
+										<xsd:element name="KodKraju">
+											<xsd:annotation>
+												<xsd:documentation>Kod kraju zamieszkania</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:simpleContent>
+													<xsd:extension base="etd:TKodKraju">
+														<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_19A"/>
+													</xsd:extension>
+												</xsd:simpleContent>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="Wojewodztwo" type="etd:TJednAdmin" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Województwo</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Powiat" type="etd:TJednAdmin" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Powiat</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Gmina" type="etd:TJednAdmin" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Gmina</xsd:documentation>
+											</xsd:annotation>
+										</xsd:element>
+										<xsd:element name="Ulica" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Nazwa ulicy</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:simpleContent>
+													<xsd:extension base="etd:TUlica">
+														<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_23"/>
+													</xsd:extension>
+												</xsd:simpleContent>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="NrDomu" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Numer budynku</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:simpleContent>
+													<xsd:extension base="etd:TNrBudynku">
+														<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_24"/>
+													</xsd:extension>
+												</xsd:simpleContent>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="NrLokalu" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Numer lokalu</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:simpleContent>
+													<xsd:extension base="etd:TNrLokalu">
+														<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_25"/>
+													</xsd:extension>
+												</xsd:simpleContent>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="Miejscowosc">
+											<xsd:annotation>
+												<xsd:documentation>Nazwa miejscowości</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:simpleContent>
+													<xsd:extension base="etd:TMiejscowosc">
+														<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_26"/>
+													</xsd:extension>
+												</xsd:simpleContent>
+											</xsd:complexType>
+										</xsd:element>
+										<xsd:element name="KodPocztowy" minOccurs="0">
+											<xsd:annotation>
+												<xsd:documentation>Kod pocztowy</xsd:documentation>
+											</xsd:annotation>
+											<xsd:complexType>
+												<xsd:simpleContent>
+													<xsd:extension base="etd:TKodPocztowy">
+														<xsd:attribute name="poz" type="xsd:string" use="required" fixed="P_27"/>
+													</xsd:extension>
+												</xsd:simpleContent>
+											</xsd:complexType>
+										</xsd:element>
+									</xsd:sequence>
+									<xsd:attribute name="rodzajAdresu" type="xsd:string" use="required" fixed="RAD"/>
+								</xsd:complexType>
+							</xsd:element>
+						</xsd:sequence>
+						<xsd:attribute name="rola" type="xsd:string" use="required" fixed="Podatnik"/>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="PozycjeSzczegolowe">
+					<xsd:annotation>
+						<xsd:documentation>Informacja o kosztach uzyskania przychodu z tytułu stosunku służbowego, stosunku pracy, spółdzielczego stosunku pracy oraz pracy nakładczej, dochody podatnika, pobrane zaliczki oraz pobrane składki na ubezpieczenia społeczne, informacja o wysokości przychodów, o których mowa w art. 20 ust. 1 ustawy, informacja o przychodach zwolnionych od podatku, załączniku oraz o pobranych przez płatnika składkach: na ubezpieczenie zdrowotne oraz członkowskich na rzecz związków zawodowych</xsd:documentation>
+					</xsd:annotation>
+					<xsd:complexType>
+						<xsd:sequence>
+							<xsd:element name="P_5" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Nr informacji</xsd:documentation>
+								</xsd:annotation>
+								<!--Jeżeli w odniesieniu do dochodów (przychodów) osoby fizycznej uzyskanych w roku, o którym mowa w poz. 4, składający sporządza i przesyła więcej niż jedną informację PIT-11 (niebędącą korektą poprzedniej), należy podać kolejny numer składanej informacji dotyczącej tego roku podatkowego.-->
+								<xsd:simpleType>
+									<xsd:restriction base="etd:TNaturalny">
+										<xsd:minInclusive value="0"/>
+										<xsd:maxInclusive value="99"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<xsd:element name="P_11">
+								<xsd:annotation>
+									<xsd:documentation>Rodzaj obowiązku podatkowego podatnika: 1 - nieograniczony obowiązek podatkowy (rezydent), 2 - ograniczony obowiązek podatkowy (nierezydent)</xsd:documentation>
+								</xsd:annotation>
+								<xsd:simpleType>
+									<xsd:restriction base="xsd:byte">
+										<xsd:enumeration value="1">
+											<xsd:annotation>
+												<xsd:documentation>nieograniczony obowiązek podatkowy (rezydent)</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+										<xsd:enumeration value="2">
+											<xsd:annotation>
+												<xsd:documentation>ograniczony obowiązek podatkowy (nierezydent)</xsd:documentation>
+											</xsd:annotation>
+										</xsd:enumeration>
+									</xsd:restriction>
+								</xsd:simpleType>
+								<!--W przypadku ograniczonego obowiązku podatkowego (nierezydent), w poz. 19-27 należy podać kraj inny niż Rzeczpospolita Polska oraz adres zamieszkania za granicą; dodatkowo kod kraju wydania dokumentu powinien być zgodny z krajem adresu zamieszkania.-->
+							</xsd:element>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>1. Należności ze stosunku: pracy, służbowego, spółdzielczego i z pracy nakładczej, wypłacone przez zakład pracy oraz płatników, o których mowa w art. 42e ust. 1 ustawy, z wyjątkiem należności wykazanych w wierszu 2 albo 3</xsd:documentation>
+								</xsd:annotation>
+								<!--W wierszu 1 i odpowiednio wierszu 6 części E wykazuje się również przychody z wymienionych tam tytułów otrzymane przez podatników, którzy przenieśli miejsce zamieszkania na terytorium Rzeczypospolitej Polskiej (tzw. ulga na powrót) oraz otrzymane przez podatników, którzy w roku podatkowym wychowywali co najmniej czworo dzieci (tzw. ulga dla rodzin 4+), jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w sytuacji gdy podatnik nie złożył płatnikowi oświadczenia o spełnieniu warunków do stosowania zwolnień od podatku, o których mowa w art. 21 ust. 1 pkt 152 i 153 ustawy, albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników wraz z kwotą kosztów uzyskania przychodów oraz sumą zaliczek na podatek pobranych przez płatnika.-->
+								<xsd:element name="P_28" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Informacja o kosztach uzyskania przychodu. Koszty uzyskania przychodów, wykazane w poz. 30, zostały uwzględnione do wysokości przysługującej podatnikowi</xsd:documentation>
+									</xsd:annotation>
+									<xsd:simpleType>
+										<xsd:restriction base="xsd:byte">
+											<xsd:enumeration value="1">
+												<xsd:annotation>
+													<xsd:documentation>z jednego stosunku pracy (stosunków pokrewnych)</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="2">
+												<xsd:annotation>
+													<xsd:documentation>z więcej niż jednego stosunku pracy (stosunków pokrewnych)</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="3">
+												<xsd:annotation>
+													<xsd:documentation>z jednego stosunku pracy (stosunków pokrewnych), podwyższone w związku z zamieszkiwaniem podatnika poza miejscowością, w której znajduje się zakład pracy</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+											<xsd:enumeration value="4">
+												<xsd:annotation>
+													<xsd:documentation>z więcej niż jednego stosunku pracy (stosunków pokrewnych), podwyższone w związku z zamieszkiwaniem podatnika poza miejscowością, w której znajduje się zakład pracy</xsd:documentation>
+												</xsd:annotation>
+											</xsd:enumeration>
+										</xsd:restriction>
+									</xsd:simpleType>
+								</xsd:element>
+								<!--W kwocie przychodów, w części E, nie uwzględnia się przychodów wolnych od podatku na podstawie przepisów ustawy oraz przychodów, od których na podstawie przepisów Ordynacji podatkowej zaniechano poboru podatku; jednakże w kolumnie e należy wykazać dochody zwolnione od podatku na podstawie umów o unikaniu podwójnego opodatkowania lub innych umów międzynarodowych.-->
+								<xsd:element name="P_29" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_30" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_31" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_32" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Dochód zwolniony od podatku</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_33" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:sequence minOccurs="0">
+									<xsd:element name="P_34" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Przychody, do których zastosowano odliczenie kosztów uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3 ustawy</xsd:documentation>
+										</xsd:annotation>
+										<!--W poz. 34 należy wykazać przychody, do których zastosowano odliczenie kosztów uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3 ustawy.-->
+									</xsd:element>
+									<xsd:element name="P_35" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Koszty uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>2. Należności z tytułów wymienionych w wierszu 1, otrzymane przez podatników do ukończenia 26. roku życia</xsd:documentation>
+								</xsd:annotation>
+								<!--Wiersze 2, 7 i 11 części E wypełnia się, jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w związku ze złożeniem przez podatnika oświadczenia o rezygnacji ze stosowania w trakcie roku zwolnienia od podatku albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 100 i 104), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników do ukończenia 26. roku życia wraz z kwotą kosztów uzyskania przychodów oraz sumą zaliczek na podatek pobranych przez płatnika. Przychody ze stosunku pracy i stosunków pokrewnych uzyskane przez podatnika po dniu ukończenia 26. roku życia płatnik wykazuje w wierszu 1, odpowiednio przychody z umów zlecenia, o których mowa w art. 13 pkt 8 ustawy, płatnik wykazuje w wierszu 6, a przychody z praktyk absolwenckich lub staży uczniowskich, płatnik wykazuje w wierszu 10.-->
+								<xsd:element name="P_36" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_37" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_38" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_39" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Dochód zwolniony od podatku</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_40" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:sequence minOccurs="0">
+									<xsd:element name="P_41" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Przychody, do których zastosowano odliczenie kosztów uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3 ustawy</xsd:documentation>
+										</xsd:annotation>
+										<!-- W poz. 41 należy wykazać przychody, do których zastosowano odliczenie kosztów uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3 ustawy.-->
+									</xsd:element>
+									<xsd:element name="P_42" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Koszty uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>3. Należności z tytułów wymienionych w wierszu 1, otrzymane przez podatników, od ukończenia wieku emerytalnego</xsd:documentation>
+								</xsd:annotation>
+								<!--Wiersze 3, 8 i 14 części E wypełnia się, jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w sytuacji gdy podatnik nie złożył płatnikowi oświadczenia o spełnieniu warunków do stosowania zwolnienia od podatku, o którym mowa w art. 21 ust. 1 pkt 154 ustawy (tzw. ulgi dla seniora) albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników po ukończeniu 60. roku życia w przypadku kobiety i 65. roku życia w przypadku mężczyzny, pod warunkiem że podatnik podlega z tytułu uzyskania tych przychodów ubezpieczeniom społecznym w rozumieniu ustawy z dnia 13 października 1998 r. o systemie ubezpieczeń społecznych (Dz. U. z 2022 r. poz. 1009, z późn. zm.). W wierszach tych należy odpowiednio wykazać kwoty kosztów uzyskania przychodów oraz sumy zaliczek na podatek pobranych przez płatnika. Przychody ze stosunku pracy i stosunków pokrewnych uzyskane przez podatnika przed ukończeniem ww. wieku płatnik wykazuje w wierszu 1, odpowiednio przychody z umów zlecenia, o których mowa w art. 13 pkt 8 ustawy płatnik wykazuje w wierszu 6, a z zasiłków macierzyńskich - w wierszu 12.-->
+								<xsd:element name="P_43" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_44" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_45" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_46" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Dochód zwolniony od podatku</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_47" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:sequence minOccurs="0">
+									<xsd:element name="P_48" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Przychody, do których zastosowano odliczenie kosztów uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3 ustawy</xsd:documentation>
+										</xsd:annotation>
+										<!--W poz. 48 należy wykazać przychody, do których zastosowano odliczenie kosztów uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3 ustawy.-->
+									</xsd:element>
+									<xsd:element name="P_49" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Koszty uzyskania przychodów na podstawie art. 22 ust. 9 pkt 3</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>4. Emerytury - renty zagraniczne</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_50" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_51" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_52" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Dochód zwolniony od podatku</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_53" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>5. Działalność wykonywana osobiście, o której mowa w art. 13 pkt 2, 4-9 ustawy, w tym z umowy o dzieło oraz czynności związane z pełnieniem obowiązków społecznych lub obywatelskich, z wyjątkiem należności wykazanych w wierszach 6 i 7 albo 8</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_54" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_55" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_56" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_57" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>6. Należności z tytułu umowy zlecenia, o której mowa w art. 13 pkt 8 ustawy, z wyjątkiem należności wykazanych w wierszu 7 albo 8</xsd:documentation>
+								</xsd:annotation>
+								<!--W wierszu 1 i odpowiednio wierszu 6 części E wykazuje się również przychody z wymienionych tam tytułów otrzymane przez podatników, którzy przenieśli miejsce zamieszkania na terytorium Rzeczypospolitej Polskiej (tzw. ulga na powrót) oraz otrzymane przez podatników, którzy w roku podatkowym wychowywali co najmniej czworo dzieci (tzw. ulga dla rodzin 4+), jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w sytuacji gdy podatnik nie złożył płatnikowi oświadczenia o spełnieniu warunków do stosowania zwolnień od podatku, o których mowa w art. 21 ust. 1 pkt 152 i 153 ustawy, albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników wraz z kwotą kosztów uzyskania przychodów oraz sumą zaliczek na podatek pobranych przez płatnika.-->
+								<xsd:element name="P_58" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_59" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_60" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_61" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>7. Należności z tytułu wymienionego w wierszu 6, otrzymane przez podatników do ukończenia 26. roku życia</xsd:documentation>
+								</xsd:annotation>
+								<!--Wiersze 2, 7, 11 i 13 części E wypełnia się, jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w związku ze złożeniem przez podatnika oświadczenia o rezygnacji ze stosowania w trakcie roku zwolnienia od podatku, o którym mowa w art. 21 ust. 1 pkt 148 ustawy (tzw. ulga dla młodych) albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników do ukończenia 26. roku życia wraz z kwotą kosztów uzyskania przychodów oraz sumą zaliczek na podatek pobranych przez płatnika. Przychody ze stosunku pracy i stosunków pokrewnych uzyskane przez podatnika po dniu ukończenia 26. roku życia płatnik wykazuje w wierszu 1, odpowiednio przychody z umów zlecenia, o których mowa w art. 13 pkt 8 ustawy, płatnik wykazuje w wierszu 6, przychody z praktyk absolwenckich lub staży uczniowskich, płatnik wykazuje w wierszu 10, a przychody z zasiłków macierzyńskich płatnik wykazuje w wierszu 12.-->
+								<xsd:element name="P_62" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_63" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_64" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_65" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>8. Należności z tytułu wymienionego w wierszu 6, otrzymane przez podatników, którzy mimo nabycia uprawnienia, nie pobierają emerytury lub renty rodzinnej</xsd:documentation>
+								</xsd:annotation>
+								<!--Wiersze 3, 8 i 14 części E wypełnia się, jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w sytuacji gdy podatnik nie złożył płatnikowi oświadczenia o spełnieniu warunków do stosowania zwolnienia od podatku, o którym mowa w art. 21 ust. 1 pkt 154 ustawy (tzw. ulgi dla seniora) albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników po ukończeniu 60. roku życia w przypadku kobiety i 65. roku życia w przypadku mężczyzny, pod warunkiem że podatnik podlega z tytułu uzyskania tych przychodów ubezpieczeniom społecznym w rozumieniu ustawy z dnia 13 października 1998 r. o systemie ubezpieczeń społecznych (Dz. U. z 2022 r. poz. 1009, z późn. zm.). W wierszach tych należy odpowiednio wykazać kwoty kosztów uzyskania przychodów oraz sumy zaliczek na podatek pobranych przez płatnika. Przychody ze stosunku pracy i stosunków pokrewnych uzyskane przez podatnika przed ukończeniem ww. wieku płatnik wykazuje w wierszu 1, odpowiednio przychody z umów zlecenia, o których mowa w art. 13 pkt 8 ustawy płatnik wykazuje w wierszu 6, a z zasiłków macierzyńskich - w wierszu 12.-->
+								<xsd:element name="P_66" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_67" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_68" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_69" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>9. Prawa autorskie i inne prawa, o których mowa w art. 18 ustawy</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_70" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_71" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_72" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:sequence minOccurs="0">
+									<xsd:element name="P_73" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Przychody, do których zastosowano koszty uzyskania przychodów na podstawie art. 22 ust. 9 pkt 1-3 ustawy</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<!--W poz. 73 należy wykazać przychody, do których zastosowano koszty uzyskania przychodów na podstawie art. 22 ust. 9 pkt 1-3 ustawy.-->
+									<xsd:element name="P_74" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Koszty uzyskania przychodów na podstawie art. 22 ust. 9 pkt 1-3 ustawy</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>10. Należności z tytułu praktyk absolwenckich lub staży uczniowskich, z wyjątkiem należności wykazanych w wierszu 11</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_75" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_76" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_77" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>11. Należności z tytułu wymienionego w wierszu 10, otrzymane przez podatników do ukończenia 26. roku życia</xsd:documentation>
+								</xsd:annotation>
+								<!--Wiersze 2, 7, 11 i 13 części E wypełnia się, jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w związku ze złożeniem przez podatnika oświadczenia o rezygnacji ze stosowania w trakcie roku zwolnienia od podatku, o którym mowa w art. 21 ust. 1 pkt 148 ustawy (tzw. ulga dla młodych) albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników do ukończenia 26. roku życia wraz z kwotą kosztów uzyskania przychodów oraz sumą zaliczek na podatek pobranych przez płatnika. Przychody ze stosunku pracy i stosunków pokrewnych uzyskane przez podatnika po dniu ukończenia 26. roku życia płatnik wykazuje w wierszu 1, odpowiednio przychody z umów zlecenia, o których mowa w art. 13 pkt 8 ustawy, płatnik wykazuje w wierszu 6, przychody z praktyk absolwenckich lub staży uczniowskich, płatnik wykazuje w wierszu 10, a przychody z zasiłków macierzyńskich płatnik wykazuje w wierszu 12.-->
+								<xsd:element name="P_78" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_79" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_80" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>12. Zasiłki macierzyńskie, z wyjątkiem zasiłków wykazanych w wierszu 13 albo 14</xsd:documentation>
+								</xsd:annotation>
+								<xsd:element name="P_81" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_82" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_83" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>13. Zasiłki macierzyńskie otrzymane przez podatników do ukończenia 26. roku życia</xsd:documentation>
+								</xsd:annotation>
+								<!--Wiersze 2, 7, 11 i 13 części E wypełnia się, jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w związku ze złożeniem przez podatnika oświadczenia o rezygnacji ze stosowania w trakcie roku zwolnienia od podatku, o którym mowa w art. 21 ust. 1 pkt 148 ustawy (tzw. ulga dla młodych) albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników do ukończenia 26. roku życia wraz z kwotą kosztów uzyskania przychodów oraz sumą zaliczek na podatek pobranych przez płatnika. Przychody ze stosunku pracy i stosunków pokrewnych uzyskane przez podatnika po dniu ukończenia 26. roku życia płatnik wykazuje w wierszu 1, odpowiednio przychody z umów zlecenia, o których mowa w art. 13 pkt 8 ustawy, płatnik wykazuje w wierszu 6, przychody z praktyk absolwenckich lub staży uczniowskich, płatnik wykazuje w wierszu 10, a przychody z zasiłków macierzyńskich płatnik wykazuje w wierszu 12.-->
+								<xsd:element name="P_84" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_85" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_86" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>14. Zasiłki macierzyńskie otrzymane przez podatników od ukończenia wieku emerytalnego</xsd:documentation>
+								</xsd:annotation>
+								<!--Wiersze 3, 8 i 14 części E wypełnia się, jeśli płatnik w trakcie roku pobierał od tych przychodów zaliczki na podatek w sytuacji gdy podatnik nie złożył płatnikowi oświadczenia o spełnieniu warunków do stosowania zwolnienia od podatku, o którym mowa w art. 21 ust. 1 pkt 154 ustawy (tzw. ulgi dla seniora) albo z powodu przekroczenia limitu przychodu zwolnionego od podatku (sumy kwot wykazanych w poz. 109 i 114), gdy zwolnienie było stosowane w trakcie roku. W wierszach tych należy odpowiednio wykazać przychody uzyskane przez podatników po ukończeniu 60. roku życia w przypadku kobiety i 65. roku życia w przypadku mężczyzny, pod warunkiem że podatnik podlega z tytułu uzyskania tych przychodów ubezpieczeniom społecznym w rozumieniu ustawy z dnia 13 października 1998 r. o systemie ubezpieczeń społecznych (Dz. U. z 2022 r. poz. 1009, z późn. zm.). W wierszach tych należy odpowiednio wykazać kwoty kosztów uzyskania przychodów oraz sumy zaliczek na podatek pobranych przez płatnika. Przychody ze stosunku pracy i stosunków pokrewnych uzyskane przez podatnika przed ukończeniem ww. wieku płatnik wykazuje w wierszu 1, odpowiednio przychody z umów zlecenia, o których mowa w art. 13 pkt 8 ustawy płatnik wykazuje w wierszu 6, a z zasiłków macierzyńskich - w wierszu 12.-->
+								<xsd:element name="P_87" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_88" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_89" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>15. Inne źródła</xsd:documentation>
+								</xsd:annotation>
+								<!--W wierszu 15 części E wykazuje się m.in. zasiłki pieniężne z ubezpieczenia społecznego wypłacone przez zakład pracy, z wyjątkiem zasiłków macierzyńskich wykazanych w wierszach 12, 13 i 14, należności z tytułu członkostwa w rolniczej spółdzielni produkcyjnej, należności za pracę przypadające tymczasowo aresztowanym lub skazanym, świadczenia wypłacone z Funduszów: Pracy i Gwarantowanych Świadczeń Pracowniczych, należności wynikające z umowy aktywizacyjnej, a także kwotę stypendium, o którym mowa w art. 21 ust. 1 pkt 40b ustawy, w wysokości przekraczającej kwotę zwolnioną od podatku (wykazaną w poz. 106).-->
+								<xsd:element name="P_90" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_91" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Koszty uzyskania przychodów</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_92" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Dochód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_93" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Dochód zwolniony od podatku</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_94" type="etd:TKwotaCNieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Zaliczka pobrana przez płatnika</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:element name="P_95" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Składki na ubezpieczenia społeczne, o których mowa w przepisach ustawy, podlegające odliczeniu od dochodu, w tym zagraniczne, o których mowa w art. 26 ust. 1 pkt 2a ustawy, z wyjątkiem wykazanych w poz. 96</xsd:documentation>
+									</xsd:annotation>
+									<!--W poz. 95 i 96 nie wykazuje się składek, których podstawę wymiaru stanowi dochód (przychód) zwolniony od podatku na podstawie ustawy, oraz składek, których podstawę wymiaru stanowi dochód, od którego na podstawie przepisów Ordynacji podatkowej zaniechano poboru podatku, a w przypadku składek zagranicznych, których podstawę wymiaru stanowi dochód (przychód) zwolniony od podatku na podstawie umów o unikaniu podwójnego opodatkowania.-->
+								</xsd:element>
+								<xsd:element name="P_96" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Składki na ubezpieczenia społeczne, o których mowa w przepisach ustawy20), w tym zagraniczne, o których mowa w art. 26 ust. 1 pkt 2a ustawy, których podstawę wymiaru stanowi przychód wymieniony w wierszach 2, 3, 7, 8 i 11 części E</xsd:documentation>
+									</xsd:annotation>
+									<!--W poz. 95 i 96 nie wykazuje się składek, których podstawę wymiaru stanowi dochód (przychód) zwolniony od podatku na podstawie ustawy, oraz składek, których podstawę wymiaru stanowi dochód, od którego na podstawie przepisów Ordynacji podatkowej zaniechano poboru podatku, a w przypadku składek zagranicznych, których podstawę wymiaru stanowi dochód (przychód) zwolniony od podatku na podstawie umów o unikaniu podwójnego opodatkowania.-->
+								</xsd:element>
+								<xsd:element name="P_97" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Składki na ubezpieczenia społeczne, o których mowa w przepisach ustawy, których podstawę wymiaru stanowi przychód zwolniony na podstawie art. 21 ust. 1 pkt 148 oraz 152-154 ustawy, wykazane odpowiednio w poz. 110, 111, 112, 115 i 116</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Informacja o wysokości przychodów o których mowa w art. 20 ust. 1 ustawy.</xsd:documentation>
+								</xsd:annotation>
+								<!--część tę wypełniają składający niebędący płatnikami, o których mowa w art. 42a ustawy, w tym rolnicy-->
+								<xsd:element name="P_98" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>Wynagrodzenie z tytułu umowy o pomocy przy zbiorach - przychód</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:sequence minOccurs="0">
+									<xsd:element name="P_99" type="etd:TZnakowy">
+										<xsd:annotation>
+											<xsd:documentation>Rodzaj przychodu (wymienić)</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="P_100" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Przychód</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:sequence minOccurs="0">
+									<xsd:element name="P_101" type="etd:TZnakowy">
+										<xsd:annotation>
+											<xsd:documentation>Rodzaj przychodu (wymienić)</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="P_102" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Przychód</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:sequence minOccurs="0">
+									<xsd:element name="P_103" type="etd:TZnakowy">
+										<xsd:annotation>
+											<xsd:documentation>Rodzaj przychodu (wymienić)</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="P_104" type="etd:TKwota2Nieujemna">
+										<xsd:annotation>
+											<xsd:documentation>Przychód</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+								<xsd:element name="P_105" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Razem. Suma kwot - przychód</xsd:documentation>
+									</xsd:annotation>
+									<!--Suma kwot z poz.: 98, 100, 102 i 104.-->
+								</xsd:element>
+							</xsd:sequence>
+							<!--INFORMACJA O PRZYCHODACH ZWOLNIONYCH OD PODATKU, ZAŁĄCZNIKU ORAZ O POBRANYCH PRZEZ PŁATNIKA SKŁADKACH: NA UBEZPIECZENIE ZDROWOTNE ORAZ CZŁONKOWSKICH NA RZECZ ZWIĄZKÓW ZAWODOWYCH (część tę wypełniają składający będący płatnikami)-->
+							<xsd:element name="P_106" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Przychody z tytułu stypendium, o którym mowa w art. 21 ust. 1 pkt 40b ustawy</xsd:documentation>
+								</xsd:annotation>
+								<!--Należy wykazać kwotę stypendium, do wysokości limitu zwolnienia.-->
+								<!-- -->
+								<!--Limit zwolnienia od podatku wynosi 3 800 zł w roku podatkowym.-->
+								<xsd:simpleType>
+									<xsd:restriction base="etd:TKwota2Nieujemna">
+										<xsd:maxInclusive value="3800"/>
+									</xsd:restriction>
+								</xsd:simpleType>
+							</xsd:element>
+							<xsd:element name="P_107" type="etd:TKwota2Nieujemna" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Przychody otrzymywane z zagranicy, o których mowa w art. 21 ust. 1 pkt 74 ustawy, między innymi renty inwalidzkie z tytułu inwalidztwa wojennego</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="P_108" type="etd:TKwota2Nieujemna" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Przychody pochodzące ze środków bezzwrotnej pomocy zagranicznej, o których mowa w art. 21 ust. 1 pkt 46 ustawy</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:sequence minOccurs="0">
+								<xsd:element name="P_109" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychody ze stosunku pracy i stosunków pokrewnych, z umów zlecenia, praktyk absolwenckich lub staży uczniowskich oraz z zasiłków macierzyńskich, o których mowa w art. 21 ust. 1 pkt 148 ustawy Należy wykazać kwotę przychodu, do wysokości limitu zwolnienia</xsd:documentation>
+									</xsd:annotation>
+									<!--Należy wykazać kwotę przychodu, do wysokości limitu zwolnienia-->
+									<!-- -->
+									<!--Limit zwolnienia od podatku przychodów wykazanych w poz. 109 i 114 wynosi łącznie 85 528 zł w roku podatkowym.-->
+								</xsd:element>
+								<xsd:element name="P_110" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>w tym przychody ze stosunku pracy i stosunków pokrewnych</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_111" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>w tym przychody z umów zlecenia</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_112" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>w tym przychody z tytułu praktyk absolwenckich lub staży uczniowskich</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_113" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>w tym przychody przychody z zasiłków macierzyńskich</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+							<xsd:sequence minOccurs="0">
+								<xsd:element name="P_114" type="etd:TKwota2Nieujemna">
+									<xsd:annotation>
+										<xsd:documentation>Przychody ze stosunku pracy i stosunków pokrewnych, z umów zlecenia oraz z zasiłków macierzyńskich o których mowa w art. 21 ust. 1 pkt 152-154 ustawy Należy wykazać kwotę przychodu, do wysokości limitu zwolnienia</xsd:documentation>
+									</xsd:annotation>
+									<!--Należy wykazać kwotę przychodu, do wysokości limitu zwolnienia-->
+									<!-- -->
+									<!--Limit zwolnienia od podatku przychodów wykazanych w poz. 109 i 114 wynosi łącznie 85 528 zł w roku podatkowym.-->
+								</xsd:element>
+								<xsd:element name="P_115" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>w tym przychody ze stosunku pracy i stosunków pokrewnych</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_116" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>w tym przychody z umów zlecenia</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:element name="P_117" type="etd:TKwota2Nieujemna" minOccurs="0">
+									<xsd:annotation>
+										<xsd:documentation>w tym przychody przychody z zasiłków macierzyńskich</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+								<xsd:sequence>
+									<xsd:element name="P_118" type="etd:TWybor1" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Rodzaj (podstawa prawna) przychodu zwolnionego od podatku, wykazanego w poz. 114: 1 - art. 21 ust. 1 pkt 152 ustawy</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="P_119" type="etd:TWybor1" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Rodzaj (podstawa prawna) przychodu zwolnionego od podatku, wykazanego w poz. 114: 1 - art. 21 ust. 1 pkt 153 ustawy</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+									<xsd:element name="P_120" type="etd:TWybor1" minOccurs="0">
+										<xsd:annotation>
+											<xsd:documentation>Rodzaj (podstawa prawna) przychodu zwolnionego od podatku, wykazanego w poz. 114: 1 - art. 21 ust. 1 pkt 154 ustawy</xsd:documentation>
+										</xsd:annotation>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:sequence>
+							<xsd:element name="P_121" type="etd:TWybor1_2">
+								<xsd:annotation>
+									<xsd:documentation>Do niniejszej informacji dołączono informację PIT-R: 1 - tak, 2 - nie</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+							<xsd:element name="P_122" type="etd:TKwota2Nieujemna" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Składki na ubezpieczenie zdrowotne pobrane przez płatnika do wysokości 9% podstawy jej wymiaru</xsd:documentation>
+								</xsd:annotation>
+								<!--W poz. 122 wykazuje się składki na ubezpieczenie zdrowotne, o których mowa w ustawie z dnia 27 sierpnia 2004 r. o świadczeniach opieki zdrowotnej finansowanych ze środków publicznych (Dz. U. z 2021 r. poz. 1285, z późn. zm.). Składki wykazane w poz. 122 są uwzględniane w kwocie składek do obliczenia w zeznaniu podatkowym dodatkowego zwrotu z tytułu ulgi na dzieci, zgodnie z art. 27f ust. 9 ustawy.-->
+							</xsd:element>
+							<xsd:element name="P_123" type="etd:TKwota2Nieujemna" minOccurs="0">
+								<xsd:annotation>
+									<xsd:documentation>Składki członkowskie na rzecz związków zawodowych pobrane przez płatnika, podlegające odliczeniu od dochodu, o których mowa w art. 26 ust. 1 pkt 2c ustawy</xsd:documentation>
+								</xsd:annotation>
+							</xsd:element>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+				<xsd:element name="Pouczenie">
+					<xsd:annotation>
+						<xsd:documentation>Wartość 1 oznacza potwierdzenie zapoznania się z treścią i akceptację poniższego pouczenia:
+						Za uchybienie obowiązkom płatnika / składającego niebędącego płatnikiem, grozi odpowiedzialność przewidziana w Kodeksie karnym skarbowym.
+								</xsd:documentation>
+					</xsd:annotation>
+					<xsd:simpleType>
+						<xsd:restriction base="etd:TKwota2Nieujemna">
+							<xsd:minExclusive value="0"/>
+							<xsd:maxExclusive value="2"/>
+							<xsd:fractionDigits value="0"/>
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:element>
+				<xsd:element name="Zalaczniki" minOccurs="0">
+					<xsd:complexType>
+						<xsd:sequence minOccurs="0">
+							<xsd:element ref="zr:Zalacznik_PIT-R" minOccurs="0"/>
+							<xsd:element ref="zzu:Zalacznik_ORD-ZU" minOccurs="0"/>
+						</xsd:sequence>
+					</xsd:complexType>
+				</xsd:element>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:unique name="klucz_NIP">
+			<xsd:selector xpath="tns:Podmiot1|tns:Podmiot2"/>
+			<xsd:field xpath="*/etd:NIP|*/tns:NIP"/>
+		</xsd:unique>
+	</xsd:element>
+</xsd:schema>

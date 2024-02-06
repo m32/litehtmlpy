@@ -20,6 +20,10 @@ build/
 dist/
 wheelhouse/
 __pycache__/
+demo-pit11/xml/
+
 demo.png
+demo-*.html
+demo-*.png
 
 litehtmlpy.cpp

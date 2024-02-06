@@ -11,6 +11,8 @@ class Main:
         self.wxapp = wx.App(False)
 
     def save(self, i, htmlstart, htmldata, htmlend):
+        with open(f'demo-{i:04d}.html', 'wt') as fp:
+            fp.write(htmlstart+htmldata+htmlend)
         cls = LiteHtml()
         cls.reset()
         cls.fromString(htmlstart+htmldata+htmlend)
@@ -25,13 +27,20 @@ class Main:
 
     def main(self):
         html = open('demo.html', 'rt').read()
-        start = html.find('<body>') + len('<body>')
-        end = html.find('</body>')
+        split='<body>'
+        start = html.find(split) + len(split)
+        start = html.find('>', start) + 1
+        i = end = start
+        while True:
+            i = html.find('</div>', i+1)
+            if i == -1:
+                break
+            end = i
         htmlstart = html[0:start]
         htmldata = html[start:end]
         htmlend = html[end:]
         i = 0
-        split = '<div class="lamstrone" />'
+        split = '<div class="lamstrone"/>'
         while True:
             istop = htmldata.find(split)
             if istop == -1:

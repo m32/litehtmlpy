@@ -1,0 +1,2 @@
+#!/bin/bash
+./pit11.py --xml=pit11.xml --xsl=pit11.xsl --html=../demo.html 
