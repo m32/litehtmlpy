@@ -2,6 +2,7 @@
 import os
 import logme
 import requests
+import urllib.parse
 import wx
 from litehtmlpy import litehtmlwx
 
@@ -118,13 +119,16 @@ class LiteWindow(wx.ScrolledWindow):
         if os.path.exists(url):
             with open(url, 'rt') as fp:
                 html = fp.read()
-        elif url.split(':')[0] in ('http', 'https'):
-            r = requests.get(url)
-            print(r.headers)
-            html = r.text
         else:
-            print('unknown url', url)
-            return
+            if self.url:
+                url = urllib.parse.urljoin(self.url, url)
+            if url.split(':')[0] in ('http', 'https'):
+                r = requests.get(url)
+                print(r.headers)
+                html = r.text
+            else:
+                print('unknown url', url)
+                return
         self.url = url
 
         self.doc = litehtmlwx.litehtmlpy.fromString(self.cntr, html, None, None)
