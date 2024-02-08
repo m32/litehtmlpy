@@ -9,14 +9,14 @@ LiteHtmlPy is a solution that helps python developers to create printouts and pr
 ./x-cleanup
 
 ## Linux configure
-./x-build-cmake -DCMAKE_BUILD_TYPE=Debug
-./x-build-cmake -DCMAKE_BUILD_TYPE=Release
+- ./x-build-cmake -DCMAKE_BUILD_TYPE=Debug
+- ./x-build-cmake -DCMAKE_BUILD_TYPE=Release
 
 ## Cross Mingw configure for python 2.7
-./x-build-cmake-mingw
+- ./x-build-cmake-mingw
 
 ## Build for manylinux inside docker
-./x-build-docker
+- ./x-build-docker
 
 ## Just setup.py build
-./x-build-python
+- ./x-build-python
