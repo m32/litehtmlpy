@@ -9,6 +9,13 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
     def __init__(self, attributes, doc):
         super().__init__(doc)
         print('i`m the button', attributes)
+        self.attributes = attributes
+        self.wnd = None
+
+    def update_position(self, wnd):
+        pos = self.get_placement()
+        print('button.pos: {},{},{},{}'.format(pos.x, pos.y, pos.width, pos.height))
+        self.wnd = wnd
 
     def draw(self, hdc, x, y, clip, ri):
         super().draw(hdc, x, y, clip, ri)
@@ -19,14 +26,22 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
     def on_mouse_leave(self):
         return False
     def on_lbutton_down(self):
+        print('Button.on_lbutton_down')
         return False
     def on_lbutton_up(self):
+        print('Button.on_lbutton_up')
         return False
     def on_click(self):
         print('Button.on_click')
+        self.wnd.HtmlClick(self)
 
 class document_container(litehtmlwx.document_container):
     handlers = []
+
+    def update_positions(self, wnd):
+        for h in self.handlers:
+            h.update_position(wnd)
+
     def create_element(self, tag_name, attributes=None, doc=None):
         if tag_name == 'button':
             if doc is not None:
@@ -41,9 +56,9 @@ class LiteWindow(wx.ScrolledWindow):
         wx.ScrolledWindow.__init__(self, parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.SetScrollbar(wx.VERTICAL, 0, 0, 0, True)
         self.SetBackgroundColour("WHITE")
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
         self.Bind(wx.EVT_SCROLLWIN, self.OnScroll)
         self.url = None
         self.cntr = document_container()
@@ -58,12 +73,16 @@ class LiteWindow(wx.ScrolledWindow):
     def OnMouse(self, evt):
         if self.doc is not None:
             #print('OnMouse', evt.x, evt.y, 'ld:', evt.LeftDown(), 'lu:', evt.LeftUp(), 'mv:', evt.Moving())
+            cx = self.GetScrollPos(wx.HORIZONTAL)
+            cy = self.GetScrollPos(wx.VERTICAL)
             if evt.LeftDown():
-                self.doc.on_lbutton_down(evt.x, evt.y, evt.x, evt.y, [])
+                print('left down', evt.x, evt.y)
+                self.doc.on_lbutton_down(evt.x, evt.y, cx, cy, [])
             elif evt.LeftUp():
-                self.doc.on_lbutton_up(evt.x, evt.y, evt.x, evt.y, [])
+                print('left up', evt.x, evt.y)
+                self.doc.on_lbutton_up(evt.x, evt.y, cx, cy, [])
             elif evt.Moving():
-                self.doc.on_mouse_over(evt.x, evt.y, evt.x, evt.y, [])
+                self.doc.on_mouse_over(evt.x, evt.y, cx, cy, [])
         evt.Skip()
 
     def OnSize(self, event):
@@ -76,6 +95,11 @@ class LiteWindow(wx.ScrolledWindow):
         if self.url is not None:
             dc = wx.PaintDC(self)
             dc.DrawBitmap(self.cntr.bmp, wx.Point(0, 0))
+        event.Skip()
+
+    def OnScroll(self, event):
+        if self.url is not None:
+            self.HtmlPaint()
         event.Skip()
 
     def LoadURL(self, url):
@@ -112,11 +136,10 @@ class LiteWindow(wx.ScrolledWindow):
         y = self.GetScrollPos(wx.VERTICAL)
         clip = litehtmlwx.litehtmlpy.position(0, 0, size[0], size[1])
         self.doc.draw(0, 0, -y, clip)
+        self.cntr.update_positions(self)
 
-    def OnScroll(self, event):
-        if self.url is not None:
-            self.HtmlPaint()
-        event.Skip()
+    def HtmlClick(self, element):
+        print('HtmlClick', element.attributes)
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):

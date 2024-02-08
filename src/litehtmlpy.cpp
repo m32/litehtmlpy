@@ -68,6 +68,7 @@ public:
             // no arguments
         );
     }
+/*
     bool on_mouse_leave() override
     {
         if( debuglog ){
@@ -104,6 +105,7 @@ public:
             // no arguments
         );
     }
+*/
     void on_click() override
     {
         if( debuglog ){
@@ -784,6 +786,14 @@ PYBIND11_MODULE(litehtmlpy, m) {
         .def("on_mouse_over", &lh::document::on_mouse_over)
         .def("on_lbutton_down", &lh::document::on_lbutton_down)
         .def("on_lbutton_up", &lh::document::on_lbutton_up)
+/*
+        .def("on_lbutton_up", [](py_document &self, int x, int y, int cx, int cy, lh::position::vector& redraw_boxes){
+            DebugBreak();
+            py::gil_scoped_release release;
+            bool rc = self.on_lbutton_up(x, y, cx, cy, redraw_boxes);
+            return rc;
+        })
+*/
         .def("on_mouse_leave", &lh::document::on_mouse_leave)
 /*
         element::ptr                    create_element(const char* tag_name, const string_map& attributes);
@@ -957,8 +967,10 @@ PYBIND11_MODULE(litehtmlpy, m) {
         .def("draw", &lh::html_tag::draw)
         .def("draw_background", &lh::html_tag::draw_background)
         .def("get_tagName",&lh::html_tag::get_tagName)
+        .def("get_placement", &lh::html_tag::get_placement)
     ;
     py::class_<lh::element, py_element, std::shared_ptr<lh::element>>(m, "element")
         .def(py::init<const std::shared_ptr<py_document>&>())
+        .def("get_placement", &lh::element::get_placement)
     ;
 }
