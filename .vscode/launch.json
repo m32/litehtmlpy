@@ -2,14 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "litehtmlt.py",
+            "name": "litehtml-wx-browser.py",
             "type": "cppdbg",
             "request": "launch",
             "program": "/devel/bin/python3/bin/python",
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "args": [
-                "litehtmlt.py",
+                "litehtml-wx-browser.py",
             ],
             "environment": [
             ],

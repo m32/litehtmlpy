@@ -9,20 +9,21 @@
 #endif
 
 #include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 #include <litehtml.h>
 #include <litehtml/render_item.h>
 
 #include <iostream>
 #include <string>
 
-using namespace litehtml;
+namespace lh = litehtml;
 namespace py = pybind11;
 
 static int debuglog = 0;
 #define ENTERWRAPPER std::cout << "PyLiteHtml::" << __FUNCTION__ << std::endl;
 //#define ENTERWRAPPER
 
-py::tuple fromBorder(const border& b)
+py::tuple fromBorder(const lh::border& b)
 {
     return py::make_tuple(
         b.width,
@@ -31,32 +32,324 @@ py::tuple fromBorder(const border& b)
     );
 }
 
-class PyHtmlTag : public html_tag
+class py_html_tag : public lh::html_tag
 {
 public:
     using html_tag::html_tag;
 
-    void draw(uint_ptr hdc, int x, int y, const position *clip, const std::shared_ptr<render_item> &ri) override
+/*
+        bool                appendChild(const element::ptr &el) override;
+        bool                removeChild(const element::ptr &el) override;
+        void                clearRecursive() override;
+        string_id            tag() const override;
+        string_id            id() const override;
+        const char*            get_tagName() const override;
+        void                set_tagName(const char* tag) override;
+        void                set_data(const char* data) override;
+
+        void                set_attr(const char* name, const char* val) override;
+        const char*            get_attr(const char* name, const char* def = nullptr) const override;
+        void                apply_stylesheet(const litehtml::css& stylesheet) override;
+        void                refresh_styles() override;
+
+        bool                is_white_space() const override;
+        bool                is_body() const override;
+        bool                is_break() const override;
+*/
+    bool on_mouse_over() override
     {
-        //DebugBreak();
-        py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "draw");
-        if (override) {
-            auto obj = override(hdc, x, y, clip, ri);
-        }
-    }
-};
-
-class PyLiteHtml : public document_container
-{
-public:
-    document::ptr m_doc;
-
-    uint_ptr create_font(const char* faceName, int size, int weight, font_style italic, unsigned int decoration, font_metrics* fm) override {
         if( debuglog ){
             ENTERWRAPPER
         }
-        uint_ptr result = 0;
+        PYBIND11_OVERRIDE(
+            bool,
+            html_tag,
+            on_mouse_over,
+            // no arguments
+        );
+    }
+    bool on_mouse_leave() override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE(
+            bool,
+            html_tag,
+            on_mouse_leave,
+            // no arguments
+        );
+    }
+    bool on_lbutton_down() override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE(
+            bool,
+            html_tag,
+            on_lbutton_down,
+            // no arguments
+        );
+    }
+    bool on_lbutton_up() override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE(
+            bool,
+            html_tag,
+            on_lbutton_up,
+            // no arguments
+        );
+    }
+    void on_click() override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE(
+            void,
+            html_tag,
+            on_click,
+            // no arguments
+        );
+    }
+/*
+        bool                set_pseudo_class(string_id cls, bool add) override;
+        bool                set_class(const char* pclass, bool add) override;
+        bool                is_replaced() const override;
+        void                compute_styles(bool recursive = true) override;
+*/
+    void draw(lh::uint_ptr hdc, int x, int y, const lh::position *clip, const std::shared_ptr<lh::render_item> &ri) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE(
+            void,
+            html_tag,
+            draw,
+            hdc,x, y, clip, ri
+        );
+    }
+    void draw_background(lh::uint_ptr hdc, int x, int y, const lh::position *clip, const std::shared_ptr<lh::render_item> &ri) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE(
+            void,
+            html_tag,
+            draw_background,
+            hdc,x, y, clip, ri
+        );
+    }
+/*
+        template<class Type, property_type property_value_type, Type property_value::* property_value_member>
+        const Type&            get_property_impl  (string_id name, bool inherited, const Type&   default_value, uint_ptr css_properties_member_offset) const;
+        int                    get_enum_property  (string_id name, bool inherited, int           default_value, uint_ptr css_properties_member_offset) const override;
+        int                    get_int_property   (string_id name, bool inherited, int           default_value, uint_ptr css_properties_member_offset) const override;
+        css_length            get_length_property(string_id name, bool inherited, css_length    default_value, uint_ptr css_properties_member_offset) const override;
+        web_color            get_color_property (string_id name, bool inherited, web_color     default_value, uint_ptr css_properties_member_offset) const override;
+        string                get_string_property(string_id name, bool inherited, const string& default_value, uint_ptr css_properties_member_offset) const override;
+        float                get_number_property(string_id name, bool inherited, float         default_value, uint_ptr css_properties_member_offset) const override;
+        string_vector        get_string_vector_property(string_id name, bool inherited, const string_vector& default_value, uint_ptr css_properties_member_offset) const override;
+        int_vector            get_int_vector_property   (string_id name, bool inherited, const int_vector&    default_value, uint_ptr css_properties_member_offset) const override;
+        length_vector        get_length_vector_property(string_id name, bool inherited, const length_vector& default_value, uint_ptr css_properties_member_offset) const override;
+        size_vector            get_size_vector_property  (string_id name, bool inherited, const size_vector&   default_value, uint_ptr css_properties_member_offset) const override;
+        string                get_custom_property(string_id name, const string& default_value) const override;
+
+        elements_list&    children();
+
+        int                    select(const string& selector) override;
+        int                    select(const css_selector& selector, bool apply_pseudo = true) override;
+        int                    select(const css_element_selector& selector, bool apply_pseudo = true) override;
+        int                    select_pseudoclass(const css_attribute_selector& sel);
+        int                    select_attribute(const css_attribute_selector& sel);
+
+        elements_list        select_all(const string& selector) override;
+        elements_list        select_all(const css_selector& selector) override;
+
+        element::ptr        select_one(const string& selector) override;
+        element::ptr        select_one(const css_selector& selector) override;
+
+        element::ptr        find_ancestor(const css_selector& selector, bool apply_pseudo = true, bool* is_pseudo = nullptr) override;
+        element::ptr        find_adjacent_sibling(const element::ptr& el, const css_selector& selector, bool apply_pseudo = true, bool* is_pseudo = nullptr) override;
+        element::ptr        find_sibling(const element::ptr& el, const css_selector& selector, bool apply_pseudo = true, bool* is_pseudo = nullptr) override;
+        void                get_text(string& text) override;
+        void                parse_attributes() override;
+
+        void                get_content_size(size& sz, int max_width) override;
+        void                add_style(const style& style) override;
+
+        bool                is_nth_child(const element::ptr& el, int num, int off, bool of_type) const override;
+        bool                is_nth_last_child(const element::ptr& el, int num, int off, bool of_type) const override;
+        bool                is_only_child(const element::ptr& el, bool of_type) const override;
+        const background*    get_background(bool own_only = false) override;
+
+        string                dump_get_name() override;
+
+    protected:
+        void                init_background_paint(position pos, std::vector<background_paint>& bg_paint, const background* bg, const std::shared_ptr<render_item>& ri);
+        void                init_one_background_paint(int i, position pos, background_paint& bg_paint, const background* bg, const std::shared_ptr<render_item>& ri);
+        void                draw_list_marker( uint_ptr hdc, const position &pos );
+        string                get_list_marker_text(int index);
+        element::ptr        get_element_before(const style& style, bool create);
+        element::ptr        get_element_after(const style& style, bool create);
+
+    private:
+        void                handle_counter_properties();
+
+*/
+};
+
+class py_element : public lh::element
+{
+public:
+    using element::element;
+/*
+	protected:
+		std::weak_ptr<element>					m_parent;
+		std::weak_ptr<document>					m_doc;
+		elements_list							m_children;
+		css_properties							m_css;
+		std::list<std::weak_ptr<render_item>>	m_renders;
+		used_selector::vector					m_used_styles;
+
+		virtual void select_all(const css_selector& selector, elements_list& res);
+		element::ptr _add_before_after(int type, const style& style);
+    public:
+		const css_properties&		css() const;
+		css_properties&				css_w();
+
+		bool						in_normal_flow()			const;
+		bool						is_inline()					const;	// returns true if element is inline
+		bool						is_inline_box()				const;	// returns true if element is inline box (inline-table, inline-box, inline-flex)
+		bool						is_block_box()				const;
+		position					get_placement()				const;
+		bool						is_positioned()				const;
+		bool						is_float()					const;
+		bool						is_block_formatting_context() const;
+
+		bool						is_root() const;
+		element::ptr				parent() const;
+		void						parent(const element::ptr& par);
+		// returns true for elements inside a table (but outside cells) that don't participate in table rendering
+		bool						is_table_skip() const;
+
+		std::shared_ptr<document>	get_document() const;
+		const std::list<std::shared_ptr<element>>& children() const;
+
+		virtual elements_list		select_all(const string& selector);
+		virtual elements_list		select_all(const css_selector& selector);
+
+		virtual element::ptr		select_one(const string& selector);
+		virtual element::ptr		select_one(const css_selector& selector);
+
+		virtual bool				appendChild(const ptr &el);
+		virtual bool				removeChild(const ptr &el);
+		virtual void				clearRecursive();
+
+		virtual string_id			id() const;
+		virtual string_id			tag() const;
+		virtual const char*			get_tagName() const;
+		virtual void				set_tagName(const char* tag);
+		virtual void				set_data(const char* data);
+
+		virtual void				set_attr(const char* name, const char* val);
+		virtual const char*			get_attr(const char* name, const char* def = nullptr) const;
+		virtual void				apply_stylesheet(const litehtml::css& stylesheet);
+		virtual void				refresh_styles();
+		virtual bool				is_white_space() const;
+		virtual bool				is_space() const;
+		virtual bool				is_comment() const;
+		virtual bool				is_body() const;
+		virtual bool				is_break() const;
+		virtual bool				is_text() const;
+
+		virtual bool				on_mouse_over();
+		virtual bool				on_mouse_leave();
+		virtual bool				on_lbutton_down();
+		virtual bool				on_lbutton_up();
+		virtual void				on_click();
+		virtual bool				set_pseudo_class(string_id cls, bool add);
+		virtual bool				set_class(const char* pclass, bool add);
+		virtual bool				is_replaced() const;
+		virtual void				compute_styles(bool recursive = true);
+		virtual void				draw(uint_ptr hdc, int x, int y, const position *clip, const std::shared_ptr<render_item>& ri);
+		virtual void				draw_background(uint_ptr hdc, int x, int y, const position *clip, const std::shared_ptr<render_item> &ri);
+		virtual int					get_enum_property  (string_id name, bool inherited, int           default_value, uint_ptr css_properties_member_offset) const;
+		virtual int					get_int_property   (string_id name, bool inherited, int           default_value, uint_ptr css_properties_member_offset) const;
+		virtual css_length			get_length_property(string_id name, bool inherited, css_length    default_value, uint_ptr css_properties_member_offset) const;
+		virtual web_color			get_color_property (string_id name, bool inherited, web_color     default_value, uint_ptr css_properties_member_offset) const;
+		virtual string				get_string_property(string_id name, bool inherited, const string& default_value, uint_ptr css_properties_member_offset) const;
+		virtual float				get_number_property(string_id name, bool inherited, float         default_value, uint_ptr css_properties_member_offset) const;
+		virtual string_vector		get_string_vector_property(string_id name, bool inherited, const string_vector& default_value, uint_ptr css_properties_member_offset) const;
+		virtual int_vector			get_int_vector_property   (string_id name, bool inherited, const int_vector&    default_value, uint_ptr css_properties_member_offset) const;
+		virtual length_vector		get_length_vector_property(string_id name, bool inherited, const length_vector& default_value, uint_ptr css_properties_member_offset) const;
+		virtual size_vector			get_size_vector_property  (string_id name, bool inherited, const size_vector&   default_value, uint_ptr css_properties_member_offset) const;
+		virtual string				get_custom_property(string_id name, const string& default_value) const;
+
+		virtual void				get_text(string& text);
+		virtual void				parse_attributes();
+		virtual int					select(const string& selector);
+		virtual int					select(const css_selector& selector, bool apply_pseudo = true);
+		virtual int					select(const css_element_selector& selector, bool apply_pseudo = true);
+		virtual element::ptr		find_ancestor(const css_selector& selector, bool apply_pseudo = true, bool* is_pseudo = nullptr);
+		virtual bool				is_ancestor(const ptr &el) const;
+		virtual element::ptr		find_adjacent_sibling(const element::ptr& el, const css_selector& selector, bool apply_pseudo = true, bool* is_pseudo = nullptr);
+		virtual element::ptr		find_sibling(const element::ptr& el, const css_selector& selector, bool apply_pseudo = true, bool* is_pseudo = nullptr);
+		virtual void				get_content_size(size& sz, int max_width);
+		virtual bool				is_nth_child(const element::ptr& el, int num, int off, bool of_type) const;
+		virtual bool				is_nth_last_child(const element::ptr& el, int num, int off, bool of_type) const;
+		virtual bool				is_only_child(const element::ptr& el, bool of_type) const;
+		virtual void				add_style(const style& style);
+		virtual const background*	get_background(bool own_only = false);
+
+		virtual string				dump_get_name();
+		virtual std::vector<std::tuple<string, string>> dump_get_attrs();
+		void						dump(litehtml::dumper& cout);
+
+		std::tuple<element::ptr, element::ptr, element::ptr> split_inlines();
+		virtual std::shared_ptr<render_item> create_render_item(const std::shared_ptr<render_item>& parent_ri);
+		bool requires_styles_update();
+		void add_render(const std::shared_ptr<render_item>& ri);
+		bool find_styles_changes( position::vector& redraw_boxes);
+		element::ptr add_pseudo_before(const style& style)
+		{
+			return _add_before_after(0, style);
+		}
+		element::ptr add_pseudo_after(const style& style)
+		{
+			return _add_before_after(1, style);
+		}
+
+		string				get_counter_value(const string& counter_name);
+		string				get_counters_value(const string_vector& parameters);
+		void				increment_counter(const string_id& counter_name_id, const int increment = 1);
+		void				reset_counter(const string_id& counter_name_id, const int value = 0);
+
+	private:
+		std::vector<element::ptr> get_siblings_before() const;
+		bool				find_counter(const string_id& counter_name_id, std::map<string_id, int>::iterator& map_iterator);
+		void				parse_counter_tokens(const string_vector& tokens, const int default_value, std::function<void(const string_id&, const int)> handler) const;
+*/
+};
+
+class py_document : public lh::document
+{
+};
+
+class py_document_container : public lh::document_container
+{
+public:
+    lh::uint_ptr create_font(const char* faceName, int size, int weight, lh::font_style italic, unsigned int decoration, lh::font_metrics* fm) override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        lh::uint_ptr result = 0;
 
         py::gil_scoped_acquire gil;
         py::function override = pybind11::get_override(this, "create_font");
@@ -76,7 +369,7 @@ public:
         return result;
     }
 
-    void    delete_font(uint_ptr hFont) override
+    void    delete_font(lh::uint_ptr hFont) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -88,7 +381,7 @@ public:
             hFont
         );
     }
-    int     text_width(const char* text, uint_ptr hFont) override
+    int     text_width(const char* text, lh::uint_ptr hFont) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -100,7 +393,7 @@ public:
             text, hFont
         );
     }
-    void    draw_text(uint_ptr hdc, const char* text, uint_ptr hFont, web_color color, const position& pos) override
+    void    draw_text(lh::uint_ptr hdc, const char* text, lh::uint_ptr hFont, lh::web_color color, const lh::position& pos) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -148,7 +441,7 @@ public:
             // no arguments
         );
     }
-    void    draw_list_marker(uint_ptr hdc, const list_marker& marker) override
+    void    draw_list_marker(lh::uint_ptr hdc, const lh::list_marker& marker) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -174,7 +467,7 @@ public:
             src, baseurl, redraw_on_ready
         );
     }
-    void    get_image_size(const char* src, const char* baseurl, size& sz) override
+    void    get_image_size(const char* src, const char* baseurl, lh::size& sz) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -186,7 +479,7 @@ public:
             src, baseurl, sz
         );
     }
-    void    draw_background(uint_ptr hdc, const std::vector<background_paint>& bg) override
+    void    draw_background(lh::uint_ptr hdc, const std::vector<lh::background_paint>& bg) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -230,7 +523,7 @@ public:
             //pybg.release();
         }
     }
-    void    draw_borders(uint_ptr hdc, const borders& borders, const position& draw_pos, bool root) override
+    void    draw_borders(lh::uint_ptr hdc, const lh::borders& borders, const lh::position& draw_pos, bool root) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -274,13 +567,13 @@ public:
             base_url
         );
     }
-    void    link(const std::shared_ptr<document>& doc, const element::ptr& el) override
+    void    link(const std::shared_ptr<lh::document>& doc, const lh::element::ptr& el) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
     }
-    void    on_anchor_click(const char* url, const element::ptr& el) override
+    void    on_anchor_click(const char* url, const lh::element::ptr& el) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -305,7 +598,7 @@ public:
             cursor
         );
     }
-    void    transform_text(string& text, text_transform tt) override
+    void    transform_text(lh::string& text, lh::text_transform tt) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -317,7 +610,7 @@ public:
             text, (int)tt
         );
     }
-    void    import_css(string& text, const string& url, string& baseurl) override
+    void    import_css(lh::string& text, const lh::string& url, lh::string& baseurl) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -329,7 +622,7 @@ public:
             text, url, baseurl
         );
     }
-    void    set_clip(const litehtml::position& pos, const litehtml::border_radiuses& bdr_radius) override
+    void    set_clip(const lh::position& pos, const lh::border_radiuses& bdr_radius) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -353,7 +646,7 @@ public:
             // no arguments
         );
     }
-    void    get_client_rect(position& client) const override
+    void    get_client_rect(lh::position& client) const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -365,9 +658,9 @@ public:
             client
         );
     }
-    element::ptr create_element( const char* tag_name,
-              const string_map& attributes,
-              const std::shared_ptr<document>& doc) override
+    lh::element::ptr create_element( const char* tag_name,
+              const lh::string_map& attributes,
+              const std::shared_ptr<lh::document>& doc) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -379,7 +672,7 @@ public:
             if( !bool(create) )
                 return nullptr;
             auto pyattributes = py::dict();
-			for (auto& cls : attributes)
+            for (auto& cls : attributes)
                 pyattributes[py::str(cls.first)] = py::str(cls.second);
 #if 0
             py::object obj = override(tag_name, pyattributes, doc);
@@ -388,17 +681,17 @@ public:
 #else
             auto obj = override(tag_name, pyattributes, doc);
             //DebugBreak();
-            if (pybind11::detail::cast_is_temporary_value_reference<PyHtmlTag::ptr>::value) {
-                static pybind11::detail::override_caster_t<PyHtmlTag::ptr> caster;
-                return pybind11::detail::cast_ref<PyHtmlTag::ptr>(std::move(obj), caster);
+            if (pybind11::detail::cast_is_temporary_value_reference<py_html_tag::ptr>::value) {
+                static pybind11::detail::override_caster_t<py_html_tag::ptr> caster;
+                return pybind11::detail::cast_ref<py_html_tag::ptr>(std::move(obj), caster);
             } else {
-                return pybind11::detail::cast_safe<PyHtmlTag::ptr>(std::move(obj));
+                return pybind11::detail::cast_safe<py_html_tag::ptr>(std::move(obj));
             }
 #endif
         }
         return nullptr;
     }
-    void    get_media_features(media_features& media) const override
+    void    get_media_features(lh::media_features& media) const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -421,7 +714,7 @@ public:
             }
         }
     }
-    void    get_language(string& language, string& culture) const override
+    void    get_language(lh::string& language, lh::string& culture) const override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -459,115 +752,181 @@ PYBIND11_MODULE(litehtmlpy, m) {
         debuglog = on;
     })
     ;
-    py::class_<document_container, PyLiteHtml, std::unique_ptr<document_container, py::nodelete>>(m, "LiteHtml")
+    py::class_<lh::document_container, py_document_container, std::unique_ptr<lh::document_container, py::nodelete>>(m, "document_container")
         .def(py::init<>())
-        .def("fromString", [](PyLiteHtml &self, char *html) {
-            py::gil_scoped_release release;
-            self.m_doc = document::createFromString(html, &self);
-        })
-        .def("render", [](PyLiteHtml &self, int maxWidth) {
-            py::gil_scoped_release release;
-            self.m_doc->render(maxWidth);
-        })
-        .def("height", [](PyLiteHtml &self) {
-            py::gil_scoped_release release;
-            return self.m_doc->height();
-        })
-        .def("draw", [](PyLiteHtml &self, int x, int y, int clipX, int clipY, int clipWidth, int clipHeight) {
-            py::gil_scoped_release release;
-            position clip(clipX, clipY, clipWidth, clipHeight);
-            self.m_doc->draw((uint_ptr)NULL, x, y, &clip);
-        })
     ;
-    py::class_<document, std::shared_ptr<document>>(m, "document")
-        .def("width", [](document &self) {
-            return self.width();
-        })
-        .def("height", [](document &self) {
-            return self.height();
-        })
+    m.def("fromString", [](py_document_container *container, char *html, const char *master_css = lh::master_css, const char *user_styles = "") {
+        py::gil_scoped_release release;
+        if( master_css == nullptr )
+            master_css = lh::master_css;
+        if( user_styles == nullptr )
+            user_styles = "";
+        py_document::ptr doc = py_document::createFromString(html, container, master_css, user_styles);
+        return doc;
+    })
+    ;
+    py::class_<lh::document, py_document, std::shared_ptr<lh::document>>(m, "document")
+        //document_container*                container()    { return m_container; }
+        //uint_ptr                        get_font(const char* name, int size, const char* weight, const char* style, const char* decoration, font_metrics* fm);
+        .def("render", &lh::document::render)
+        .def("draw", &lh::document::draw)
+        //web_color                        get_def_color()    { return m_def_color; }
+        //int                                to_pixels(const char* str, int fontSize, bool* is_percent = nullptr) const;
+        //void                             cvt_units(css_length& val, int fontSize, int size = 0) const;
+        //int                                to_pixels(const css_length& val, int fontSize, int size = 0) const;
+        .def("width", &lh::document::width)
+        .def("height", &lh::document::height)
+        .def("content_width", &lh::document::content_width)
+        .def("content_height", &lh::document::content_height)
+/*
+        void                            add_stylesheet(const char* str, const char* baseurl, const char* media);
+*/
+        .def("on_mouse_over", &lh::document::on_mouse_over)
+        .def("on_lbutton_down", &lh::document::on_lbutton_down)
+        .def("on_lbutton_up", &lh::document::on_lbutton_up)
+        .def("on_mouse_leave", &lh::document::on_mouse_leave)
+/*
+        element::ptr                    create_element(const char* tag_name, const string_map& attributes);
+        element::ptr                    root();
+        void                            get_fixed_boxes(position::vector& fixed_boxes);
+        void                            add_fixed_box(const position& pos);
+        void                            add_media_list(const media_query_list::ptr& list);
+        bool                            media_changed();
+        bool                            lang_changed();
+        bool                            match_lang(const string& lang);
+        void                            add_tabular(const std::shared_ptr<render_item>& el);
+        element::const_ptr              get_over_element() const { return m_over_element; }
+
+        void                            append_children_from_string(element& parent, const char* str);
+*/
     ;
 /*
-	struct list_marker
-	{
-		string			image;
-		const char*		baseurl;
-		list_style_type	marker_type;
-		web_color		color;
-		position		pos;
-		int				index;
-		uint_ptr		font;
-	};
+    struct list_marker
+    {
+        string            image;
+        const char*        baseurl;
+        list_style_type    marker_type;
+        web_color        color;
+        position        pos;
+        int                index;
+        uint_ptr        font;
+    };
 */
-    py::class_<web_color>(m, "web_color")
-        .def(py::init<int,int,int,int>())
-        .def_readwrite("red", &web_color::red)
-        .def_readwrite("green", &web_color::green)
-        .def_readwrite("blue", &web_color::blue)
-        .def_readwrite("alpha", &web_color::alpha)
+    py::enum_<lh::render_type>(m, "render_type", py::arithmetic())
+        .value("render_all", lh::render_type::render_all)
+        .value("render_no_fixed", lh::render_type::render_no_fixed)
+        .value("render_fixed_only", lh::render_type::render_fixed_only)
+        .export_values()
     ;
-    py::class_<margins>(m, "margins")
+/*
+    struct def_color
+    {
+        const char*    name;
+        const char*    rgb;
+    };
+
+    extern def_color g_def_colors[];
+*/
+    py::class_<lh::web_color>(m, "web_color")
         .def(py::init<>())
-        .def_readwrite("left", &margins::left)
-        .def_readwrite("top", &margins::top)
-        .def_readwrite("right", &margins::right)
-        .def_readwrite("bottom", &margins::bottom)
-        .def("width", &margins::width)
-        .def("height", &margins::height)
+        .def(py::init<int,int,int,int>())
+        .def_readwrite("red", &lh::web_color::red)
+        .def_readwrite("green", &lh::web_color::green)
+        .def_readwrite("blue", &lh::web_color::blue)
+        .def_readwrite("alpha", &lh::web_color::alpha)
+/*
+        static const web_color transparent;
+        static const web_color black;
+        static const web_color white;
+
+        bool operator==(web_color color) const { return red == color.red && green == color.green && blue == color.blue && alpha == color.alpha; }
+        bool operator!=(web_color color) const { return !(*this == color); }
+
+        string to_string() const;
+        static web_color    from_string(const string& str, document_container* callback);
+        static string        resolve_name(const string& name, document_container* callback);
+        static bool            is_color(const string& str, document_container* callback);
+*/
     ;
-    py::class_<size>(m, "size")
+    py::class_<lh::margins>(m, "margins")
+        .def(py::init<>())
+        .def_readwrite("left", &lh::margins::left)
+        .def_readwrite("top", &lh::margins::top)
+        .def_readwrite("right", &lh::margins::right)
+        .def_readwrite("bottom", &lh::margins::bottom)
+        .def("width", &lh::margins::width)
+        .def("height", &lh::margins::height)
+    ;
+    py::class_<lh::size>(m, "size")
         .def(py::init<>())
         .def(py::init<int, int>())
-        .def_readwrite("width", &size::width)
-        .def_readwrite("height", &size::height)
+        .def_readwrite("width", &lh::size::width)
+        .def_readwrite("height", &lh::size::height)
     ;
-    py::class_<position>(m, "position")
+    py::class_<lh::position>(m, "position")
+        .def(py::init<>())
         .def(py::init<int,int,int,int>())
-        .def_readwrite("x", &position::x)
-        .def_readwrite("y", &position::y)
-        .def_readwrite("width", &position::width)
-        .def_readwrite("height", &position::height)
-        .def("left", &position::left)
-        .def("top", &position::top)
-        .def("right", &position::right)
-        .def("bottom", &position::bottom)
+        .def_readwrite("x", &lh::position::x)
+        .def_readwrite("y", &lh::position::y)
+        .def_readwrite("width", &lh::position::width)
+        .def_readwrite("height", &lh::position::height)
+        .def("left", &lh::position::left)
+        .def("top", &lh::position::top)
+        .def("right", &lh::position::right)
+        .def("bottom", &lh::position::bottom)
         //.def(py::self += margins)
         //.def(py::self -= margins)
         //=size
-        .def("clear", &position::clear)
-        .def("move_to", &position::move_to)
-        .def("does_intersect", &position::does_intersect)
-        .def("empty", &position::empty)
-        .def("is_point_inside", &position::is_point_inside)
+        .def("clear", &lh::position::clear)
+        .def("move_to", &lh::position::move_to)
+        .def("does_intersect", &lh::position::does_intersect)
+        .def("empty", &lh::position::empty)
+        .def("is_point_inside", &lh::position::is_point_inside)
     ;
-
-    py::class_<render_item, std::shared_ptr<render_item>>(m, "render_item")
-        .def("pos", &render_item::pos)
+    py::class_<lh::font_metrics>(m, "font_metrics")
+        .def(py::init<>())
+        .def_readwrite("height", &lh::font_metrics::height)
+        .def_readwrite("ascent", &lh::font_metrics::ascent)
+        .def_readwrite("descent", &lh::font_metrics::descent)
+        .def_readwrite("x_height", &lh::font_metrics::x_height)
+        .def_readwrite("draw_spaces", &lh::font_metrics::draw_spaces)
+        .def("base_line", &lh::font_metrics::base_line)
+    ;
+/*
+    struct font_item
+    {
+        uint_ptr        font;
+        font_metrics    metrics;
+    };
+    typedef std::map<string, font_item> fonts_map;
+*/
+    py::class_<lh::render_item, std::shared_ptr<lh::render_item>>(m, "render_item")
+        .def("pos", &lh::render_item::pos)
         //.def("skip", &render_item::skip)
         //void skip(bool val)
-        .def("right", &render_item::right)
-        .def("left", &render_item::left)
-        .def("top", &render_item::top)
-        .def("bottom", &render_item::bottom)
-        .def("height", &render_item::height)
-        .def("width", &render_item::width)
-        .def("padding_right", &render_item::padding_right)
-        .def("padding_left", &render_item::padding_left)
-        .def("padding_top", &render_item::padding_top)
-        .def("padding_bottom", &render_item::padding_bottom)
-        .def("border_right", &render_item::border_right)
-        .def("border_left", &render_item::border_left)
-        .def("border_top", &render_item::border_top)
-        .def("border_bottom", &render_item::border_bottom)
-        .def("margin_right", &render_item::margin_right)
-        .def("margin_left", &render_item::margin_left)
-        .def("margin_top", &render_item::margin_top)
-        .def("margin_bottom", &render_item::margin_bottom)
+        .def("right", &lh::render_item::right)
+        .def("left", &lh::render_item::left)
+        .def("top", &lh::render_item::top)
+        .def("bottom", &lh::render_item::bottom)
+        .def("height", &lh::render_item::height)
+        .def("width", &lh::render_item::width)
+        .def("padding_right", &lh::render_item::padding_right)
+        .def("padding_left", &lh::render_item::padding_left)
+        .def("padding_top", &lh::render_item::padding_top)
+        .def("padding_bottom", &lh::render_item::padding_bottom)
+        .def("border_right", &lh::render_item::border_right)
+        .def("border_left", &lh::render_item::border_left)
+        .def("border_top", &lh::render_item::border_top)
+        .def("border_bottom", &lh::render_item::border_bottom)
+        .def("margin_right", &lh::render_item::margin_right)
+        .def("margin_left", &lh::render_item::margin_left)
+        .def("margin_top", &lh::render_item::margin_top)
+        .def("margin_bottom", &lh::render_item::margin_bottom)
 /*
         //std::shared_ptr<render_item> parent() const
         margins& get_margins()
         margins& get_paddings()
-		void set_paddings(const margins& val)
+        void set_paddings(const margins& val)
         margins& get_borders()
         int content_offset_top() const
         inline int content_offset_bottom() const
@@ -575,28 +934,31 @@ PYBIND11_MODULE(litehtmlpy, m) {
         int content_offset_right() const
         int content_offset_width() const
         int content_offset_height() const
-		int box_sizing_left() const
-		int box_sizing_right() const
-		int box_sizing_width() const
-		int box_sizing_top() const
-		int box_sizing_bottom() const
-		int box_sizing_height() const
+        int box_sizing_left() const
+        int box_sizing_right() const
+        int box_sizing_width() const
+        int box_sizing_top() const
+        int box_sizing_bottom() const
+        int box_sizing_height() const
         void parent(const std::shared_ptr<render_item>& par)
         const std::shared_ptr<element>& src_el() const
-		const css_properties& css() const
+        const css_properties& css() const
         void add_child(const std::shared_ptr<render_item>& ri)
-		bool is_root() const
+        bool is_root() const
         bool collapse_top_margin() const
         bool collapse_bottom_margin() const
         bool is_visible() const
 */
     ;
 
-    py::class_<html_tag, PyHtmlTag, std::shared_ptr<html_tag>>(m, "PyHtmlTag")
-        .def(py::init<const std::shared_ptr<document>&>())
-//        .def("draw", &html_tag::draw)
-        .def("get_tagName",[](PyHtmlTag &self) {
-            return self.get_tagName();
-        })
+    py::class_<lh::html_tag, py_html_tag, std::shared_ptr<lh::html_tag>>(m, "html_tag")
+        .def(py::init<const std::shared_ptr<py_document>&>())
+        //.def(py::init<(const lh::element::ptr& parent, const lh::string& style = "display: block")>())
+        .def("draw", &lh::html_tag::draw)
+        .def("draw_background", &lh::html_tag::draw_background)
+        .def("get_tagName",&lh::html_tag::get_tagName)
+    ;
+    py::class_<lh::element, py_element, std::shared_ptr<lh::element>>(m, "element")
+        .def(py::init<const std::shared_ptr<py_document>&>())
     ;
 }

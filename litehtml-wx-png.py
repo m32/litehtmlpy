@@ -1,9 +1,9 @@
 #!/usr/bin/env vpython3
 import logme
 import wx
-from litehtmlpy import litehtmlwx
+from litehtmlpy import litehtmlwx, litehtmlpy
 
-class LiteHtml(litehtmlwx.LiteHtml):
+class document_container(litehtmlwx.document_container):
     pass
 
 class Main:
@@ -12,24 +12,25 @@ class Main:
         html = open('demo.html', 'rt').read()
 
 
-        cls = LiteHtml()
+        cntr = document_container()
+        cntr.reset()
+        print('max size=', cntr.size)
 
-        print('*'*10, 'fromString')
-        cls.reset()
-        cls.fromString(html)
+        doc = litehtmlpy.fromString(cntr, html, None, None)
+        doc.render(cntr.size[0], litehtmlpy.render_all)
+        print('doc: width:', doc.width(), 'height:', doc.height())
 
-        print('*'*10, 'render', 'maxwidth=', cls.size[0])
-        cls.render(cls.size[0])
-        print('*'*10, 'render', 'maxwidth=', cls.size[0], 'maxheight=', cls.height())
-        cls.size[1] = cls.height()
-        cls.reset()
+        cntr.size[1] = doc.height()
+        cntr.reset()
 
         print('*'*10, 'draw')
-        cls.draw(
-            0, 0,
-            0, 0, cls.size[0], cls.size[1])
-        #cls.close()
-        cls.bmp.SaveFile('demo.png', wx.BITMAP_TYPE_PNG)
+        clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
+        doc.draw(0, 0, 0, clip)
+
+        cntr.bmp.SaveFile('demo.png', wx.BITMAP_TYPE_PNG)
+
+        del doc
+        del cntr
 
 def main():
     app = Main()

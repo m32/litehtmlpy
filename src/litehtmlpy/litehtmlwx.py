@@ -5,12 +5,16 @@ from . import litehtmlpy
 
 logger = logging.getLogger(__name__)
 
-class LiteHtml(litehtmlpy.LiteHtml):
+class document_container(litehtmlpy.document_container):
     def __init__(self):
         #super().__init__()
-        litehtmlpy.LiteHtml.__init__(self)
+        litehtmlpy.document_container.__init__(self)
         self.hfont = 0
         self.fonts = {}
+        v = 3.96 * 96 / 72
+        self.size = [int(210 * v), int(297 * v)]
+
+    def size0(self):
         v = 3.96 * 96 / 72
         self.size = [int(210 * v), int(297 * v)]
 
@@ -103,10 +107,12 @@ class LiteHtml(litehtmlpy.LiteHtml):
         return 'Times New Roman'
 
     def draw_list_marker(self, hdc, marker):
-        logger.debug('draw_list_marker(%d, %s)', hdc, marker)
+        #logger.debug('draw_list_marker(%d, %s)', hdc, marker)
+        pass
 
     def load_image(self, src, baseurl, redraw_on_ready):
         logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
+        pass
 
     def get_image_size(self, src, baseurl, size):
         #logger.debug('get_image_size(%s, %s)', src, baseurl)
@@ -198,6 +204,7 @@ class LiteHtml(litehtmlpy.LiteHtml):
         pass
 
     def get_client_rect(self, client):
+        #logger.debug('get_client_rect(%s)'%client)
         client.clear()
         client.width = self.size[0]
         client.height = self.size[1]

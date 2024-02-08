@@ -4,19 +4,20 @@ gc.enable()
 
 import logme
 
-from litehtmlpy import litehtml
+from litehtmlpy import litehtml, litehtmlpy
 
-class LiteHtml(litehtml.LiteHtml):
+class document_container(litehtml.document_container):
     pass
 
 def main():
     #litehtml.litehtml.liblitehtmlpy.debuglog(1)
-    html = open('wxpython.org.html', 'rt').read()
-    cls = LiteHtml()
-    cls.fromString(html)
-    cls.draw(
-        0, 0,
-        0, 0, cls.size[0], cls.size[1])
+    html = open('demo.html', 'rt').read()
+    cntr = document_container()
+    doc = litehtmlpy.fromString(cntr, html, None, None)
+    doc.render(cntr.size[0], litehtmlpy.render_all)
+    clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
+    doc.draw(0, 0, 0, clip)
+    del doc, cntr
 
 showobjs = False
 print('gc.collect', gc.collect())

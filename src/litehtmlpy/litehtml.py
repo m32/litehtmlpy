@@ -3,10 +3,10 @@ from . import litehtmlpy
 
 logger = logging.getLogger(__name__)
 
-class LiteHtml(litehtmlpy.LiteHtml):
+class document_container(litehtmlpy.document_container):
     def __init__(self):
         #super().__init__()
-        litehtmlpy.LiteHtml.__init__(self)
+        litehtmlpy.document_container.__init__(self)
         self.hfont = 0
         self.fonts = {}
         v = 3.96 * 96 / 72

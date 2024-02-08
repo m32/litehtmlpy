@@ -5,8 +5,35 @@ import requests
 import wx
 from litehtmlpy import litehtmlwx
 
-class LiteHtml(litehtmlwx.LiteHtml):
-    pass
+class Button(litehtmlwx.litehtmlpy.html_tag):
+    def __init__(self, attributes, doc):
+        super().__init__(doc)
+        print('i`m the button', attributes)
+
+    def draw(self, hdc, x, y, clip, ri):
+        super().draw(hdc, x, y, clip, ri)
+        p = ri.pos()
+        print('Button.draw', x, y, ri.left(), ri.top(), ri.right(), ri.bottom())
+    def on_mouse_over(self):
+        return False
+    def on_mouse_leave(self):
+        return False
+    def on_lbutton_down(self):
+        return False
+    def on_lbutton_up(self):
+        return False
+    def on_click(self):
+        print('Button.on_click')
+
+class document_container(litehtmlwx.document_container):
+    handlers = []
+    def create_element(self, tag_name, attributes=None, doc=None):
+        if tag_name == 'button':
+            if doc is not None:
+                tagh = Button(attributes, doc)
+                self.handlers.append(tagh)
+                return tagh
+            return True
 
 class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
@@ -16,32 +43,42 @@ class LiteWindow(wx.ScrolledWindow):
         self.SetBackgroundColour("WHITE")
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
+        self.Bind(wx.EVT_SCROLLWIN, self.OnScroll)
         self.url = None
-        self.litehtml = LiteHtml()
+        self.cntr = document_container()
+        self.cntr.reset()
+        self.doc = None
 
-    def InitBuffer(self):
-        """Initialize the bitmap used for buffering the display."""
-        size = self.GetClientSize()
-        self.buffer = wx.Bitmap(max(1,size.width), max(1,size.height))
-        dc = wx.BufferedDC(None, self.buffer)
-        dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
-        dc.Clear()
+    def Cleanup(self):
+        print('Cleanup')
+        del self.doc
+        del self.cntr
+
+    def OnMouse(self, evt):
+        if self.doc is not None:
+            #print('OnMouse', evt.x, evt.y, 'ld:', evt.LeftDown(), 'lu:', evt.LeftUp(), 'mv:', evt.Moving())
+            if evt.LeftDown():
+                self.doc.on_lbutton_down(evt.x, evt.y, evt.x, evt.y, [])
+            elif evt.LeftUp():
+                self.doc.on_lbutton_up(evt.x, evt.y, evt.x, evt.y, [])
+            elif evt.Moving():
+                self.doc.on_mouse_over(evt.x, evt.y, evt.x, evt.y, [])
+        evt.Skip()
 
     def OnSize(self, event):
         if self.url is not None:
-            self.InitBuffer()
-            self.PaintHtml()
+            self.HtmlRender()
+            self.HtmlPaint()
         event.Skip()
 
     def OnPaint(self, event):
         if self.url is not None:
-            dc = wx.BufferedPaintDC(self, self.buffer)
-            self.PaintHtml()
-            dc.DrawBitmap(self.litehtml.bmp, wx.Point(0, 0))
+            dc = wx.PaintDC(self)
+            dc.DrawBitmap(self.cntr.bmp, wx.Point(0, 0))
         event.Skip()
 
     def LoadURL(self, url):
-        self.InitBuffer()
         if os.path.exists(url):
             with open(url, 'rt') as fp:
                 html = fp.read()
@@ -54,19 +91,32 @@ class LiteWindow(wx.ScrolledWindow):
             return
         self.url = url
 
-        self.litehtml.reset()
-        self.litehtml.fromString(html)
-
-        size = self.GetClientSize()
-        self.SetScrollbar(wx.VERTICAL, 0, size.height//2, self.litehtml.size[1]+200, True)
+        self.doc = litehtmlwx.litehtmlpy.fromString(self.cntr, html, None, None)
+        self.HtmlRender()
+        self.HtmlPaint()
         self.Refresh(True)
 
-    def PaintHtml(self):
+    def HtmlRender(self):
         size = self.GetClientSize()
-        self.litehtml.render(size.width)
-        self.litehtml.reset()
+        self.doc.render(size[0], litehtmlwx.litehtmlpy.render_all)
+        self.cntr.size = size
+
+        h = self.doc.height() - size[0] + 20 # + statusline.height
+        if h < 0:
+            h = 0
+        self.SetScrollbar(wx.VERTICAL, 0, 16, h, True)
+
+    def HtmlPaint(self):
+        self.cntr.reset()
+        size = self.GetClientSize()
         y = self.GetScrollPos(wx.VERTICAL)
-        self.litehtml.draw(0, -y, 0, 0, self.litehtml.size[0], self.litehtml.size[1])
+        clip = litehtmlwx.litehtmlpy.position(0, 0, size[0], size[1])
+        self.doc.draw(0, 0, -y, clip)
+
+    def OnScroll(self, event):
+        if self.url is not None:
+            self.HtmlPaint()
+        event.Skip()
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):
@@ -185,7 +235,14 @@ class SampleFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnQuit, id=wx.ID_EXIT)
 
         # Create the main panel
-        pnl = LiteHtmlPanel(self, url)
+        self.pnl = LiteHtmlPanel(self, url)
+
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+
+    def OnClose(self, event):
+        print('Close')
+        self.pnl.wv.Cleanup()
+        event.Skip()
 
     # Menu event handler to close the frame
     def OnQuit(self, evt):

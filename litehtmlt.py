@@ -1,26 +1,17 @@
 #!/usr/bin/env vpython3
-import gc
-gc.enable()
-
 import logme
 
-from litehtmlpy import litehtml
+from litehtmlpy import litehtml, litehtmlpy
 
-class Button(litehtml.litehtmlpy.PyHtmlTag):
+class Button(litehtml.litehtmlpy.html_tag):
     def __init__(self, attributes, doc):
         super().__init__(doc)
-        print('i`m the button', attributes)
-        tt = self.get_tagName()
-        print('tt=', tt)
-        print(dir(self))
+        print('i`m the button', attributes, 'tagName=', self.get_tagName())
     def draw(self, hdc, x, y, clip, ri):
-        p = ri.pos()
-        print('Button.draw', hdc, x, y, clip.x, clip.y, clip.width, clip.height, p.x, p.y, p.width, p.height)
-        print(ri.left(), ri.top(), ri.right(), ri.bottom())
-        print(dir(ri))
-        #super().draw(hdc, x, y, clip, ri)
+        super().draw(hdc, x, y, clip, ri)
+        print('Button.draw', hdc, x, y, clip, ri.pos())
 
-class LiteHtml(litehtml.LiteHtml):
+class document_container(litehtml.document_container):
     def __init__(self):
         super().__init__()
         self.handlers = []
@@ -36,9 +27,12 @@ class LiteHtml(litehtml.LiteHtml):
 def main():
     #litehtml.litehtml.liblitehtmlpy.debuglog(1)
     html = open('litehtmlt.html', 'rt').read()
-    cls = LiteHtml()
-    cls.fromString(html)
-    cls.draw(
-        0, 0,
-        0, 0, cls.size[0], cls.size[1])
+    cntr = document_container()
+
+    doc = litehtmlpy.fromString(cntr, html, None, None)
+    doc.render(cntr.size[0], litehtmlpy.render_all)
+    clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
+    doc.draw(0, 0, 0, clip)
+    del doc, cntr
+
 main()
