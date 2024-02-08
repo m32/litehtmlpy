@@ -21,16 +21,21 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
         super().draw(hdc, x, y, clip, ri)
         p = ri.pos()
         print('Button.draw', x, y, ri.left(), ri.top(), ri.right(), ri.bottom())
+
     def on_mouse_over(self):
         return False
+
     def on_mouse_leave(self):
         return False
+
     def on_lbutton_down(self):
         print('Button.on_lbutton_down')
         return False
+
     def on_lbutton_up(self):
         print('Button.on_lbutton_up')
         return False
+
     def on_click(self):
         print('Button.on_click')
         self.wnd.HtmlClick(self)
@@ -38,9 +43,16 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
 class document_container(litehtmlwx.document_container):
     handlers = []
 
-    def update_positions(self, wnd):
+    def __init__(self, parent):
+        super().__init__()
+        self.parent = parent
+
+    def on_anchor_click(self, url, el):
+        self.parent.HtmlClickHRef(url, el)
+
+    def update_positions(self):
         for h in self.handlers:
-            h.update_position(wnd)
+            h.update_position(self.parent)
 
     def create_element(self, tag_name, attributes=None, doc=None):
         if tag_name == 'button':
@@ -61,7 +73,7 @@ class LiteWindow(wx.ScrolledWindow):
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SCROLLWIN, self.OnScroll)
         self.url = None
-        self.cntr = document_container()
+        self.cntr = document_container(self)
         self.cntr.reset()
         self.doc = None
 
@@ -136,7 +148,11 @@ class LiteWindow(wx.ScrolledWindow):
         y = self.GetScrollPos(wx.VERTICAL)
         clip = litehtmlwx.litehtmlpy.position(0, 0, size[0], size[1])
         self.doc.draw(0, 0, -y, clip)
-        self.cntr.update_positions(self)
+        self.cntr.update_positions()
+
+    def HtmlClickHRef(self, url, element):
+        print('HtmlClickHref', url)
+        self.LoadURL(url)
 
     def HtmlClick(self, element):
         print('HtmlClick', element.attributes)
