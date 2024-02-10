@@ -299,6 +299,7 @@ class LiteHtmlPanel(wx.Panel):
         if n >=0 and n < len(self.history):
             self.historyno = n
             url = self.history[n]
+            self.location.SetValue(url)
             self.wv.LoadURL(url)
 
     def OnNextPageButton(self, event):
@@ -306,6 +307,7 @@ class LiteHtmlPanel(wx.Panel):
         if n >=0 and n < len(self.history):
             self.historyno = n
             url = self.history[n]
+            self.location.SetValue(url)
             self.wv.LoadURL(url)
 
     def OnStopButton(self, event):
