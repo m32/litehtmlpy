@@ -115,7 +115,7 @@ class document_container(litehtmlpy.document_container):
         pass
 
     def get_image_size(self, src, baseurl, size):
-        #logger.debug('get_image_size(%s, %s)', src, baseurl)
+        logger.debug('get_image_size(%s, %s)', src, baseurl)
         size.width = 0
         size.height = 0
 
@@ -124,7 +124,7 @@ class document_container(litehtmlpy.document_container):
         image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bg
         if color == (0, 0, 0, 0):
             return
-        #logger.debug('draw_background(%d, %s)', hdc, bgs)
+        logger.debug('draw_background(%d, %s)', hdc, bgs)
         color = wx.Colour(color.red, color.green, color.blue, color.alpha)
         x, y, w, h = border.x, border.y, border.width, border.height
         pt = [

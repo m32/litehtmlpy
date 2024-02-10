@@ -1,5 +1,6 @@
 #!/usr/bin/env vpython3
 import os
+import io
 import logme
 import requests
 import urllib.parse
@@ -63,17 +64,28 @@ class document_container(litehtmlwx.document_container):
                 return tagh
             return True
 
+    def load_image(self, src, baseurl, redraw_on_ready):
+        self.parent.HtmlLoadImage(src, baseurl, redraw_on_ready)
+
+    def get_image_size(self, src, baseurl, size):
+        sz = self.parent.HtmlGetImageSize(src, baseurl)
+        size.width = sz[0]
+        size.height = sz[1]
+
 class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
         #super().__init__( parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         wx.ScrolledWindow.__init__(self, parent, ID, style=wx.NO_FULL_REPAINT_ON_RESIZE)
         self.SetScrollbar(wx.VERTICAL, 0, 0, 0, True)
         self.SetBackgroundColour("WHITE")
-        self.Bind(wx.EVT_MOUSE_EVENTS, self.OnMouse)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnMouseDown)
+        self.Bind(wx.EVT_LEFT_UP, self.OnMouseUp)
+        self.Bind(wx.EVT_MOTION, self.OnMouseMove)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SCROLLWIN, self.OnScroll)
         self.url = None
+        self.images = {}
         self.cntr = document_container(self)
         self.cntr.reset()
         self.doc = None
@@ -83,19 +95,25 @@ class LiteWindow(wx.ScrolledWindow):
         del self.doc
         del self.cntr
 
-    def OnMouse(self, evt):
+    def OnMouseDown(self, evt):
         if self.doc is not None:
-            #print('OnMouse', evt.x, evt.y, 'ld:', evt.LeftDown(), 'lu:', evt.LeftUp(), 'mv:', evt.Moving())
             cx = self.GetScrollPos(wx.HORIZONTAL)
             cy = self.GetScrollPos(wx.VERTICAL)
-            if evt.LeftDown():
-                print('left down', evt.x, evt.y)
-                self.doc.on_lbutton_down(evt.x, evt.y, cx, cy, [])
-            elif evt.LeftUp():
-                print('left up', evt.x, evt.y)
-                self.doc.on_lbutton_up(evt.x, evt.y, cx, cy, [])
-            elif evt.Moving():
-                self.doc.on_mouse_over(evt.x, evt.y, cx, cy, [])
+            self.doc.on_lbutton_down(evt.x, evt.y, cx, cy, [])
+        evt.Skip()
+
+    def OnMouseUp(self, evt):
+        if self.doc is not None:
+            cx = self.GetScrollPos(wx.HORIZONTAL)
+            cy = self.GetScrollPos(wx.VERTICAL)
+            self.doc.on_lbutton_up(evt.x, evt.y, cx, cy, [])
+        evt.Skip()
+
+    def OnMouseMove(self, evt):
+        if self.doc is not None:
+            cx = self.GetScrollPos(wx.HORIZONTAL)
+            cy = self.GetScrollPos(wx.VERTICAL)
+            self.doc.on_mouse_over(evt.x, evt.y, cx, cy, [])
         evt.Skip()
 
     def OnSize(self, event):
@@ -115,20 +133,34 @@ class LiteWindow(wx.ScrolledWindow):
             self.HtmlPaint()
         event.Skip()
 
-    def LoadURL(self, url):
+    def GetUrlData(self, url, html=True):
+        data = None
+        print('GetUrlData', url)
         if os.path.exists(url):
-            with open(url, 'rt') as fp:
-                html = fp.read()
-        else:
-            if self.url:
-                url = urllib.parse.urljoin(self.url, url)
-            if url.split(':')[0] in ('http', 'https'):
-                r = requests.get(url)
-                print(r.headers)
-                html = r.text
+            with open(url, 'rb') as fp:
+                data = fp.read()
+        elif url.split(':')[0] in ('http', 'https'):
+            r = requests.get(url)
+            print(r.headers)
+            if html:
+                if r.headers['Content-Type'] == 'text/html':
+                    data = r.text
             else:
-                print('unknown url', url)
-                return
+                if r.headers['Content-Type'] == 'image/png':
+                    data = r.content
+        if data is None:
+            print('unknown url', url)
+            return None
+        return data
+
+    def LoadURL(self, url):
+        self.doc = None
+        self.cntr.reset()
+        self.url = None
+        self.images = {}
+        html = self.GetUrlData(url, True)
+        if html is None:
+            return
         self.url = url
 
         self.doc = litehtmlwx.litehtmlpy.fromString(self.cntr, html, None, None)
@@ -155,11 +187,34 @@ class LiteWindow(wx.ScrolledWindow):
         self.cntr.update_positions()
 
     def HtmlClickHRef(self, url, element):
+        url = urllib.parse.urljoin(self.url, url)
         print('HtmlClickHref', url)
-        self.LoadURL(url)
+        self.GetParent().OnLocationOpen(url)
 
     def HtmlClick(self, element):
         print('HtmlClick', element.attributes)
+
+    def HtmlLoadImage(self, src, baseurl, redraw_on_ready):
+        if baseurl is not None:
+            url = urllib.parse.urljoin(baseurl, src)
+        else:
+            url = urllib.parse.urljoin(self.url, src)
+        data = self.GetUrlData(url, False)
+        if data is None:
+            return
+        img = wx.Image(io.BytesIO(data), type=wx.BITMAP_TYPE_ANY, index=-1)
+        if img.IsOk():
+            self.images[url] = img
+
+    def HtmlGetImageSize(self, src, baseurl):
+        if baseurl is not None:
+            url = urllib.parse.urljoin(baseurl, src)
+        else:
+            url = urllib.parse.urljoin(self.url, src)
+        img = self.images.get(url, None)
+        if img is not None:
+            return img.GetSize()
+        return [0, 0]
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):
@@ -233,19 +288,25 @@ class LiteHtmlPanel(wx.Panel):
 
         dlg.Destroy()
 
-    def OnPrevPageButton(self, event):
-        self.wv.GoBack()
-
     def OnCheckCanGoBack(self, event):
         event.Enable(self.historyno > 0)
 
-    def OnNextPageButton(self, event):
-        #for i in self.wv.GetForwardHistory():
-        #    print("%s %s" % (i.Url, i.Title))
-        self.wv.GoForward()
-
     def OnCheckCanGoForward(self, event):
         event.Enable(self.historyno < len(self.history))
+
+    def OnPrevPageButton(self, event):
+        n = self.historyno-1
+        if n >=0 and n < len(self.history):
+            self.historyno = n
+            url = self.history[n]
+            self.wv.LoadURL(url)
+
+    def OnNextPageButton(self, event):
+        n = self.historyno+1
+        if n >=0 and n < len(self.history):
+            self.historyno = n
+            url = self.history[n]
+            self.wv.LoadURL(url)
 
     def OnStopButton(self, event):
         pass
@@ -255,12 +316,22 @@ class LiteHtmlPanel(wx.Panel):
 
     def OnLocationSelect(self, event):
         url = self.location.GetStringSelection()
+        self.history.append(url)
+        self.historyno = len(self.history)-1
         self.wv.LoadURL(url)
 
     def OnLocationEnter(self, event):
         url = self.location.GetValue()
         self.history.append(url)
+        self.historyno = len(self.history)-1
         self.wv.LoadURL(url)
+
+    def OnLocationOpen(self, url):
+        self.location.SetValue(url)
+        self.history.append(url)
+        self.historyno = len(self.history)-1
+        self.wv.LoadURL(url)
+
 
 class SampleFrame(wx.Frame):
     def __init__(self, parent, url=None):
