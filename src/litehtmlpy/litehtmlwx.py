@@ -111,11 +111,11 @@ class document_container(litehtmlpy.document_container):
         pass
 
     def load_image(self, src, baseurl, redraw_on_ready):
-        logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
+        #logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
         pass
 
     def get_image_size(self, src, baseurl, size):
-        logger.debug('get_image_size(%s, %s)', src, baseurl)
+        #logger.debug('get_image_size(%s, %s)', src, baseurl)
         size.width = 0
         size.height = 0
 
