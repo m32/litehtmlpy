@@ -52,12 +52,8 @@ class document_container(litehtmlpy.document_container):
         size.width = 0
         size.height = 0
 
-    def draw_background(self, hdc, bgs):
-        bg = bgs[-1]
-        image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bg
-        if color == (0, 0, 0, 0):
-            return
-        logger.debug('draw_background(%d, %s)', hdc, bgs)
+    def draw_background(self, hdc, bg):
+        logger.debug('draw_background(%d, %s)', hdc, bg)
 
     def draw_borders(self, hdc, borders, draw_pos, root):
         logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)

@@ -121,12 +121,12 @@ class document_container(litehtmlpy.document_container):
 
     def draw_background(self, hdc, bgs):
         bg = bgs[-1]
-        image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bg
-        if color == (0, 0, 0, 0):
+        #image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bg
+        if bg.color == (0, 0, 0, 0):
             return
         logger.debug('draw_background(%d, %s)', hdc, bgs)
-        color = wx.Colour(color.red, color.green, color.blue, color.alpha)
-        x, y, w, h = border.x, border.y, border.width, border.height
+        color = wx.Colour(bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha)
+        x, y, w, h = bg.border_box.x, bg.border_box.y, bg.border_box.width, bg.border_box.height
         pt = [
             (x, y), (x+w, y), (x+w, y+h), (x, y+h), (x, y)
         ]
@@ -134,10 +134,11 @@ class document_container(litehtmlpy.document_container):
         self.dc.DrawPolygon(pt)
         self.dc.SetBrush(wx.NullBrush)
         for i in range(len(bgs)-1, 0, -1):
-            image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bgs[i-1]
-            if not image:
-                continue
+            #image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bgs[i-1]
+            #if not image:
+            #    continue
             # repeat image inside box
+            pass
 
     def draw_borders(self, hdc, borders, draw_pos, root):
         #logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
@@ -146,21 +147,21 @@ class document_container(litehtmlpy.document_container):
         right = left + draw_pos.width
         bottom = top + draw_pos.height
 
-        b = borders[0]
-        colorLeft = wx.Colour(*b[2])
-        widthLeft = b[0]
+        b = borders.left
+        colorLeft = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
+        widthLeft = b.width
 
-        b = borders[1]
-        colorTop = wx.Colour(*b[2])
-        widthTop = b[0]
+        b = borders.top
+        colorTop = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
+        widthTop = b.width
 
-        b = borders[2]
-        colorRight = wx.Colour(*b[2])
-        widthRight = b[0]
+        b = borders.right
+        colorRight = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
+        widthRight = b.width
 
-        b = borders[3]
-        colorBottom = wx.Colour(*b[2])
-        widthBottom = b[0]
+        b = borders.bottom
+        colorBottom = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
+        widthBottom = b.width
 
         self.dc.SetPen(wx.Pen(colorLeft, widthLeft))
         self.dc.DrawLine(left, top, left, bottom)

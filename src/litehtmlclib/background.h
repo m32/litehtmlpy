@@ -1,0 +1,32 @@
+    py::class_<lh::background>(m, "background")
+		.def_readwrite("m_image", &lh::background::m_image)
+		.def_readwrite("m_baseurl", &lh::background::m_baseurl)
+		.def_readwrite("m_color", &lh::background::m_color)
+		.def_readwrite("m_attachment", &lh::background::m_attachment)
+		.def_readwrite("m_position_x", &lh::background::m_position_x)
+		.def_readwrite("m_position_y", &lh::background::m_position_y)
+		.def_readwrite("m_size", &lh::background::m_size)
+		.def_readwrite("m_repeat", &lh::background::m_repeat)
+		.def_readwrite("m_clip", &lh::background::m_clip)
+		.def_readwrite("m_origin", &lh::background::m_origin)
+        //
+		.def("is_empty", &lh::background::is_empty)
+	;
+
+    py::class_<lh::background_paint>(m, "background_paint")
+		.def_readwrite("image", &lh::background_paint::image)
+		.def_readwrite("baseurl", &lh::background_paint::baseurl)
+		.def_readwrite("attachment", &lh::background_paint::attachment)
+		.def_readwrite("repeat", &lh::background_paint::repeat)
+		.def_readwrite("color", &lh::background_paint::color)
+		.def_readwrite("clip_box", &lh::background_paint::clip_box)
+		.def_readwrite("origin_box", &lh::background_paint::origin_box)
+		.def_readwrite("border_box", &lh::background_paint::border_box)
+		.def_readwrite("border_radius", &lh::background_paint::border_radius)
+		.def_readwrite("image_size", &lh::background_paint::image_size)
+		.def_readwrite("position_x", &lh::background_paint::position_x)
+		.def_readwrite("position_y", &lh::background_paint::position_y)
+		.def_readwrite("is_root", &lh::background_paint::is_root)
+        //
+        .def(py::init<>())
+	;
