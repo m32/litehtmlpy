@@ -8,16 +8,15 @@ import wx
 from litehtmlpy import litehtmlwx
 
 class Button(litehtmlwx.litehtmlpy.html_tag):
-    def __init__(self, attributes, doc):
+    def __init__(self, parent, attributes, doc):
         super().__init__(doc)
+        self.parent = parent
         print('i`m the button', attributes)
         self.attributes = attributes
-        self.wnd = None
 
-    def update_position(self, wnd):
+    def update_position(self):
         pos = self.get_placement()
         print('button.pos: {},{},{},{}'.format(pos.x, pos.y, pos.width, pos.height))
-        self.wnd = wnd
 
     def draw(self, hdc, x, y, clip, ri):
         super().draw(hdc, x, y, clip, ri)
@@ -42,35 +41,64 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
         print('Button.on_click')
         self.wnd.HtmlClick(self)
 
+class Input(litehtmlwx.litehtmlpy.html_tag):
+    def __init__(self, parent, attributes, doc):
+        super().__init__(doc)
+        self.parent = parent
+        self.attributes = attributes
+        self.ctrl = wx.TextCtrl(parent, -1)
+
+    def update_position(self):
+        pos = self.get_placement()
+        print('input.pos: {},{},{},{}'.format(pos.left(), pos.top(), pos.right(), pos.bottom()))
+        self.ctrl.SetSize(x=pos.left(), y=pos.top(), width=(pos.right()-pos.left()), height=(pos.bottom()-pos.top()))
+
+    def draw(self, hdc, x, y, clip, ri):
+        super().draw(hdc, x, y, clip, ri)
+        p = ri.pos()
+        print('input.draw', x, y, ri.left(), ri.top(), ri.right(), ri.bottom())
+
+    def on_mouse_over(self):
+        return False
+
+    def on_mouse_leave(self):
+        return False
+
+    def on_lbutton_down(self):
+        print('input.on_lbutton_down')
+        return False
+
+    def on_lbutton_up(self):
+        print('input.on_lbutton_up')
+        return False
+
+    def on_click(self):
+        print('input.on_click')
+        self.wnd.HtmlClick(self)
+
 class document_container(litehtmlwx.document_container):
     handlers = []
-
-    def __init__(self, parent):
-        super().__init__()
-        self.parent = parent
 
     def on_anchor_click(self, url, el):
         self.parent.HtmlClickHRef(url, el)
 
     def update_positions(self):
         for h in self.handlers:
-            h.update_position(self.parent)
+            h.update_position()
 
     def create_element(self, tag_name, attributes=None, doc=None):
         if tag_name == 'button':
             if doc is not None:
-                tagh = Button(attributes, doc)
+                tagh = Button(self.parent, attributes, doc)
                 self.handlers.append(tagh)
                 return tagh
             return True
-
-    def load_image(self, src, baseurl, redraw_on_ready):
-        self.parent.HtmlLoadImage(src, baseurl, redraw_on_ready)
-
-    def get_image_size(self, src, baseurl, size):
-        sz = self.parent.HtmlGetImageSize(src, baseurl)
-        size.width = sz[0]
-        size.height = sz[1]
+        if tag_name == 'input':
+            if doc is not None:
+                tagh = Input(self.parent, attributes, doc)
+                self.handlers.append(tagh)
+                return tagh
+            return True
 
 class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
@@ -206,15 +234,12 @@ class LiteWindow(wx.ScrolledWindow):
         if img.IsOk():
             self.images[url] = img
 
-    def HtmlGetImageSize(self, src, baseurl):
+    def HtmlGetImage(self, src, baseurl):
         if baseurl is not None:
             url = urllib.parse.urljoin(baseurl, src)
         else:
             url = urllib.parse.urljoin(self.url, src)
-        img = self.images.get(url, None)
-        if img is not None:
-            return img.GetSize()
-        return [0, 0]
+        return self.images.get(url, None)
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):
@@ -256,7 +281,7 @@ class LiteHtmlPanel(wx.Panel):
         self.location.AppendItems([
             'demo.html',
             'litehtmlt.html',
-            'wxpython.org.html',
+            'toolbar/toolbar.html',
             'http://wxPython.org',
             'http://wxwidgets.org',
             'http://google.com'

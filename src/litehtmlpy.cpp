@@ -128,7 +128,7 @@ public:
             void,
             html_tag,
             draw,
-            hdc,x, y, clip, ri
+            hdc, x, y, clip, ri
         );
     }
     void draw_background(lh::uint_ptr hdc, int x, int y, const lh::position *clip, const std::shared_ptr<lh::render_item> &ri) override
@@ -140,7 +140,7 @@ public:
             void,
             html_tag,
             draw_background,
-            hdc,x, y, clip, ri
+            hdc, x, y, clip, ri
         );
     }
 /*
@@ -469,12 +469,32 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
+#if 0
+        py::gil_scoped_acquire gil;
+        py::function override = pybind11::get_override(this, "get_image_size");
+        if (override) {
+            std::cout << "get_image_size.1: " << src;
+            std::cout << "," << (baseurl != nullptr ? baseurl : "NULL" ); 
+            std::cout << ",(" << sz.width;
+            std::cout << "," << sz.height;
+            std::cout << ")" << std::endl; 
+            auto obj = override(src, baseurl, &sz);
+            std::cout << "get_image_size.2: " << src;
+            std::cout << "," << (baseurl != nullptr ? baseurl : "NULL" ); 
+            std::cout << ",(" << sz.width;
+            std::cout << "," << sz.height;
+            std::cout << ")" << std::endl; 
+        } else {
+            std::cout << "get_image_size is pure" << std::endl; 
+        }
+#else
         PYBIND11_OVERRIDE_PURE(
             void,
             document_container,
             get_image_size,
-            src, baseurl, sz
+            src, baseurl, &sz
         );
+#endif
     }
     void    draw_background(lh::uint_ptr hdc, const std::vector<lh::background_paint>& bg) override
     {
@@ -612,7 +632,7 @@ public:
             void,
             document_container,
             get_client_rect,
-            client
+            &client
         );
     }
     lh::element::ptr create_element( const char* tag_name,

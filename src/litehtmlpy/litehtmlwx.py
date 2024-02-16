@@ -6,9 +6,10 @@ from . import litehtmlpy
 logger = logging.getLogger(__name__)
 
 class document_container(litehtmlpy.document_container):
-    def __init__(self):
+    def __init__(self, parent=None):
         #super().__init__()
         litehtmlpy.document_container.__init__(self)
+        self.parent = parent
         self.hfont = 0
         self.fonts = {}
         v = 3.96 * 96 / 72
@@ -22,6 +23,8 @@ class document_container(litehtmlpy.document_container):
         self.bmp = wx.Bitmap(self.size[0], self.size[1], 32)
         self.dc = wx.MemoryDC()
         self.dc.SelectObject(self.bmp)
+        self.dc.SetBackground(wx.Brush(wx.WHITE))
+        self.dc.Clear()
         self.ppi = self.dc.GetPPI()
 
     def create_font(self, face, size, weight, italic, decoration):
@@ -112,33 +115,53 @@ class document_container(litehtmlpy.document_container):
 
     def load_image(self, src, baseurl, redraw_on_ready):
         #logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
-        pass
+        if self.parent is not None:
+            self.parent.HtmlLoadImage(src, baseurl, redraw_on_ready)
 
     def get_image_size(self, src, baseurl, size):
         #logger.debug('get_image_size(%s, %s)', src, baseurl)
-        size.width = 0
-        size.height = 0
+        if self.parent is None:
+            size.width = 0
+            size.height = 0
+        else:
+            img = self.parent.HtmlGetImage(src, baseurl)
+            if img is None:
+                size.width = 0
+                size.height = 0
+            else:
+                sz = img.GetSize()
+                size.width = sz[0]
+                size.height = sz[1]
 
     def draw_background(self, hdc, bgs):
         bg = bgs[-1]
-        #image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bg
-        if bg.color == (0, 0, 0, 0):
-            return
-        logger.debug('draw_background(%d, %s)', hdc, bgs)
+		#image, baseurl, attachment, repeat, color, clip_box, origin_box, border_box, border_radius, image_size, position_x, position_y, is_root
+        #logger.debug('draw_background(%d, %s)', hdc, bgs)
+        x, y, w, h = bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height
+        self.dc.SetClippingRegion(x, y, w, h)
         color = wx.Colour(bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha)
+        self.dc.SetBrush(wx.Brush(color, style=wx.BRUSHSTYLE_SOLID))
         x, y, w, h = bg.border_box.x, bg.border_box.y, bg.border_box.width, bg.border_box.height
         pt = [
             (x, y), (x+w, y), (x+w, y+h), (x, y+h), (x, y)
         ]
-        self.dc.SetBrush(wx.Brush(color))
         self.dc.DrawPolygon(pt)
         self.dc.SetBrush(wx.NullBrush)
-        for i in range(len(bgs)-1, 0, -1):
-            #image, baseurl, attachment, repeat, color, clip, origin, border, radius, size, px, py, root = bgs[i-1]
-            #if not image:
-            #    continue
-            # repeat image inside box
-            pass
+        self.dc.DestroyClippingRegion()
+        for i in range(len(bgs)-1, -1, -1):
+            bg = bgs[i]
+            if bg.image_size.width == 0 or bg.image_size.height == 0:
+                continue
+            x, y, w, h = bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height
+            self.dc.SetClippingRegion(x, y, w, h)
+            img = self.parent.HtmlGetImage(bg.image, bg.baseurl)
+            if img is not None:
+                if bg.image_size.width != w or bg.image_size.height != h:
+                    img = img.Rescale(w, h)
+                bmp = wx.Bitmap(img)
+                # TODO: repeat image inside box
+                self.dc.DrawBitmap(bmp, bg.position_x, bg.position_y)
+            self.dc.DestroyClippingRegion()
 
     def draw_borders(self, hdc, borders, draw_pos, root):
         #logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)

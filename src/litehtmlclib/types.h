@@ -367,24 +367,21 @@
 		css_units_vmax,
 		css_units_rem,
 	};
+#endif
+    py::enum_<lh::background_attachment>(m, "background_attachment", py::arithmetic())
+        .value("background_attachment_scroll", lh::background_attachment::background_attachment_scroll)
+        .value("background_attachment_fixed", lh::background_attachment::background_attachment_fixed)
+        .export_values()
+        ;
 
-#define  background_attachment_strings	"scroll;fixed"
-
-	enum background_attachment
-	{
-		background_attachment_scroll,
-		background_attachment_fixed
-	};
-
-#define  background_repeat_strings	"repeat;repeat-x;repeat-y;no-repeat"
-
-	enum background_repeat
-	{
-		background_repeat_repeat,
-		background_repeat_repeat_x,
-		background_repeat_repeat_y,
-		background_repeat_no_repeat
-	};
+    py::enum_<lh::background_repeat>(m, "background_repeat", py::arithmetic())
+        .value("background_repeat_repeat", lh::background_repeat::background_repeat_repeat)
+        .value("background_repeat_repeat_x", lh::background_repeat::background_repeat_repeat_x)
+        .value("background_repeat_repeat_y", lh::background_repeat::background_repeat_repeat_y)
+        .value("background_repeat_no_repeat", lh::background_repeat::background_repeat_no_repeat)
+        .export_values()
+        ;
+#if 0
 
 #define  background_box_strings	"border-box;padding-box;content-box"
 
