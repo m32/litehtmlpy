@@ -1,24 +1,28 @@
 <html>
     <style>
-            #text1
+            input
             {
+                font-family: Tahoma;
+                font-size: 0.9em;
+                width: 30%;
                 height: 29px;
-                position: relative;
-                margin-left: 20px;
-                margin-right: 20px;
                 background-color:#FF00000;
             }
     </style>
 <body>
 <div>
 <button type="button" id="button2" style="background-color:#0000FF">Click ME :)</button>
-<label for="text1">Enter text:</label><input type="text" id="text1">
+<label for="text1">Enter text:</label><input type="text" id="text1" name="text1">
 </div>
 <div>zażółcić gęślą jaźń</div>
 <a href="https://web-platform-tests.org/">web-platform-tests.org</a><br/>
 <a href="http://test.csswg.org/suites/css-flexbox-1_dev/nightly-unstable/html/toc.htm">W3C tests</a><br/>
 <a href="https://test.csswg.org/suites/css-flexbox-1_dev/nightly-unstable/html/flex-direction.htm">W3C test flex-direction</a><br/>
 <a href="https://wxpython.org/"><img src="header-logo.png"></a>
+<form>
+  <label for="username">Username: </label> <input type="text" id="username" name="username" value="enter user name"/><br>
+  <input type="submit" value="Submit">Submit</input>
+</form>
 
 </body>
 </html>

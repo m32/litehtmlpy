@@ -9,7 +9,7 @@
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "args": [
-                "litehtml-wx-png.py",
+                "litehtml-wx-browser.py",
             ],
             "environment": [
             ],

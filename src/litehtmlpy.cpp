@@ -469,32 +469,12 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-#if 0
-        py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "get_image_size");
-        if (override) {
-            std::cout << "get_image_size.1: " << src;
-            std::cout << "," << (baseurl != nullptr ? baseurl : "NULL" ); 
-            std::cout << ",(" << sz.width;
-            std::cout << "," << sz.height;
-            std::cout << ")" << std::endl; 
-            auto obj = override(src, baseurl, &sz);
-            std::cout << "get_image_size.2: " << src;
-            std::cout << "," << (baseurl != nullptr ? baseurl : "NULL" ); 
-            std::cout << ",(" << sz.width;
-            std::cout << "," << sz.height;
-            std::cout << ")" << std::endl; 
-        } else {
-            std::cout << "get_image_size is pure" << std::endl; 
-        }
-#else
         PYBIND11_OVERRIDE_PURE(
             void,
             document_container,
             get_image_size,
             src, baseurl, &sz
         );
-#endif
     }
     void    draw_background(lh::uint_ptr hdc, const std::vector<lh::background_paint>& bg) override
     {
@@ -642,31 +622,30 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
+#if 1
         py::gil_scoped_acquire gil;
         py::function override = pybind11::get_override(this, "create_element");
         if (override) {
-            py::bool_ create = override(tag_name);
-            if( !bool(create) )
-                return nullptr;
-            auto pyattributes = py::dict();
-            for (auto& cls : attributes)
-                pyattributes[py::str(cls.first)] = py::str(cls.second);
-#if 0
-            py::object obj = override(tag_name, pyattributes, doc);
-            if( py::isinstance<py::none>(obj) )
-                return obj;
-#else
-            auto obj = override(tag_name, pyattributes, doc);
             //DebugBreak();
+            auto obj = override(tag_name, attributes, doc);
+            if( obj.is_none() )
+                return nullptr;
             if (pybind11::detail::cast_is_temporary_value_reference<py_html_tag::ptr>::value) {
                 static pybind11::detail::override_caster_t<py_html_tag::ptr> caster;
                 return pybind11::detail::cast_ref<py_html_tag::ptr>(std::move(obj), caster);
             } else {
                 return pybind11::detail::cast_safe<py_html_tag::ptr>(std::move(obj));
             }
-#endif
         }
         return nullptr;
+#else
+        PYBIND11_OVERRIDE_PURE(
+            lh::element::ptr,
+            document_container,
+            create_element,
+            tag_name, attributes, doc
+        );
+#endif
     }
     void    get_media_features(lh::media_features& media) const override
     {

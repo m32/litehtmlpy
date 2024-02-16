@@ -39,7 +39,7 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
 
     def on_click(self):
         print('Button.on_click')
-        self.wnd.HtmlClick(self)
+        self.parent.HtmlClick(self)
 
 class Input(litehtmlwx.litehtmlpy.html_tag):
     def __init__(self, parent, attributes, doc):
@@ -50,7 +50,7 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
 
     def update_position(self):
         pos = self.get_placement()
-        print('input.pos: {},{},{},{}'.format(pos.left(), pos.top(), pos.right(), pos.bottom()))
+        print('input.pos: x={x},y={y},w={width},h={height}'.format(x=pos.left(), y=pos.top(), width=(pos.right()-pos.left()), height=(pos.bottom()-pos.top())))
         self.ctrl.SetSize(x=pos.left(), y=pos.top(), width=(pos.right()-pos.left()), height=(pos.bottom()-pos.top()))
 
     def draw(self, hdc, x, y, clip, ri):
@@ -74,7 +74,7 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
 
     def on_click(self):
         print('input.on_click')
-        self.wnd.HtmlClick(self)
+        self.parent.HtmlClick(self)
 
 class document_container(litehtmlwx.document_container):
     handlers = []
@@ -88,17 +88,21 @@ class document_container(litehtmlwx.document_container):
 
     def create_element(self, tag_name, attributes=None, doc=None):
         if tag_name == 'button':
-            if doc is not None:
-                tagh = Button(self.parent, attributes, doc)
-                self.handlers.append(tagh)
-                return tagh
-            return True
+            print('create_element', tag_name, attributes, doc)
+            tagh = Button(self.parent, attributes, doc)
+            self.handlers.append(tagh)
+            return tagh
         if tag_name == 'input':
-            if doc is not None:
+            t = attributes.get('type', None).lower()
+            if t == 'text':
                 tagh = Input(self.parent, attributes, doc)
                 self.handlers.append(tagh)
                 return tagh
-            return True
+            elif t == 'submit':
+                tagh = Button(self.parent, attributes, doc)
+                self.handlers.append(tagh)
+                return tagh
+        return None
 
 class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
@@ -239,6 +243,7 @@ class LiteWindow(wx.ScrolledWindow):
             url = urllib.parse.urljoin(baseurl, src)
         else:
             url = urllib.parse.urljoin(self.url, src)
+        print('HtmlGetImage', src, baseurl)
         return self.images.get(url, None)
 
 class LiteHtmlPanel(wx.Panel):
@@ -281,9 +286,7 @@ class LiteHtmlPanel(wx.Panel):
         self.location.AppendItems([
             'demo.html',
             'litehtmlt.html',
-            'toolbar/toolbar.html',
             'http://wxPython.org',
-            'http://wxwidgets.org',
             'http://google.com'
         ])
 
