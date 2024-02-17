@@ -1,2 +1,2 @@
 #!/bin/bash
-vpython3 -m build build_ext
+vpython3 -m build --wheel
