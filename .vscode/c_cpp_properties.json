@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceRoot}",
-                "${workspaceRoot}/litehtml/Include",
+                "${workspaceRoot}/litehtml/include",
                 "/usr/include",
                 "."
             ],
