@@ -1,5 +1,6 @@
 #
 # cmake -DCMAKE_BUILD_TYPE=Debug .
+# cmake -DCMAKE_BUILD_TYPE=Release .
 #
 cmake_minimum_required(VERSION 3.4...3.18)
 project(litehtmlpy)
@@ -63,12 +64,14 @@ target_link_libraries(litehtmlpy PRIVATE
     litehtml
     gumbo
     ${PYTHON_LIBRARIES}
-    ${PYTHON_LIBRARY}
 )
 
 if(CMAKE_CROSSCOMPILING)
 target_compile_definitions(litehtmlpy PRIVATE
     -DMS_WIN64
+)
+target_compile_options(litehtmlpy PRIVATE
+    -Wa,-mbig-obj
 )
 target_link_options(litehtmlpy PRIVATE
     -static
