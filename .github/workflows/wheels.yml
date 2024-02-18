@@ -48,3 +48,9 @@ jobs:
         with:
           name: wheels_ubuntu__${{ github.sha }}
           path: ./wheelhouse/*.whl
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v0.1.14
+        with:
+          files: ./wheelhouse/*.whl
+          draft: true
