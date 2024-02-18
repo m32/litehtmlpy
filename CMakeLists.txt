@@ -70,15 +70,15 @@ target_compile_definitions(litehtmlpy PRIVATE
 )
 
 target_include_directories(litehtmlpy PRIVATE
-    ${PYTHON_INCLUDE_DIRS}
+#    ${PYTHON_INCLUDE_DIRS}
     litehtml/include
-    ${PYBIND11_INCLUDE_DIR}
+#    ${PYBIND11_INCLUDE_DIR}
 )
 
 target_link_libraries(litehtmlpy PRIVATE
     litehtml
     gumbo
-    ${PYTHON_LIBRARIES}
+#    ${PYTHON_LIBRARIES}
 )
 
 if(CMAKE_CROSSCOMPILING)
