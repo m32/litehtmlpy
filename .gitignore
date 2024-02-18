@@ -16,9 +16,6 @@ src/litehtmlpy/litehtmlpy.pyd
 build.ninja
 litehtmlpy.egg-info/
 
-litehtml/
-pybind11/
-
 build/
 dist/
 wheelhouse/

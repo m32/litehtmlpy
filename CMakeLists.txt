@@ -10,21 +10,21 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option(LITEHTMLPY_BUILD_TESTING "enable testing for litehtmlpy" OFF)
 
-find_package(Git)
-
-if(NOT EXISTS ${CMAKE_SOURCE_DIR}/litehtml)
-    execute_process(COMMAND "${GIT_EXECUTABLE}" clone --depth 1 https://github.com/m32/litehtml -b master
-        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-endif()
-if(NOT EXISTS ${CMAKE_SOURCE_DIR}/pybind11)
-    if(CMAKE_CROSSCOMPILING)
-        execute_process(COMMAND "${GIT_EXECUTABLE}" clone --depth 1 https://github.com/pybind/pybind11.git -b v2.9
-            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-    else()
-        execute_process(COMMAND "${GIT_EXECUTABLE}" clone --depth 1 https://github.com/pybind/pybind11.git -b v2.11
-            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
-    endif()
-endif()
+#find_package(Git)
+#
+#if(NOT EXISTS ${CMAKE_SOURCE_DIR}/litehtml)
+#    execute_process(COMMAND "${GIT_EXECUTABLE}" clone --depth 1 https://github.com/m32/litehtml -b master
+#        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+#endif()
+#if(NOT EXISTS ${CMAKE_SOURCE_DIR}/pybind11)
+#    if(CMAKE_CROSSCOMPILING)
+#        execute_process(COMMAND "${GIT_EXECUTABLE}" clone --depth 1 https://github.com/pybind/pybind11.git -b v2.9
+#            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+#    else()
+#        execute_process(COMMAND "${GIT_EXECUTABLE}" clone --depth 1 https://github.com/pybind/pybind11.git -b v2.11
+#            WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+#    endif()
+#endif()
 
 add_subdirectory(litehtml)
 
