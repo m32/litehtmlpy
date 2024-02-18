@@ -2,14 +2,15 @@
 #
 # https://stackoverflow.com/questions/50690526/how-to-publish-binary-python-wheels-for-linux-on-a-local-machine
 #
-XNAME=quay.io/pypa/manylinux_2_28_x86_64
+XIMAGE=quay.io/pypa/manylinux_2_17_x86_64
+XNAME=manylinux
 
 xrm(){
-    docker rmi ${XNAME}
+    docker rmi ${XIMAGE}
 }
 
 xpull(){
-    docker pull ${XNAME}
+    docker pull ${XIMAGE}
 }
 
 xbuild(){
@@ -18,7 +19,7 @@ docker run \
     -t \
     --rm \
     -v `pwd`:/io \
-    ${XNAME} \
+    ${XIMAGE} \
     /io/build-wheels.sh
 }
 
