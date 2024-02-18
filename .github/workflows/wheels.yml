@@ -41,7 +41,7 @@ jobs:
         env:
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux2014
           CIBW_ARCHS_LINUX: x86_64
-          CIBW_BUILD: "cp311-cp311-manylinux_x86_64*"
+          CIBW_BUILD: "cp311*-manylinux_x86_64*"
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4.3.0
