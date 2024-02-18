@@ -5,25 +5,6 @@ on:
     # allow manual runs on branches without a PR
 
 jobs:
-  build_sdist:
-    name: Build SDist
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
-
-    - name: Build SDist
-      run: pipx run build --sdist
-
-    - name: Check metadata
-      run: pipx run twine check dist/*
-
-    - uses: actions/upload-artifact@v4
-      with:
-        path: dist/*.tar.gz
-
-
   build_ubuntu_wheels:
     name: Build wheels on Ubuntu
     runs-on: ubuntu-22.04
