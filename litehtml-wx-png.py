@@ -1,4 +1,5 @@
 #!/usr/bin/env vpython3
+import sys
 import os
 import io
 import urllib.parse
@@ -58,8 +59,12 @@ class App(wx.App):
 class Main:
     def demo(self):
         wxapp = App(False)
-        html = open('demo.html', 'rt').read()
-        html = open('litehtmlt.html', 'rt').read()
+        if len(sys.argv) > 1:
+            fname = sys.argv[1]
+        else:
+            fname = 'demo.html'
+            fname = 'litehtmlt.html'
+        html = open(fname, 'rt').read()
 
         cntr = document_container(wxapp)
         cntr.reset()
