@@ -14,6 +14,9 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
         print('i`m the button', attributes)
         self.attributes = attributes
 
+    def destroy(self):
+        pass
+
     def update_position(self):
         pos = self.get_placement()
         print('button.pos: {},{},{},{}'.format(pos.x, pos.y, pos.width, pos.height))
@@ -48,6 +51,10 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
         self.attributes = attributes
         self.ctrl = wx.TextCtrl(parent, -1)
 
+    def destroy(self):
+        self.ctrl.Destroy()
+        self.ctrl = None
+
     def update_position(self):
         pos = self.get_placement()
         print('input.pos: x={x},y={y},w={width},h={height}'.format(x=pos.left(), y=pos.top(), width=(pos.right()-pos.left()), height=(pos.bottom()-pos.top())))
@@ -79,6 +86,12 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
 class document_container(litehtmlwx.document_container):
     handlers = []
 
+    def destroy(self):
+        super().reset()
+        for h in self.handlers:
+            h.destroy()
+        self.handlers = []
+
     def on_anchor_click(self, url, el):
         self.parent.HtmlClickHRef(url, el)
 
@@ -93,7 +106,7 @@ class document_container(litehtmlwx.document_container):
             self.handlers.append(tagh)
             return tagh
         if tag_name == 'input':
-            t = attributes.get('type', None).lower()
+            t = attributes.get('type', '').lower()
             if t == 'text':
                 tagh = Input(self.parent, attributes, doc)
                 self.handlers.append(tagh)
@@ -124,8 +137,10 @@ class LiteWindow(wx.ScrolledWindow):
 
     def Cleanup(self):
         print('Cleanup')
-        del self.doc
-        del self.cntr
+        self.cntr.destroy()
+        self.url = None
+        self.doc = None
+        self.cntr = None
 
     def OnMouseDown(self, evt):
         if self.doc is not None:
@@ -175,7 +190,7 @@ class LiteWindow(wx.ScrolledWindow):
             r = requests.get(url)
             print(r.headers)
             if html:
-                if r.headers['Content-Type'] == 'text/html':
+                if r.headers['Content-Type'].find('text/html') != -1:
                     data = r.text
             else:
                 if r.headers['Content-Type'] == 'image/png':
@@ -187,6 +202,7 @@ class LiteWindow(wx.ScrolledWindow):
 
     def LoadURL(self, url):
         self.doc = None
+        self.cntr.destroy()
         self.cntr.reset()
         self.url = None
         self.images = {}
@@ -205,16 +221,16 @@ class LiteWindow(wx.ScrolledWindow):
         self.doc.render(size[0], litehtmlwx.litehtmlpy.render_all)
         self.cntr.size = size
 
-        h = self.doc.height() - size[0] + 20 # + statusline.height
+        h = self.doc.height() + 20 # + statusline.height
         if h < 0:
             h = 0
-        self.SetScrollbar(wx.VERTICAL, 0, 16, h, True)
+        self.SetScrollbar(wx.VERTICAL, 0, size.Height, h, True)
 
     def HtmlPaint(self):
         self.cntr.reset()
         size = self.GetClientSize()
         y = self.GetScrollPos(wx.VERTICAL)
-        clip = litehtmlwx.litehtmlpy.position(0, 0, size[0], size[1])
+        clip = litehtmlwx.litehtmlpy.position(0, 0, size.Width, size.Height)
         self.doc.draw(0, 0, -y, clip)
         self.cntr.update_positions()
 
