@@ -72,7 +72,13 @@
             master_css = lh::master_css;
         if( user_styles == nullptr )
             user_styles = "";
-        py_document::ptr doc = py_document::createFromString(html, container, master_css, user_styles);
-        return doc;
+#if 0
+        lh::document::ptr doc = lh::document::createFromString(html, container, master_css, user_styles);
+        return doc->getPointer();
+#else
+        auto doc = lh::document::createFromString(html, container, master_css, user_styles);
+        py::object o = py::cast(doc, py::return_value_policy::reference);
+        return o;
+#endif
     })
     ;
