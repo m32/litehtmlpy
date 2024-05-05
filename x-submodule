@@ -1,2 +1,2 @@
-git submodule add  -b v2.11 --name pybind11 https://github.com/pybind/pybind11 pybind11
+git submodule add  -b v2.12 --name pybind11 https://github.com/pybind/pybind11 pybind11
 git submodule add  -b master --name litehtml https://github.com/m32/litehtml litehtml

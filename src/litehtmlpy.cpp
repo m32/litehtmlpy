@@ -1,4 +1,6 @@
 #define PYBIND11_DETAILED_ERROR_MESSAGES
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 
 #ifdef MS_WIN64
 #define _hypot hypot
@@ -8,8 +10,6 @@
 #define DebugBreak() raise(SIGTRAP)
 #endif
 
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
 #include <litehtml.h>
 #include <litehtml/render_item.h>
 
@@ -349,9 +349,9 @@ public:
         lh::uint_ptr result = 0;
 
         py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "create_font");
-        if (override) {
-            auto obj = override(faceName, size, weight, (int)italic, (int)decoration);
+        py::function pyfunc = pybind11::get_override(this, "create_font");
+        if (pyfunc) {
+            auto obj = pyfunc(faceName, size, weight, (int)italic, (int)decoration);
             if (py::isinstance<py::list>(obj)) {
                 py::list l = obj.cast<py::list>();
                 result = l[0].cast<int>();
@@ -476,7 +476,59 @@ public:
             src, baseurl, &sz
         );
     }
-    void    draw_background(lh::uint_ptr hdc, const std::vector<lh::background_paint>& bg) override
+    void draw_image(lh::uint_ptr hdc, const lh::background_layer& layer, const std::string& url, const std::string& base_url) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            draw_image,
+            hdc, layer, url, base_url
+        );
+    }
+
+	void draw_solid_fill(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::web_color& color) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            draw_solid_fill,
+            hdc, layer, color
+        );
+    }
+
+	void draw_linear_gradient(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::background_layer::linear_gradient& gradient) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            draw_linear_gradient,
+            hdc, layer, gradient
+        );
+    }
+
+	void draw_radial_gradient(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::background_layer::radial_gradient& gradient) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            draw_radial_gradient,
+            hdc, layer, gradient
+        );
+    }
+
+	void draw_conic_gradient(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::background_layer::conic_gradient& gradient) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -485,9 +537,10 @@ public:
             void,
             document_container,
             draw_background,
-            hdc, bg
+            hdc, layer, gradient
         );
     }
+
     void    draw_borders(lh::uint_ptr hdc, const lh::borders& borders, const lh::position& draw_pos, bool root) override
     {
         if( debuglog ){
@@ -508,7 +561,7 @@ public:
         }
         PYBIND11_OVERRIDE_PURE(
             void,
-            document_container,
+            lh::document_container,
             set_caption,
             caption
         );
@@ -555,7 +608,7 @@ public:
             cursor
         );
     }
-    void    transform_text(lh::string& text, lh::text_transform tt) override
+    void    transform_text(std::string& text, lh::text_transform tt) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -567,7 +620,7 @@ public:
             text, tt
         );
     }
-    void    import_css(lh::string& text, const lh::string& url, lh::string& baseurl) override
+    void    import_css(std::string& text, const std::string& url, std::string& baseurl) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -624,10 +677,10 @@ public:
         }
 #if 1
         py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "create_element");
-        if (override) {
+        py::function pyfunc = pybind11::get_override(this, "create_element");
+        if (pyfunc) {
             //DebugBreak();
-            auto obj = override(tag_name, attributes, doc);
+            auto obj = pyfunc(tag_name, attributes, doc);
             if( obj.is_none() )
                 return nullptr;
             if (pybind11::detail::cast_is_temporary_value_reference<py_html_tag::ptr>::value) {
@@ -653,12 +706,12 @@ public:
             ENTERWRAPPER
         }
         py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "get_media_features");
-        if (override) {
-            auto obj = override();
+        py::function pyfunc = pybind11::get_override(this, "get_media_features");
+        if (pyfunc) {
+            auto obj = pyfunc();
             if (py::isinstance<py::list>(obj)) {
                 py::list l = obj.cast<py::list>();
-                media.type              = (litehtml::media_type)l[0].cast<int>();
+                media.type              = (lh::media_type)l[0].cast<int>();
                 media.width             = l[1].cast<int>();
                 media.height            = l[2].cast<int>();
                 media.device_width      = l[3].cast<int>();
@@ -670,16 +723,16 @@ public:
             }
         }
     }
-    void    get_language(lh::string& language, lh::string& culture) const override
+    void    get_language(std::string& language, std::string& culture) const override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
 /*
         py::gil_scoped_acquire gil;
-        py::function override = pybind11::get_override(this, "get_language");
-        if (override) {
-            auto obj = override();
+        py::function pyfunc = pybind11::get_override(this, "get_language");
+        if (pyfunc) {
+            auto obj = pyfunc();
             if (py::isinstance<py::list>(obj)) {
                 py::list l = obj.cast<py::list>();
                 language = l[0].cast<string&>();
@@ -711,40 +764,40 @@ PYBIND11_MODULE(litehtmlpy, m) {
 
 #include "litehtmlclib/background.h"
 #include "litehtmlclib/borders.h"
-#include "litehtmlclib/css_length.h"
-#include "litehtmlclib/css_margins.h"
-#include "litehtmlclib/css_offsets.h"
-#include "litehtmlclib/css_position.h"
-#include "litehtmlclib/css_properties.h"
-//#include "litehtmlclib/css_selector.h"
+//#include "litehtmlclib/css_length.h"
+//#include "litehtmlclib/css_margins.h"
+//#include "litehtmlclib/css_offsets.h"
+//#include "litehtmlclib/css_position.h"
+//#include "litehtmlclib/css_properties.h"
+////#include "litehtmlclib/css_selector.h"
 #include "litehtmlclib/document.h"
 #include "litehtmlclib/document_container.h"
-#include "litehtmlclib/element.h"
-//#include "litehtmlclib/flex_item.h"
-//#include "litehtmlclib/flex_line.h"
-//#include "litehtmlclib/formatting_context.h"
-//#include "litehtmlclib/html.h"
-#include "litehtmlclib/html_tag.h"
-//#include "litehtmlclib/iterators.h"
-//#include "litehtmlclib/line_box.h"
-//#include "litehtmlclib/litehtml.h"
-//#include "litehtmlclib/master_css.h"
-//#include "litehtmlclib/media_query.h"
-//#include "litehtmlclib/num_cvt.h"
-//#include "litehtmlclib/os_types.h"
-//#include "litehtmlclib/render_block.h"
-//#include "litehtmlclib/render_block_context.h"
-//#include "litehtmlclib/render_flex.h"
-//#include "litehtmlclib/render_image.h"
-//#include "litehtmlclib/render_inline.h"
-//#include "litehtmlclib/render_inline_context.h"
-#include "litehtmlclib/render_item.h"
-//#include "litehtmlclib/render_table.h"
-//#include "litehtmlclib/string_id.h"
-//#include "litehtmlclib/style.h"
-//#include "litehtmlclib/stylesheet.h"
-//#include "litehtmlclib/table.h"
-//#include "litehtmlclib/tstring_view.h"
+//#include "litehtmlclib/element.h"
+////#include "litehtmlclib/flex_item.h"
+////#include "litehtmlclib/flex_line.h"
+////#include "litehtmlclib/formatting_context.h"
+////#include "litehtmlclib/html.h"
+//#include "litehtmlclib/html_tag.h"
+////#include "litehtmlclib/iterators.h"
+////#include "litehtmlclib/line_box.h"
+////#include "litehtmlclib/litehtml.h"
+////#include "litehtmlclib/master_css.h"
+////#include "litehtmlclib/media_query.h"
+////#include "litehtmlclib/num_cvt.h"
+////#include "litehtmlclib/os_types.h"
+////#include "litehtmlclib/render_block.h"
+////#include "litehtmlclib/render_block_context.h"
+////#include "litehtmlclib/render_flex.h"
+////#include "litehtmlclib/render_image.h"
+////#include "litehtmlclib/render_inline.h"
+////#include "litehtmlclib/render_inline_context.h"
+//#include "litehtmlclib/render_item.h"
+////#include "litehtmlclib/render_table.h"
+////#include "litehtmlclib/string_id.h"
+////#include "litehtmlclib/style.h"
+////#include "litehtmlclib/stylesheet.h"
+////#include "litehtmlclib/table.h"
+////#include "litehtmlclib/tstring_view.h"
 #include "litehtmlclib/types.h"
 #include "litehtmlclib/web_color.h"
 }

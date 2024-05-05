@@ -233,15 +233,6 @@
         .value("font_weight_bold", lh::font_weight::font_weight_bold)
         .value("font_weight_bolder", lh::font_weight::font_weight_bolder)
         .value("font_weight_lighter", lh::font_weight::font_weight_lighter)
-        .value("font_weight_100", lh::font_weight::font_weight_100)
-        .value("font_weight_200", lh::font_weight::font_weight_200)
-        .value("font_weight_300", lh::font_weight::font_weight_300)
-        .value("font_weight_400", lh::font_weight::font_weight_400)
-        .value("font_weight_500", lh::font_weight::font_weight_500)
-        .value("font_weight_600", lh::font_weight::font_weight_600)
-        .value("font_weight_700", lh::font_weight::font_weight_700)
-        .value("font_weight_800", lh::font_weight::font_weight_800)
-        .value("font_weight_900", lh::font_weight::font_weight_900)
         .export_values()
         ;
 

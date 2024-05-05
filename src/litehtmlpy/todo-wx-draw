@@ -1,0 +1,63 @@
+diff --git a/src/litehtmlpy/litehtmlwx.py b/src/litehtmlpy/litehtmlwx.py
+index ba0a939..970233b 100644
+--- a/src/litehtmlpy/litehtmlwx.py
++++ b/src/litehtmlpy/litehtmlwx.py
+@@ -28,7 +28,7 @@ class document_container(litehtmlpy.document_container):
+         self.ppi = self.dc.GetPPI()
+ 
+     def create_font(self, face, size, weight, italic, decoration):
+-        #logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
++        logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
+         if not face:
+             face = 'Times New Roman'
+         else:
+@@ -133,35 +133,20 @@ class document_container(litehtmlpy.document_container):
+                 size.width = sz[0]
+                 size.height = sz[1]
+ 
+-    def draw_background(self, hdc, bgs):
+-        bg = bgs[-1]
+-		#image, baseurl, attachment, repeat, color, clip_box, origin_box, border_box, border_radius, image_size, position_x, position_y, is_root
+-        #logger.debug('draw_background(%d, %s)', hdc, bgs)
+-        x, y, w, h = bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height
+-        self.dc.SetClippingRegion(x, y, w, h)
+-        color = wx.Colour(bg.color.red, bg.color.green, bg.color.blue, bg.color.alpha)
+-        self.dc.SetBrush(wx.Brush(color, style=wx.BRUSHSTYLE_SOLID))
+-        x, y, w, h = bg.border_box.x, bg.border_box.y, bg.border_box.width, bg.border_box.height
+-        pt = [
+-            (x, y), (x+w, y), (x+w, y+h), (x, y+h), (x, y)
+-        ]
+-        self.dc.DrawPolygon(pt)
+-        self.dc.SetBrush(wx.NullBrush)
+-        self.dc.DestroyClippingRegion()
+-        for i in range(len(bgs)-1, -1, -1):
+-            bg = bgs[i]
+-            if bg.image_size.width == 0 or bg.image_size.height == 0:
+-                continue
+-            x, y, w, h = bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height
+-            self.dc.SetClippingRegion(x, y, w, h)
+-            img = self.parent.HtmlGetImage(bg.image, bg.baseurl)
+-            if img is not None:
+-                if bg.image_size.width != w or bg.image_size.height != h:
+-                    img = img.Rescale(w, h)
+-                bmp = wx.Bitmap(img)
+-                # TODO: repeat image inside box
+-                self.dc.DrawBitmap(bmp, bg.position_x, bg.position_y)
+-            self.dc.DestroyClippingRegion()
++    def draw_image(self, hdc, layer, url, base_url):
++        logger.debug('draw_image(%d, %s, %s, %s)', hdc, layer, url, base_url)
++
++    def draw_solid_fill(self, hdc, layer, color):
++        logger.debug('draw_solid_fill(%d, %s, %s)', hdc, layer, color)
++
++    def draw_linear_gradient(self, hdc, layer, gradient):
++        logger.debug('draw_linear_gradient(%d, %s, %s)', hdc, layer, gradient)
++
++    def draw_radial_gradient(self, hdc, layer, gradient):
++        logger.debug('draw_radial_gradient(%d, %s, %s)', hdc, layer, gradient)
++
++    def draw_conic_gradient(self, hdc, layer, gradient):
++        logger.debug('draw_conic_gradient(%d, %s, %s)', hdc, layer, gradient)
+ 
+     def draw_borders(self, hdc, borders, draw_pos, root):
+         #logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)

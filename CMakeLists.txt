@@ -61,7 +61,7 @@ endif()
 #endif()
 
 set_target_properties(litehtmlpy PROPERTIES
-    CXX_STANDARD 11
+    CXX_STANDARD 17
     C_STANDARD 99
 )
 

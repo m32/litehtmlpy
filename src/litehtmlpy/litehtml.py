@@ -25,7 +25,7 @@ class document_container(litehtmlpy.document_container):
 
     def text_width(self, text, hFont):
         logger.debug('text_width(%s, %s)', text, hFont)
-        return 12
+        return len(text)*12
 
     def draw_text(self, hdc, text, hFont, color, pos):
         logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, pos)
@@ -52,8 +52,20 @@ class document_container(litehtmlpy.document_container):
         size.width = 0
         size.height = 0
 
-    def draw_background(self, hdc, bg):
-        logger.debug('draw_background(%d, %s)', hdc, bg)
+    def draw_image(self, hdc, layer, url, base_url):
+        logger.debug('draw_image(%d, %s, %s, %s)', hdc, layer, url, base_url)
+
+    def draw_solid_fill(self, hdc, layer, color):
+        logger.debug('draw_solid_fill(%d, %s, %s)', hdc, layer, color)
+
+    def draw_linear_gradient(self, hdc, layer, gradient):
+        logger.debug('draw_linear_gradient(%d, %s, %s)', hdc, layer, gradient)
+
+    def draw_radial_gradient(self, hdc, layer, gradient):
+        logger.debug('draw_radial_gradient(%d, %s, %s)', hdc, layer, gradient)
+
+    def draw_conic_gradient(self, hdc, layer, gradient):
+        logger.debug('draw_conic_gradient(%d, %s, %s)', hdc, layer, gradient)
 
     def draw_borders(self, hdc, borders, draw_pos, root):
         logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
@@ -101,7 +113,7 @@ class document_container(litehtmlpy.document_container):
             800, # device height (screen height)
             8, # color
             0, # monochrome
-            256, # color index
+            0, # color index
             96, # resolution
         )
 
