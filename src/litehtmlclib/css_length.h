@@ -9,6 +9,5 @@
         .def("val", &lh::css_length::val)
         .def("units", &lh::css_length::units)
         .def("calc_percent", &lh::css_length::calc_percent)
-        .def("fromString", &lh::css_length::fromString)
         .def("to_string", &lh::css_length::to_string)
 	;
