@@ -12,6 +12,7 @@ class document_container(litehtmlpy.document_container):
         v = 3.96 * 96 / 72
         self.size = [int(210 * v), int(297 * v)]
         self.ppi = (96, 96)
+        self.clips = []
 
     def create_font(self, face, size, weight, italic, decoration):
         logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
@@ -91,9 +92,12 @@ class document_container(litehtmlpy.document_container):
 
     def set_clip(self, pos, radius):
         logger.debug('set_clip(%s, %s)', pos, radius)
+        self.clips.push((pos, radius))
 
     def del_clip(self):
         logger.debug('del_clip()')
+        if self.clips:
+            self.clips.pop()
 
     def get_client_rect(self, client):
         logger.debug('get_client_rect(%s, %s, %s, %s)', client.x, client.y, client.width, client.height)

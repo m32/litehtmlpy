@@ -17,11 +17,17 @@
 #include <litehtml/borders.h>
 #include <litehtml/css_length.h>
 
+#ifdef USE_CAIRO_CONTAINERS
+#include "cairo/container_cairo.h"
+#include "cairo/container_cairo_pango.h"
+#endif
+
 #include <iostream>
 #include <string>
 
 namespace lh = litehtml;
 namespace py = pybind11;
+using namespace pybind11::literals;
 
 static int debuglog = 0;
 #define ENTERWRAPPER std::cout << "PyLiteHtml::" << __FUNCTION__ << std::endl;
@@ -561,7 +567,7 @@ public:
         }
         PYBIND11_OVERRIDE_PURE(
             void,
-            lh::document_container,
+            document_container,
             set_caption,
             caption
         );
@@ -756,48 +762,233 @@ public:
 #endif
 };
 
+#ifdef USE_CAIRO_CONTAINERS
+#if 0
+class py_document_container_cairo : public container_cairo
+{
+public:
+	cairo_surface_t* get_image(const std::string& url) override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        return nullptr;
+        /*
+        PYBIND11_OVERRIDE_PURE(
+            cairo_surface_t*,
+            container_cairo,
+            get_image,
+            url
+        );
+        */
+    }
+	double get_screen_dpi() const override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            double,
+            container_cairo,
+            get_screen_dpi,
+            // no arguments
+        );
+    }
+	int get_screen_width() const override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            int,
+            container_cairo,
+            get_screen_width,
+            // no arguments
+        );
+    }
+	int get_screen_height() const override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            int,
+            container_cairo,
+            get_screen_height,
+            // no arguments
+        );
+    }
+};
+#endif
+
+class py_document_container_cairo_pango : public container_cairo_pango
+{
+public:
+	cairo_surface_t* get_image(const std::string& url) override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        return nullptr;
+    }
+	double get_screen_dpi() const override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            double,
+            container_cairo_pango,
+            get_screen_dpi,
+            //
+        );
+    }
+	int get_screen_width() const override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            int,
+            container_cairo_pango,
+            get_screen_width,
+            //
+        );
+    }
+	int get_screen_height() const override {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            int,
+            container_cairo_pango,
+            get_screen_height,
+            //
+        );
+    }
+
+    void    load_image(const char* src, const char* baseurl, bool redraw_on_ready) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            container_cairo_pango,
+            load_image,
+            src, baseurl, redraw_on_ready
+        );
+    }
+    void    set_caption(const char* caption) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            container_cairo_pango,
+            set_caption,
+            caption
+        );
+    }
+    void    set_base_url(const char* base_url) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            container_cairo_pango,
+            set_base_url,
+            base_url
+        );
+    }
+    void    on_anchor_click(const char* url, const lh::element::ptr& el) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            container_cairo_pango,
+            on_anchor_click,
+            url, el
+        );
+    }
+    void    set_cursor(const char* cursor) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            container_cairo_pango,
+            set_cursor,
+            cursor
+        );
+    }
+    void    import_css(std::string& text, const std::string& url, std::string& baseurl) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            container_cairo_pango,
+            import_css,
+            text, url, baseurl
+        );
+    }
+    void    get_client_rect(lh::position& client) const override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            container_cairo_pango,
+            get_client_rect,
+            &client
+        );
+    }
+};
+#endif
+
 PYBIND11_MODULE(litehtmlpy, m) {
     m.def("debuglog", [](int on) {
         debuglog = on;
     })
     ;
 
-#include "litehtmlclib/background.h"
-#include "litehtmlclib/borders.h"
-#include "litehtmlclib/css_length.h"
-#include "litehtmlclib/css_margins.h"
-#include "litehtmlclib/css_offsets.h"
-#include "litehtmlclib/css_position.h"
-#include "litehtmlclib/css_properties.h"
-////#include "litehtmlclib/css_selector.h"
-#include "litehtmlclib/document.h"
-#include "litehtmlclib/document_container.h"
-#include "litehtmlclib/element.h"
-////#include "litehtmlclib/flex_item.h"
-////#include "litehtmlclib/flex_line.h"
-////#include "litehtmlclib/formatting_context.h"
-////#include "litehtmlclib/html.h"
-#include "litehtmlclib/html_tag.h"
-////#include "litehtmlclib/iterators.h"
-////#include "litehtmlclib/line_box.h"
-////#include "litehtmlclib/litehtml.h"
-////#include "litehtmlclib/master_css.h"
-////#include "litehtmlclib/media_query.h"
-////#include "litehtmlclib/num_cvt.h"
-////#include "litehtmlclib/os_types.h"
-////#include "litehtmlclib/render_block.h"
-////#include "litehtmlclib/render_block_context.h"
-////#include "litehtmlclib/render_flex.h"
-////#include "litehtmlclib/render_image.h"
-////#include "litehtmlclib/render_inline.h"
-////#include "litehtmlclib/render_inline_context.h"
-#include "litehtmlclib/render_item.h"
-////#include "litehtmlclib/render_table.h"
-////#include "litehtmlclib/string_id.h"
-////#include "litehtmlclib/style.h"
-////#include "litehtmlclib/stylesheet.h"
-////#include "litehtmlclib/table.h"
-////#include "litehtmlclib/tstring_view.h"
-#include "litehtmlclib/types.h"
-#include "litehtmlclib/web_color.h"
+#include "background.h"
+#include "borders.h"
+#include "css_length.h"
+#include "css_margins.h"
+#include "css_offsets.h"
+#include "css_position.h"
+#include "css_properties.h"
+////#include "css_selector.h"
+#include "document.h"
+#include "document_container.h"
+#include "element.h"
+////#include "flex_item.h"
+////#include "flex_line.h"
+////#include "formatting_context.h"
+////#include "html.h"
+#include "html_tag.h"
+////#include "iterators.h"
+////#include "line_box.h"
+////#include "litehtml.h"
+////#include "master_css.h"
+////#include "media_query.h"
+////#include "num_cvt.h"
+////#include "os_types.h"
+////#include "render_block.h"
+////#include "render_block_context.h"
+////#include "render_flex.h"
+////#include "render_image.h"
+////#include "render_inline.h"
+////#include "render_inline_context.h"
+#include "render_item.h"
+////#include "render_table.h"
+////#include "string_id.h"
+////#include "style.h"
+////#include "stylesheet.h"
+////#include "table.h"
+////#include "tstring_view.h"
+#include "types.h"
+#include "web_color.h"
 }

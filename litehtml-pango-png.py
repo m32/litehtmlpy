@@ -5,18 +5,16 @@ import io
 import logging
 import urllib.parse
 import logme
-import wx
+from litehtmlpy import litehtmlpango, litehtmlpy
 
-from litehtmlpy import litehtmlwx, litehtmlpy
-
-#litehtmlpy.debuglog(1)
+litehtmlpy.debuglog(1)
 
 logger = logging.getLogger(__name__)
 
-class document_container(litehtmlwx.document_container):
+class document_container(litehtmlpango.document_container):
     pass
 
-class App(wx.App):
+class App:
     images = {}
     url = ''
 
@@ -48,9 +46,7 @@ class App(wx.App):
         data = self.GetUrlData(url, False)
         if data is None:
             return
-        img = wx.Image(io.BytesIO(data), type=wx.BITMAP_TYPE_ANY, index=-1)
-        if img.IsOk():
-            self.images[url] = img
+        #self.images[url] = img
 
     def HtmlGetImage(self, src, baseurl):
         if baseurl is not None:
@@ -62,7 +58,7 @@ class App(wx.App):
 
 class Main:
     def demo(self):
-        wxapp = App(False)
+        app = App()
         if len(sys.argv) > 1:
             fname = sys.argv[1]
         else:
@@ -70,22 +66,21 @@ class Main:
             fname = 'litehtmlt.html'
         html = open(fname, 'rt').read()
 
-        cntr = document_container(wxapp)
-        cntr.reset()
+        cntr = document_container(app)
         print('max size=', cntr.size)
 
-        doc = litehtmlpy.fromString(cntr, html, None, None)
+        doc = cntr.fromString(html, None, None)
         doc.render(cntr.size[0], litehtmlpy.render_all)
         print('doc: width:', doc.width(), 'height:', doc.height())
 
         cntr.size[1] = doc.height()
-        cntr.reset()
+        hdc = cntr.surface(doc.width(), doc.height())
 
         print('*'*10, 'draw')
         clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
-        doc.draw(0, 0, 0, clip)
+        doc.draw(hdc, 0, 0, clip)
 
-        cntr.bmp.SaveFile('demo.png', wx.BITMAP_TYPE_PNG)
+        cntr.save('demo.png')
 
         del doc
         del cntr

@@ -9,6 +9,7 @@ project(litehtmlpy)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option(LITEHTMLPY_BUILD_TESTING "enable testing for litehtmlpy" OFF)
+option(LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS "include cairo containers" OFF)
 
 #find_package(Git)
 #
@@ -44,9 +45,22 @@ endif()
 
 add_subdirectory(pybind11)
 
+if(LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
+    set(TEST_LITEHTMLPY_CONTAINERS
+        src/cairo/cairo_borders.cpp
+        src/cairo/container_cairo.cpp
+        src/cairo/container_cairo_pango.cpp
+    )
+else()
+    set(TEST_LITEHTMLPY_CONTAINERS
+    )
+endif()
+
+
 pybind11_add_module(
     litehtmlpy
     src/litehtmlpy.cpp
+    ${TEST_LITEHTMLPY_CONTAINERS}
 )
 
 if(LITEHTMLPY_BUILD_TESTING)
@@ -80,6 +94,19 @@ target_link_libraries(litehtmlpy PRIVATE
     gumbo
 #    ${PYTHON_LIBRARIES}
 )
+
+if(LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(CAIRO REQUIRED IMPORTED_TARGET "cairo")
+    target_link_libraries(litehtmlpy PRIVATE PkgConfig::CAIRO)
+    pkg_check_modules(PANGO REQUIRED IMPORTED_TARGET "pango")
+    target_link_libraries(litehtmlpy PRIVATE PkgConfig::PANGO)
+    pkg_check_modules(PANGOCAIRO REQUIRED IMPORTED_TARGET "pangocairo")
+    target_link_libraries(litehtmlpy PRIVATE PkgConfig::PANGOCAIRO)
+    target_compile_definitions(litehtmlpy PRIVATE
+        -DUSE_CAIRO_CONTAINERS
+    )
+endif()
 
 if(CMAKE_CROSSCOMPILING)
 target_compile_definitions(litehtmlpy PRIVATE

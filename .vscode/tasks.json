@@ -6,7 +6,7 @@
         {
             "label": "cmake",
             "type": "shell",
-            "command": "cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DLITEHTML_BUILD_TESTING=OFF -DLITEHTMLPY_BUILD_TESTING=ON -Wno-dev ."
+            "command": "cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DLITEHTML_BUILD_TESTING=OFF -DLITEHTMLPY_BUILD_TESTING=ON -DLITEHTMLPY_INCLUDE_CAIRO_CONTAINERS=ON -Wno-dev ."
         },
         {
             "label": "make",

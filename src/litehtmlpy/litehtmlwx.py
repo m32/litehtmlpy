@@ -14,10 +14,7 @@ class document_container(litehtmlpy.document_container):
         self.fonts = {}
         v = 3.96 * 96 / 72
         self.size = [int(210 * v), int(297 * v)]
-
-    def size0(self):
-        v = 3.96 * 96 / 72
-        self.size = [int(210 * v), int(297 * v)]
+        self.clips = []
 
     def reset(self):
         self.bmp = wx.Bitmap(self.size[0], self.size[1], 32)
@@ -205,12 +202,13 @@ class document_container(litehtmlpy.document_container):
         pass
 
     def set_clip(self, pos, radius):
-        #logger.debug('set_clip(%s, %s, %d, %d)', pos, radius)
-        pass
+        logger.debug('set_clip(%s, %s, %d, %d)', pos, radius)
+        self.clips.push((pos, radius))
 
     def del_clip(self):
-        #logger.debug('del_clip()')
-        pass
+        logger.debug('del_clip()')
+        if self.clips:
+            self.clips.pop()
 
     def get_client_rect(self, client):
         #logger.debug('get_client_rect(%s)'%client)

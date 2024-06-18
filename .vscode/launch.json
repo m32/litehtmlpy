@@ -8,7 +8,7 @@
       "program": "/devel/bin/python3/bin/python",
       "stopAtEntry": true,
       "cwd": "${workspaceFolder}",
-      "args": ["litehtmld.py"],
+      "args": ["litehtml-pango-png.py"],
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
