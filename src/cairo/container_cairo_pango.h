@@ -37,6 +37,9 @@ public:
 
     litehtml::uint_ptr surface(int width, int height);
     void save(const char *fname);
+    cairo_surface_t* getsurface() {
+        return m_temp_surface;
+    }
 };
 
 #endif //LITEBROWSER_CONTAINER_CAIRO_PANGO_H

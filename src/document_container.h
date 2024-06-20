@@ -1,3 +1,25 @@
+/*
+typedef struct
+{
+    unsigned char *current_position;
+    unsigned char *end_of_array;
+} png_stream_to_byte_array_closure_t;
+
+static cairo_status_t write_png_stream_to_byte_array (void *in_closure, const unsigned char *data, unsigned int length)
+{
+    png_stream_to_byte_array_closure_t *closure = (png_stream_to_byte_array_closure_t *) in_closure;
+    if ((closure->current_position + length) > (closure->end_of_array))
+        return CAIRO_STATUS_WRITE_ERROR;
+    memcpy (closure->current_position, data, length);
+    closure->current_position += length;
+    return CAIRO_STATUS_SUCCESS;
+}
+
+    closure.current_position = byte_array;
+    closure.end_of_array = byte_array + sizeof (byte_array);
+    cairo_surface_write_to_png_stream (surface, write_png_stream_to_byte_array, &closure);
+
+*/
     py::class_<lh::document_container, py_document_container, std::unique_ptr<lh::document_container, py::nodelete>>(m, "document_container")
         .def(py::init<>())
     ;
@@ -11,6 +33,15 @@
         .def(py::init<>())
         .def("surface", &container_cairo_pango::surface, "width"_a, "height"_a)
         .def("save", &container_cairo_pango::save, "fname"_a)
+        .def("savestream", [](
+            py_document_container_cairo_pango &self,
+            py::function pyfunc
+        ) {
+            cairo_surface_t *surface = self.getsurface();
+            cairosavestream_t st; st.pyfunc = pyfunc;
+            cairo_status_t status = cairo_surface_write_to_png_stream(surface, &cairosavestream, &st);
+            return status;
+        })
         .def("fromString", [](
             py_document_container_cairo_pango &self,
             char *html,
@@ -24,7 +55,7 @@
                 user_styles = "";
             lh::document::ptr doc = lh::document::createFromString(html, &self, master_css, user_styles);
             return doc;
-    })
-    ;
+        })
+        ;
     ;
 #endif

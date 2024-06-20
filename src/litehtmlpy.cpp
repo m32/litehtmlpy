@@ -946,6 +946,21 @@ public:
     }
 };
 #endif
+typedef struct cairosavestream_t {
+    py::function pyfunc;
+}cairosavestream_t;
+
+static _cairo_status cairosavestream(void *closure, const unsigned char *data, unsigned int length){
+    cairosavestream_t *st = (cairosavestream_t *)closure;
+    py::gil_scoped_acquire gil;
+    auto pydata = py::memoryview::from_memory(data, length);
+    try {
+        auto obj = st->pyfunc(pydata);
+        return CAIRO_STATUS_SUCCESS;
+    } catch (py::error_already_set &e) {
+        return CAIRO_STATUS_WRITE_ERROR;
+    }
+};
 
 PYBIND11_MODULE(litehtmlpy, m) {
     m.def("debuglog", [](int on) {

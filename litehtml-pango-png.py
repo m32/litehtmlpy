@@ -80,7 +80,10 @@ class Main:
         clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
         doc.draw(hdc, 0, 0, clip)
 
+        print('x-save')
         cntr.save('demo.png')
+        with open('demo-1.png', 'wb') as fpo:
+            cntr.savestream(fpo.write)
 
         del doc
         del cntr
