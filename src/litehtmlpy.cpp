@@ -945,7 +945,7 @@ public:
         );
     }
 };
-#endif
+
 typedef struct cairosavestream_t {
     py::function pyfunc;
 }cairosavestream_t;
@@ -961,6 +961,7 @@ static _cairo_status cairosavestream(void *closure, const unsigned char *data, u
         return CAIRO_STATUS_WRITE_ERROR;
     }
 };
+#endif
 
 PYBIND11_MODULE(litehtmlpy, m) {
     m.def("debuglog", [](int on) {
