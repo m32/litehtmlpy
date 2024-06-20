@@ -35,12 +35,12 @@ static cairo_status_t write_png_stream_to_byte_array (void *in_closure, const un
         .def("save", &container_cairo_pango::save, "fname"_a)
         .def("savestream", [](
             py_document_container_cairo_pango &self,
-            py::function pyfunc
+            const py::function &pyfunc
         ) {
             cairo_surface_t *surface = self.getsurface();
             cairosavestream_t st; st.pyfunc = pyfunc;
             cairo_status_t status = cairo_surface_write_to_png_stream(surface, &cairosavestream, &st);
-            return status;
+            return (int)status;
         })
         .def("fromString", [](
             py_document_container_cairo_pango &self,
