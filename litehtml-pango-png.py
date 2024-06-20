@@ -83,7 +83,15 @@ class Main:
         print('x-save')
         cntr.save('demo.png')
         with open('demo-1.png', 'wb') as fpo:
-            cntr.savestream(fpo.write)
+            rc = cntr.savestream(fpo.write)
+
+        n = 0
+        def xwrite(data):
+            if n == 1:
+                raise IOError(0)
+            n += 1
+        rc = cntr.savestream(xwrite)
+        print('save result:', rc)
 
         del doc
         del cntr
