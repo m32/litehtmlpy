@@ -1,4 +1,4 @@
-    py::class_<lh::html_tag, py_html_tag, std::shared_ptr<lh::html_tag>>(m, "html_tag")
+    py::class_<lh::html_tag, lh::element, py_html_tag, std::shared_ptr<lh::html_tag>>(m, "html_tag")
 /*
 	protected:
 		string_id				m_tag;

@@ -25,7 +25,7 @@ class document_container(litehtmlpy.document_container):
         self.ppi = self.dc.GetPPI()
 
     def create_font(self, face, size, weight, italic, decoration):
-        logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
+        #logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
         if not face:
             face = 'Times New Roman'
         else:
@@ -86,11 +86,12 @@ class document_container(litehtmlpy.document_container):
         return width
 
     def draw_text(self, hdc, text, hFont, color, pos):
-        #logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, pos)
+        #logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, (pos.x, pos.y, pos.width, pos.height))
         font = self.fonts[hFont]
         color = wx.Colour(color.red, color.green, color.blue, color.alpha)
+        #self.dc.SetTextForeground(color)
+        self.dc.SetTextBackground(color)
         self.dc.SetFont(font)
-        self.dc.SetTextForeground(color)
         self.dc.DrawText(text, pos.x, pos.y)
 
     def pt_to_px(self, pt):

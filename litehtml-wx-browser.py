@@ -11,20 +11,19 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
     def __init__(self, parent, attributes, doc):
         super().__init__(doc)
         self.parent = parent
-        print('i`m the button', attributes)
         self.attributes = attributes
 
     def destroy(self):
         pass
 
-    def update_position(self):
-        pos = self.get_placement()
-        print('button.pos: {},{},{},{}'.format(pos.x, pos.y, pos.width, pos.height))
-
     def draw(self, hdc, x, y, clip, ri):
         super().draw(hdc, x, y, clip, ri)
-        p = ri.pos()
-        print('Button.draw', x, y, ri.left(), ri.top(), ri.right(), ri.bottom())
+        pos = ri.pos()
+        x += pos.x
+        y += pos.y
+        w = pos.width
+        h = pos.height
+        print('Button.draw', x, y, w, h, self.attributes)
 
     def on_mouse_over(self):
         return False
@@ -55,15 +54,20 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
         self.ctrl.Destroy()
         self.ctrl = None
 
-    def update_position(self):
-        pos = self.get_placement()
-        print('input.pos: x={x},y={y},w={width},h={height}'.format(x=pos.left(), y=pos.top(), width=(pos.right()-pos.left()), height=(pos.bottom()-pos.top())))
-        self.ctrl.SetSize(x=pos.left(), y=pos.top(), width=(pos.right()-pos.left()), height=(pos.bottom()-pos.top()))
-
     def draw(self, hdc, x, y, clip, ri):
         super().draw(hdc, x, y, clip, ri)
-        p = ri.pos()
-        print('input.draw', x, y, ri.left(), ri.top(), ri.right(), ri.bottom())
+        pos = ri.pos()
+        #print('input.draw', ri.left(), ri.top(), ri.right(), ri.bottom())
+        x += pos.x
+        y += pos.y
+        w = pos.width
+        h = pos.height
+        css = self.css()
+        fh = css.get_font_size()
+        lh = css.get_line_height()
+        y = y + (h - lh) // 2
+        h = pos.height
+        self.ctrl.SetSize(x, y, w, h)
 
     def on_mouse_over(self):
         return False
@@ -95,10 +99,6 @@ class document_container(litehtmlwx.document_container):
     def on_anchor_click(self, url, el):
         self.parent.HtmlClickHRef(url, el)
 
-    def update_positions(self):
-        for h in self.handlers:
-            h.update_position()
-
     def create_element(self, tag_name, attributes=None, doc=None):
         if tag_name == 'button':
             print('create_element', tag_name, attributes, doc)
@@ -116,6 +116,12 @@ class document_container(litehtmlwx.document_container):
                 self.handlers.append(tagh)
                 return tagh
         return None
+
+    def draw_image(self, hdc, layer, url, base_url):
+        self.parent.DrawImage(layer, url, base_url)
+
+    def draw_solid_fill(self, hdc, layer, color):
+        self.parent.DrawSolidFill(layer, color)
 
 class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
@@ -230,9 +236,12 @@ class LiteWindow(wx.ScrolledWindow):
         self.cntr.reset()
         size = self.GetClientSize()
         y = self.GetScrollPos(wx.VERTICAL)
-        clip = litehtmlwx.litehtmlpy.position(0, 0, size.Width, size.Height)
-        self.doc.draw(0, 0, -y, clip)
-        self.cntr.update_positions()
+        print('*'*20, 'HtmlPaint')
+        try:
+            clip = litehtmlwx.litehtmlpy.position(0, 0, size.Width, size.Height)
+            self.doc.draw(0, 0, -y, clip)
+        finally:
+            print('*'*20, '/HtmlPaint')
 
     def HtmlClickHRef(self, url, element):
         url = urllib.parse.urljoin(self.url, url)
@@ -253,14 +262,38 @@ class LiteWindow(wx.ScrolledWindow):
         img = wx.Image(io.BytesIO(data), type=wx.BITMAP_TYPE_ANY, index=-1)
         if img.IsOk():
             self.images[url] = img
+            return img
+        return None
 
     def HtmlGetImage(self, src, baseurl):
         if baseurl is not None:
             url = urllib.parse.urljoin(baseurl, src)
         else:
             url = urllib.parse.urljoin(self.url, src)
-        print('HtmlGetImage', src, baseurl)
+        #print('HtmlGetImage', src, baseurl)
         return self.images.get(url, None)
+
+    def DrawImage(self, layer, url, base_url):
+        img = self.HtmlGetImage(url, base_url)
+        if img is None:
+            return
+        bpos = layer.border_box
+        #cpos = layer.clip_box
+        #print('DrawImage', url, (bpos.x, bpos.y, bpos.width, bpos.height))
+        img = img.Scale(bpos.width, bpos.height, wx.IMAGE_QUALITY_HIGH)
+        bmp = wx.Bitmap(img)
+        #gc = wx.GraphicsContext.Create(dc)
+        self.cntr.dc.DrawBitmap(bmp, wx.Point(bpos.x, bpos.y))
+
+    def DrawSolidFill(self, layer, color):
+        
+        color = wx.Colour(color.red, color.green, color.blue)
+        b = wx.Brush(color) 
+        self.cntr.dc.SetBrush(b) 
+
+        bpos = layer.clip_box
+        self.cntr.dc.DrawRectangle(bpos.x, bpos.y, bpos.width, bpos.height)
+        self.cntr.dc.SetBrush(wx.NullBrush) 
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):
