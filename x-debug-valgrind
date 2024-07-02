@@ -1,4 +1,1 @@
-valgrind \
---leak-check=full \
-$* \
-/devel/bin/python3/bin/python3 litehtml-pango-png.py
+valgrind --leak-check=full /devel/bin/python3/bin/python3 litehtml-pango-png.py
