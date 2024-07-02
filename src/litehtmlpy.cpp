@@ -20,6 +20,7 @@
 #ifdef USE_CAIRO_CONTAINERS
 #include "cairo/container_cairo.h"
 #include "cairo/container_cairo_pango.h"
+#include "cairo/cairo_images_cache.h"
 #endif
 
 #include <iostream>
@@ -819,14 +820,45 @@ public:
 
 class py_document_container_cairo_pango : public container_cairo_pango
 {
+    int dpi;
+	cairo_images_cache m_images;
 public:
-	cairo_surface_t* get_image(const std::string& url) override {
-        if( debuglog ){
-            ENTERWRAPPER
+    void clear_images() {
+		m_images.clear();
+    }
+    bool put_image(const std::string& url, py::bytearray data, int width, int height) {
+        if( !m_images.reserve(url) )
+            return false;
+        unsigned char *buffer = (unsigned char *)PyByteArray_AS_STRING(data.ptr());
+        ssize_t size = PyByteArray_GET_SIZE(data.ptr());
+#if 0
+        int stride = cairo_format_stride_for_width(CAIRO_FORMAT_ARGB32, width);
+        cairo_surface_t *surface = cairo_image_surface_create_for_data(buffer, CAIRO_FORMAT_ARGB32, width, height, stride);
+        cairo_surface_mark_dirty(surface);
+#else
+        cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+        unsigned char* dst = cairo_image_surface_get_data(surface);
+        unsigned char* src = (unsigned char*)buffer;
+        int line_size = width * 4;
+        int dst_offset = 0;
+        int src_offset = 0;
+        for (int i = 0; i < height; i++, src_offset += line_size, dst_offset += line_size)
+        {
+            memcpy(dst + dst_offset, src + src_offset, line_size);
         }
-        return nullptr;
+        cairo_surface_mark_dirty(surface);
+#endif
+		m_images.add_image(url, surface);
+        return true;
+    }
+	cairo_surface_t* get_image(const std::string& url) override {
+        cairo_surface_t *surface = m_images.get_image(url);
+        //DebugBreak();
+    	return surface;
     }
 	double get_screen_dpi() const override {
+        return dpi;
+/*
         if( debuglog ){
             ENTERWRAPPER
         }
@@ -836,6 +868,7 @@ public:
             get_screen_dpi,
             //
         );
+*/
     }
 	int get_screen_width() const override {
         if( debuglog ){
@@ -944,6 +977,11 @@ public:
             &client
         );
     }
+
+    void set_dpi(int dpi)
+    {
+        this->dpi = dpi;
+    }
 };
 
 typedef struct cairosavestream_t {
@@ -958,6 +996,7 @@ static _cairo_status cairosavestream(void *closure, const unsigned char *data, u
         auto obj = st->pyfunc(pydata);
         return CAIRO_STATUS_SUCCESS;
     } catch (py::error_already_set &e) {
+        throw;
         return CAIRO_STATUS_WRITE_ERROR;
     }
 };

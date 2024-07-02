@@ -86,6 +86,12 @@ public:
 		auto iter = m_images.find(url);
 		return iter != m_images.end();
 	}
+
+	void clear()
+    {
+		std::unique_lock<std::mutex> lock(m_mutex);
+		m_images.clear();
+    }
 };
 
 #endif //LITEHTML_CAIRO_IMAGES_CACHE_H

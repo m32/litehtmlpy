@@ -1,0 +1,3 @@
+#!/bin/bash
+# backtrace
+gdb --args /devel/bin/python3/bin/python3 litehtml-pango-png.py

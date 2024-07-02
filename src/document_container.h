@@ -42,6 +42,26 @@ static cairo_status_t write_png_stream_to_byte_array (void *in_closure, const un
             cairo_status_t status = cairo_surface_write_to_png_stream(surface, &cairosavestream, &st);
             return (int)status;
         })
+        .def("clear_images", [](
+            py_document_container_cairo_pango &self
+        ) {
+            return self.clear_images();
+        })
+        .def("put_image", [](
+            py_document_container_cairo_pango &self,
+            const std::string& url,
+            py::bytearray data,
+            int width,
+            int height
+        ) {
+            return self.put_image(url, data, width, height);
+        })
+        .def("set_dpi", [](
+            py_document_container_cairo_pango &self,
+            int dpi
+        ) {
+            self.set_dpi(dpi);
+        })
         .def("fromString", [](
             py_document_container_cairo_pango &self,
             char *html,

@@ -1,9 +1,11 @@
 #!/usr/bin/env vpython3
+import gc
 import sys
 import os
 import io
 import logging
 import urllib.parse
+from PIL import Image
 import logme
 from litehtmlpy import litehtmlpango, litehtmlpy
 
@@ -17,10 +19,8 @@ class document_container(litehtmlpango.document_container):
 class App:
     images = {}
     url = ''
-
     def GetUrlData(self, url, html=True):
         data = None
-        print('GetUrlData', url)
         if os.path.exists(url):
             with open(url, 'rb') as fp:
                 data = fp.read()
@@ -34,26 +34,27 @@ class App:
                 if r.headers['Content-Type'] == 'image/png':
                     data = r.content
         if data is None:
-            print('unknown url', url)
             return None
         return data
 
-    def HtmlLoadImage(self, src, baseurl, redraw_on_ready):
+    def HtmlLoadImage(self, cntr, src, baseurl, redraw_on_ready):
         if baseurl is not None:
             url = urllib.parse.urljoin(baseurl, src)
         else:
             url = urllib.parse.urljoin(self.url, src)
         data = self.GetUrlData(url, False)
+        print('HtmlLoadImage({}, {})'.format(url, data is not None))
         if data is None:
             return
-        #self.images[url] = img
-
-    def HtmlGetImage(self, src, baseurl):
-        if baseurl is not None:
-            url = urllib.parse.urljoin(baseurl, src)
-        else:
-            url = urllib.parse.urljoin(self.url, src)
-        return self.images.get(url, None)
+        try:
+            im = Image.open(io.BytesIO(data))
+        except:
+            print('bang')
+            return
+        if 'A' not in im.getbands():
+            im.putalpha(int(alpha * 256.))
+        arr = bytearray(im.tobytes('raw', 'BGRa'))
+        cntr.put_image(url, arr, im.width, im.height)
 
 
 class Main:
@@ -82,18 +83,14 @@ class Main:
 
         print('x-save')
         cntr.save('demo.png')
+
+        print('x-save-stream')
         with open('demo-1.png', 'wb') as fpo:
             rc = cntr.savestream(fpo.write)
-
-        n = 0
-        def xwrite(data):
-            if n == 1:
-                raise IOError(0)
-            n += 1
-        rc = cntr.savestream(xwrite)
         print('save result:', rc)
 
         del doc
+        cntr.clear_images()
         del cntr
 
 def main():
@@ -101,3 +98,4 @@ def main():
     app.demo()
 
 main()
+gc.collect()
