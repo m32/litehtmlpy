@@ -1,1 +1,4 @@
-valgrind --leak-check=full /devel/bin/python3/bin/python3 litehtml-pango-png.py
+#!/bin/bash
+#valgrind --leak-check=full /devel/bin/python3/bin/python3 litehtml-pango-png.py
+PYTHONMALLOC=malloc valgrind --show-leak-kinds=definite --log-file=valgrind-output \
+    /devel/bin/python3/bin/python3 litehtml-pango-png.py
