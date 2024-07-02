@@ -4,6 +4,7 @@ import sys
 import os
 import io
 import logging
+import requests
 import urllib.parse
 from PIL import Image
 import logme
@@ -52,8 +53,12 @@ class App:
             print('bang')
             return
         if 'A' not in im.getbands():
+            alpha = 1.0
             im.putalpha(int(alpha * 256.))
-        arr = bytearray(im.tobytes('raw', 'BGRa'))
+        try:
+            arr = bytearray(im.tobytes('raw', 'BGRa'))
+        except ValueError:
+            return
         cntr.put_image(url, arr, im.width, im.height)
 
 
