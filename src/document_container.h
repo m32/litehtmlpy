@@ -20,6 +20,11 @@ static cairo_status_t write_png_stream_to_byte_array (void *in_closure, const un
     cairo_surface_write_to_png_stream (surface, write_png_stream_to_byte_array, &closure);
 
 */
+    py::enum_<lh::mouse_event>(m, "mouse_event")
+        .value("mouse_event_enter", lh::mouse_event::mouse_event_enter)
+        .value("mouse_event_leave", lh::mouse_event::mouse_event_leave)
+    ;
+
     py::class_<lh::document_container, py_document_container, std::unique_ptr<lh::document_container, py::nodelete>>(m, "document_container")
         .def(py::init<>())
     ;

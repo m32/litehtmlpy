@@ -32,6 +32,8 @@ class document_container(litehtmlpy.container_cairo_pango):
     ##void    link(const std::shared_ptr<document>& doc, const element::ptr& el) override 
 
     #void    on_anchor_click(const char* url, const element::ptr& el) override 
+    def on_mouse_event(self, el, event):
+        logger.debug('on_mouse_event(%s, %s)', el, event)
 
     def set_cursor(self, cursor):
         logger.debug('set_cursor(%s)', cursor)

@@ -603,6 +603,18 @@ public:
             url, el
         );
     }
+    void    on_mouse_event(const litehtml::element::ptr& el, litehtml::mouse_event event) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            on_mouse_event,
+            el, event
+        );
+    }
     void    set_cursor(const char* cursor) override
     {
         if( debuglog ){
@@ -939,6 +951,18 @@ public:
             container_cairo_pango,
             on_anchor_click,
             url, el
+        );
+    }
+    void    on_mouse_event(const litehtml::element::ptr& el, litehtml::mouse_event event) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            document_container,
+            on_mouse_event,
+            el, event
         );
     }
     void    set_cursor(const char* cursor) override

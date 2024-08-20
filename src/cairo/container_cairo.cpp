@@ -23,19 +23,15 @@ void container_cairo::draw_list_marker(litehtml::uint_ptr hdc, const litehtml::l
 {
 	if(!marker.image.empty())
 	{
-		/*litehtml::string url;
+		litehtml::string url;
 		make_url(marker.image.c_str(), marker.baseurl, url);
 
-		lock_images_cache();
-		images_map::iterator img_i = m_images.find(url.c_str());
-		if(img_i != m_images.end())
+		auto img = get_image(url);
+		if(img)
 		{
-			if(img_i->second)
-			{
-				draw_txdib((cairo_t*) hdc, img_i->second, marker.pos.x, marker.pos.y, marker.pos.width, marker.pos.height);
-			}
+			draw_pixbuf((cairo_t*) hdc, img, marker.pos.x, marker.pos.y, cairo_image_surface_get_width(img),
+						cairo_image_surface_get_height(img));
 		}
-		unlock_images_cache();*/
 	} else
 	{
 		switch(marker.marker_type)
@@ -611,12 +607,16 @@ cairo_surface_t* container_cairo::scale_surface(cairo_surface_t* surface, int wi
 	int s_width = cairo_image_surface_get_width(surface);
 	int s_height = cairo_image_surface_get_height(surface);
 	cairo_surface_t *result = cairo_surface_create_similar(surface, cairo_surface_get_content(surface), width, height);
+	cairo_pattern_t *pattern = cairo_pattern_create_for_surface(surface);
 	cairo_t *cr = cairo_create(result);
+	cairo_pattern_set_filter(pattern, CAIRO_FILTER_BILINEAR);
+	cairo_pattern_set_extend(pattern, CAIRO_EXTEND_PAD);
 	cairo_scale(cr, (double) width / (double) s_width, (double) height / (double) s_height);
-	cairo_set_source_surface(cr, surface, 0, 0);
-	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-	cairo_paint(cr);
+	cairo_set_source(cr, pattern);
+	cairo_rectangle(cr, 0, 0, s_width, s_height);
+	cairo_fill(cr);
 	cairo_destroy(cr);
+	cairo_pattern_destroy(pattern);
 	return result;
 }
 
