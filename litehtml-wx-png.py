@@ -4,6 +4,7 @@ import os
 import io
 import logging
 import urllib.parse
+import requests
 import logme
 import wx
 
@@ -49,6 +50,20 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
 
 class document_container(litehtmlwx.document_container):
     handlers = []
+
+    def import_css(self, text, url, base_url):
+        url = urllib.parse.urljoin(base_url, url)
+        if os.path.exists(url):
+            with open(url, 'rt') as fp:
+                data = fp.read()
+        elif url.split(':')[0] in ('http', 'https'):
+            r = requests.get(url)
+            if r.headers['Content-Type'] == 'text/css':
+                data = r.text
+        if data is None:
+            print('unknown import_css', url)
+            return
+        return data
 
     def create_element(self, tag_name, attributes=None, doc=None):
         if tag_name == 'input':

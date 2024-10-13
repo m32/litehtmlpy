@@ -99,6 +99,20 @@ class document_container(litehtmlwx.document_container):
     def on_anchor_click(self, url, el):
         self.parent.HtmlClickHRef(url, el)
 
+    def import_css(self, text, url, base_url):
+        url = urllib.parse.urljoin(base_url, url)
+        if os.path.exists(url):
+            with open(url, 'rt') as fp:
+                data = fp.read()
+        elif url.split(':')[0] in ('http', 'https'):
+            r = requests.get(url)
+            if r.headers['Content-Type'] == 'text/css':
+                data = r.text
+        if data is None:
+            print('unknown import_css', url)
+            return
+        return data
+
     def create_element(self, tag_name, attributes=None, doc=None):
         if tag_name == 'button':
             print('create_element', tag_name, attributes, doc)
@@ -335,6 +349,7 @@ class LiteHtmlPanel(wx.Panel):
         self.location.AppendItems([
             'demo.html',
             'litehtmlt.html',
+            'demo-01.html',
             'http://wxPython.org',
             'http://google.com'
         ])

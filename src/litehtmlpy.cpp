@@ -644,12 +644,23 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
+#if 1
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "import_css");
+        if (pyfunc) {
+            auto obj = pyfunc(text, url, baseurl);
+            if (py::isinstance<py::str>(obj)) {
+                text = obj.cast<std::string>();
+            }
+        }
+#else
         PYBIND11_OVERRIDE_PURE(
             void,
             document_container,
             import_css,
             text, url, baseurl
         );
+#endif
     }
     void    set_clip(const lh::position& pos, const lh::border_radiuses& bdr_radius) override
     {

@@ -1,4 +1,5 @@
 #!/usr/bin/env vpython3
+import sys
 import gc
 gc.enable()
 
@@ -11,7 +12,11 @@ class document_container(litehtml.document_container):
 
 def main():
     #litehtml.litehtml.liblitehtmlpy.debuglog(1)
-    html = open('demo.html', 'rt').read()
+    if len(sys.argv) > 1:
+        fname = sys.argv[1]
+    else:
+        fname = 'demo.html'
+    html = open(fname, 'rt').read()
     cntr = document_container()
     try:
         doc = litehtmlpy.fromString(cntr, html, None, None)
