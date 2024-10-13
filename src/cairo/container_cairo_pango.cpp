@@ -85,6 +85,8 @@ litehtml::uint_ptr container_cairo_pango::create_font(const char *faceName, int 
 
 	if(fm)
 	{
+		fm->font_size = size;
+
 		cairo_save(m_temp_cr);
 		PangoLayout *layout = pango_cairo_create_layout(m_temp_cr);
 		PangoContext *context = pango_layout_get_context(layout);
@@ -94,20 +96,23 @@ litehtml::uint_ptr container_cairo_pango::create_font(const char *faceName, int 
 
 		fm->ascent = PANGO_PIXELS((double)pango_font_metrics_get_ascent(metrics));
 		fm->descent = PANGO_PIXELS((double)pango_font_metrics_get_descent(metrics));
-		fm->height = fm->ascent + fm->descent;
+		fm->height = PANGO_PIXELS((double)pango_font_metrics_get_height(metrics));
 		fm->x_height = fm->height;
 
 		pango_layout_set_text(layout, "x", 1);
 
-		int x_width, x_height;
-		pango_layout_get_pixel_size(layout, &x_width, &x_height);
+		PangoRectangle ink_rect;
+		PangoRectangle  logical_rect;
+		pango_layout_get_pixel_extents(layout, &ink_rect, &logical_rect);
+		fm->x_height = ink_rect.height;
+		if(fm->x_height == fm->height) fm->x_height = fm->x_height * 4 / 5;
 
-		fm->x_height	= x_height;
+		pango_layout_set_text(layout, "0", 1);
+
+		pango_layout_get_pixel_extents(layout, &ink_rect, &logical_rect);
+		fm->ch_width = logical_rect.width;
 
 		cairo_restore(m_temp_cr);
-
-		g_object_unref(layout);
-		pango_font_metrics_unref(metrics);
 
 		ret = new cairo_font;
 		ret->font		= desc;
@@ -128,6 +133,9 @@ litehtml::uint_ptr container_cairo_pango::create_font(const char *faceName, int 
 		pango_quantize_line_geometry(&ret->strikethrough_thickness, &ret->strikethrough_position);
 		ret->strikethrough_thickness = PANGO_PIXELS(ret->strikethrough_thickness);
 		ret->strikethrough_position = PANGO_PIXELS(ret->strikethrough_position);
+
+		g_object_unref(layout);
+		pango_font_metrics_unref(metrics);
 	}
 
 	return (litehtml::uint_ptr) ret;
@@ -180,7 +188,12 @@ void container_cairo_pango::draw_text(litehtml::uint_ptr hdc, const char *text, 
 	pango_layout_set_font_description (layout, fnt->font);
 	pango_layout_set_text (layout, text, -1);
 
-	int baseline = PANGO_PIXELS(pango_layout_get_baseline(layout));
+	auto font_options = get_font_options();
+	if(font_options)
+	{
+		auto ctx = pango_layout_get_context(layout);
+		pango_cairo_context_set_font_options(ctx, font_options);
+	}
 
 	PangoRectangle ink_rect, logical_rect;
 	pango_layout_get_pixel_extents(layout, &ink_rect, &logical_rect);
@@ -188,7 +201,7 @@ void container_cairo_pango::draw_text(litehtml::uint_ptr hdc, const char *text, 
 	int text_baseline = pos.height - fnt->descent;
 
 	int x = pos.left() + logical_rect.x;
-	int y = pos.top() + logical_rect.y + text_baseline - baseline;
+	int y = pos.top();
 
 	cairo_move_to(cr, x, y);
 	pango_cairo_update_layout (cr, layout);
@@ -220,6 +233,7 @@ void container_cairo_pango::draw_text(litehtml::uint_ptr hdc, const char *text, 
 
 	g_object_unref(layout);
 }
+
 
 litehtml::uint_ptr container_cairo_pango::surface(int width, int height) {
     cairo_surface_destroy(m_temp_surface);

@@ -26,26 +26,26 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
         super().draw(hdc, x, y, clip, ri)
         pos = ri.pos()
         css = self.css()
-        x += pos.x
-        y += pos.y
+        nx = x + pos.x
+        ny = y + pos.y
         w = pos.width
         h = pos.height
         self.parent.dc.SetPen(wx.Pen(wx.RED, 1))
         self.parent.dc.SetBrush(wx.NullBrush) 
-        self.parent.dc.DrawRectangle(x, y, w, h)
+        self.parent.dc.DrawRectangle(nx, ny, w, h)
         self.parent.dc.SetBrush(wx.NullBrush) 
-        self.parent.dc.DrawText('A', x, y)
+        self.parent.dc.DrawText('A', nx, ny)
 
         fh = css.get_font_size()
         lh = css.get_line_height()
-        y = y + h - lh
+        ny = y + pos.y + h - lh
         h = lh
         print('h', h, 'ln_h', lh, 'fh', fh)
         self.parent.dc.SetPen(wx.Pen(wx.BLACK, 1))
         self.parent.dc.SetBrush(wx.NullBrush) 
-        self.parent.dc.DrawRectangle(x, y, w, h)
+        self.parent.dc.DrawRectangle(nx, ny, w, h)
         self.parent.dc.SetBrush(wx.NullBrush) 
-        self.parent.dc.DrawText('B', x, y)
+        self.parent.dc.DrawText('B', nx, ny)
 
 class document_container(litehtmlwx.document_container):
     handlers = []
