@@ -342,6 +342,71 @@ public:
 */
 };
 
+class py_dumper : public lh::dumper
+{
+public:
+	void begin_node(const std::string& descr) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            dumper,
+            begin_node,
+            descr
+        );
+    }
+	void end_node() override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            dumper,
+            end_node,
+            // no arguments
+        );
+    }
+	void begin_attrs_group(const std::string& descr) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            dumper,
+            begin_attrs_group,
+            descr
+        );
+    }
+	void end_attrs_group() override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            dumper,
+            end_attrs_group,
+            // no arguments
+        );
+    }
+	void add_attr(const std::string& name, const std::string& value) override
+    {
+        if( debuglog ){
+            ENTERWRAPPER
+        }
+        PYBIND11_OVERRIDE_PURE(
+            void,
+            dumper,
+            add_attr,
+            name, value
+        );
+    }
+};
+
 class py_document : public lh::document
 {
 };

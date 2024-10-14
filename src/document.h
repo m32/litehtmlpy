@@ -6,18 +6,10 @@
         .def(py::init<>())
         .def(py::init<const lh::css_text&>())
     ;
-#if 0
-    class dumper
-    {
-    public:
-        virtual ~dumper() {}
-        virtual void begin_node(const litehtml::string& descr) = 0;
-        virtual void end_node() = 0;
-        virtual void begin_attrs_group(const litehtml::string& descr) = 0;
-        virtual void end_attrs_group() = 0;
-        virtual void add_attr(const litehtml::string& name, const litehtml::string& value) = 0;
-    };
-#endif
+
+    py::class_<lh::dumper, py_dumper, std::shared_ptr<lh::dumper>>(m, "dumper")
+        .def(py::init<>())
+    ;
 
     py::class_<lh::document, py_document, std::shared_ptr<lh::document>>(m, "document")
 		//document(document_container* objContainer);
@@ -64,6 +56,7 @@
         void                            append_children_from_string(element& parent, const char* str);
 		void							dump(dumper& cout);
 */
+        .def("dump", &lh::document::dump)
     ;
 
     m.def("fromString", [](py_document_container *container, char *html, const char *master_css = lh::master_css, const char *user_styles = "") {
