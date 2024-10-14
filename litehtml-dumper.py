@@ -15,21 +15,30 @@ class document_container(litehtml.document_container):
 class dumper(litehtmlpy.dumper):
     def __init__(self):
         super().__init__()
+        self.indent = 0
+
+    def printi(self, *args):
+        s = '   '*self.indent if self.indent else ''
+        print(s, *args)
 
     def begin_node(self, descr):
-        print('begin_node', descr)
+        self.printi('begin_node', descr)
+        self.indent += 1
 
     def end_node(self):
-        print('end_node')
+        self.indent -= 1
+        self.printi('end_node')
 
     def begin_attrs_group(self, descr):
-        print('begin_attrs_group', descr)
+        self.printi('begin_attrs_group', descr)
+        self.indent += 1
 
     def end_attrs_group(self):
-        print('end_attrs_group')
+        self.indent -= 1
+        self.printi('end_attrs_group')
 
     def add_attr(self, name, value):
-        print('add_attr', name, value)
+        self.printi('add_attr', name, value)
 
 class Main:
     def demo(self):
@@ -44,7 +53,7 @@ class Main:
         print('max size=', cntr.size)
 
         doc = litehtmlpy.fromString(cntr, html, None, None)
-        #doc.render(cntr.size[0], litehtmlpy.render_all)
+        doc.render(cntr.size[0], litehtmlpy.render_all)
         print('doc: width:', doc.width(), 'height:', doc.height())
 
         dump = dumper()
