@@ -15,7 +15,19 @@ litehtmlpy.debuglog(1)
 logger = logging.getLogger(__name__)
 
 class document_container(litehtmlpango.document_container):
-    pass
+    def import_css(self, text, url, base_url):
+        url = urllib.parse.urljoin(base_url, url)
+        if os.path.exists(url):
+            with open(url, 'rt') as fp:
+                data = fp.read()
+        elif url.split(':')[0] in ('http', 'https'):
+            r = requests.get(url)
+            if r.headers['Content-Type'] == 'text/css':
+                data = r.text
+        if data is None:
+            print('unknown import_css', url)
+            return
+        return data
 
 class App:
     images = {}
