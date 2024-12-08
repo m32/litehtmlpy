@@ -28,6 +28,7 @@ static cairo_status_t write_png_stream_to_byte_array (void *in_closure, const un
     py::class_<lh::document_container, py_document_container, std::unique_ptr<lh::document_container, py::nodelete>>(m, "document_container")
         .def(py::init<>())
     ;
+
 #ifdef USE_CAIRO_CONTAINERS
 #if 0
     py::class_<container_cairo, py_document_container_cairo, std::unique_ptr<container_cairo, py::nodelete>>(m, "container_cairo")

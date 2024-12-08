@@ -1,500 +1,855 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns:xs="http://www.w3.org/2001/XMLSchema"><head><title>
-INFORMACJA O PRZYCHODACH Z INNYCH &#377;R&#211;DE&#321; ORAZ O DOCHODACH
-I POBRANYCH ZALICZKACH NA PODATEK DOCHODOWY
-</title><style type="text/css">
+    INFORMACJA O PRZYCHODACH Z INNYCH &#377;R&#211;DE&#321; ORAZ O DOCHODACH
+    I POBRANYCH ZALICZKACH NA PODATEK DOCHODOWY
+  </title><style type="text/css">
+
 body {
-background-color: #FFFFFF;
-color: #000000;
-font-family: 'Arial', sans-serif;
-font-size: 11pt;
-margin: 0;
-padding: 1px 5%;
+
+	background-color: #FFFFFF;
+
+	color: #000000;
+
+	font-family: 'Arial', sans-serif;
+
+	font-size: 11pt;
+
+	margin: 0;
+
+	padding: 1px 5%;
+
 }
+
+
+
 div.body {
-width: 100%;
-min-width: 480px;
-margin-left: auto;
-margin-right: auto;
+
+	width: 100%;
+
+	min-width: 480px;
+
+	margin-left: auto;
+
+	margin-right: auto;
+
 }
+
+
+
 div.deklaracja, div.zalacznik {
-margin: 2em 0;
+
+	margin: 2em 0;
+
 }
+
+
+
 .tlo-zalacznika {
-background-color: #FFFFDD;
+
+	background-color: #FFFFDD;
+
 }
+
+
+
 table {
-border-collapse: collapse;
+
+	border-collapse: collapse;
+
 }
+
+
+
 .normalna, .tytul-sekcja-blok {
-width: 100%;
+
+	width: 100%;
+
 }
+
+
+
 .naglowek {
-background-color: #CCDDFF;
+
+	background-color: #CCDDFF;
+
 }
+
+
+
 .kod-formularza {
-font-size: 2em;
-font-weight: bold;
+
+	font-size: 2em;
+
+	font-weight: bold;
+
 }
+
+
+
 .naglowek .wartosc {
-font-weight: bold;
+
+	font-weight: bold;	
+
 }
+
+
+
 .tytul {
-font-size: 2em;
-font-weight: bold;
-text-align: center;
+
+	font-size: 2em;
+
+	font-weight: bold;
+
+	text-align: center;
+
 }
+
+
+
 .tytulformularza {
-font-size: xx-large;
-font-weight: bold;
-text-align: center;
+
+	font-size: xx-large;
+
+	font-weight: bold;
+
+	text-align: center;
+
 }
+
+
+
 .okres {
-display: block;
-margin: 1em;
-font-size: 1.2em;
-text-align: center;
-vertical-align: top;
-clear: both;
+
+	display: block;
+
+	margin: 1em;
+
+	font-size: 1.2em;
+
+	text-align: center;
+
+	vertical-align: top;
+
+	clear: both; 
+
 }
+
+
+
 .data {
-border: 1px solid black;
-padding: 2px 1.5em;
-background-color: white;
-font-weight: bold;
-margin: 0 2em;
+
+	border: 1px solid black; 
+
+	padding: 2px 1.5em;
+
+	background-color: white;
+
+	font-weight: bold;
+
+	margin: 0 2em; 
+
 }
+
+
+
 .obok-daty {
-text-align: right;
-display: inline-block;
-width: 45%;
+
+	text-align: right;
+
+	display: inline-block;
+
+	width: 45%;
+
 }
+
+
+
 .objasnienie {
-border: 2px solid black;
-padding: 0.25em 0.5em;
-font-size: 0.8em;
+
+	border: 2px solid black;
+
+	padding: 0.25em 0.5em; 
+
+	font-size: 0.8em; 
+
 }
+
+
+
 .zalacznik-objasnienie {
-background-color: #DDDDDD;
-border: 2px solid black;
-font-size: 0.8em;
-width:99.5%;
+
+	background-color: #DDDDDD;	
+
+	border: 2px solid black;
+
+	font-size: 0.8em;
+
+	width:99.5%;
+
 }
+
+
+
 .prawne {
-background-color: #DDDDDD;
-border: 2px solid black;
-font-size: 0.8em;
+
+	background-color: #DDDDDD;	
+
+	border: 2px solid black; 
+
+	font-size: 0.8em;
+
 }
+
+
+
 .prawne .etykieta {
-min-width: 9em;
+
+	min-width: 9em;
+
 }
+
+
+
 .wypelniane {
-background-color: white;
+
+	background-color: white;
+
 }
+
+
+
 .niewypelniane, .ukryte {
-background-color: #DDDDDD;
+
+	background-color: #DDDDDD;
+
 }
+
+
+
 .pouczenia td {
-background-color: white;
-border: 2px solid black;
+
+	background-color: white;
+
+	border: 2px solid black;
+
 }
+
+
+
 .tytul-sekcja-blok {
-background-color: #DDDDFF;
-border: 2px solid black;
-text-transform: uppercase;
-width: 99.5%;
+
+	background-color: #DDDDFF;
+
+	border: 2px solid black;
+
+	text-transform: uppercase;
+
+	width: 99.5%;
+
 }
+
+
+
+
+
 h1 {
-font-size: 1.4em;
-font-weight: bold;
-text-align: center;
-text-transform: uppercase;
+
+	font-size: 1.4em;
+
+	font-weight: bold;
+
+	text-align: center;
+
+	text-transform: uppercase;
+
 }
+
+
+
 h2 {
-text-align: left;
-font-size: 1.2em;
-font-weight: bold;
+
+	text-align: left;
+
+	font-size: 1.2em;
+
+	font-weight: bold; 
+
 }
+
+
+
 h3 {
-text-align: left;
-font-size: 1.2em;
-font-weight: normal;
+
+	text-align: left;
+
+	font-size: 1.2em;
+
+	font-weight: normal;
+
 }
+
+
+
 h4 {
-text-align: left;
-font-size: 1em;
-font-weight: normal;
+
+	text-align: left;
+
+	font-size: 1em;
+
+	font-weight: normal;
+
 }
+
+
+
 h1, h2, h3, h4 {
-font-family: 'Arial', sans-serif;
-margin: 0;
-padding: 1px;
+
+	font-family: 'Arial', sans-serif;
+
+	margin: 0;
+
+	padding: 1px;
+
 }
+
+
+
 .wypelniane {
-border: 1px solid black;
-font-size: 1.2em;
-padding: 1px;
-vertical-align: top;
-text-align: left;
+
+	border: 1px solid black; 
+
+	font-size: 1.2em;
+
+	padding: 1px; 
+
+	vertical-align: top;	
+
+	text-align: left;
+
 }
+
+
+
+	
+
 .puste {
-background-color: #DDDDDD;
-border: 1px solid black;
-font-size: 0.8em;
-padding: 1px;
-height: 2em;
-vertical-align: top;
+
+	background-color: #DDDDDD;
+
+	border: 1px solid black; 
+
+	font-size: 0.8em;
+
+	padding: 1px; 
+
+	height: 2em;
+
+	vertical-align: top;
+
 }
+
+
+
 .puste2 {
-background-color: #DDDDDD;
-border: 1px solid black;
-font-size: 1.2em;
-padding: 1px;
-height: 2em;
-text-align: center;
+
+	background-color: #DDDDDD;
+
+	border: 1px solid black; 
+
+	 font-size: 1.2em;
+
+	padding: 1px; 
+
+	height: 2em;
+
+	text-align: center;
+
 }
+
+
+
 .niewypelnianeopisy {
-background-color: #DDDDDD;
-border: 1px solid black;
-font-size: 0.8em;
-padding: 1px;
-height: 2em;
-vertical-align: top;
-text-align: left;
+
+	background-color: #DDDDDD;
+
+	border: 1px solid black;
+
+	font-size: 0.8em;
+
+	padding: 1px; 
+
+	height: 2em;
+
+	vertical-align: top;
+
+	text-align: left;
+
 }
+
+
+
 .center {
-background-color: #DDDDDD;
-border: 1px solid black;
-font-size: 0.8em;
-padding: 1px;
-height: 2em;
-vertical-align: top;
-text-align: center;
+
+	background-color: #DDDDDD;
+
+	border: 1px solid black; 
+
+	font-size: 0.8em;
+
+	padding: 1px; 
+
+	height: 2em;
+
+	vertical-align: top;
+
+	text-align: center;
+
 }
+
+
+
 .niewypelniane, .pouczenia td, .taknie {
-border: 1px solid black;
-font-size: 0.8em;
-font-weight: bold;
-padding: 1px;
-height: 2em;
-vertical-align: top;
-text-align: center;
+
+	border: 1px solid black;
+
+	font-size: 0.8em;
+
+	font-weight: bold;
+
+	padding: 1px; 
+
+	height: 2em;
+
+	vertical-align: top; 
+
+	text-align: center;
+
 }
+
+
+
 .kwota {
-text-align: right;
-padding-right: 0.2em;
+
+	text-align: right;
+
+	padding-right: 0.2em;
+
 }
+
+
+
 .opisrubryki {
-font-size: 0.5em;
-margin-bottom: 0.2em;
-text-align: left;
-font-weight: bold;
-text-transform: none;
+
+	font-size: 0.5em;
+
+	margin-bottom: 0.2em;
+
+	text-align: left;
+
+	font-weight: bold;
+
+	text-transform: none; 
+
 }
+
+
+
 .opis-tekstowy{
-font-size: 0.7em;
-margin-bottom: 0.2em;
-font-weight: bold;
-text-transform: none;
+
+	font-size: 0.7em;
+
+	margin-bottom: 0.2em;
+
+	font-weight: bold;
+
+	text-transform: none; 
+
 }
+
+
+
 .czcionka td, .czcionka th {
-font-size: 0.9em;
-height: 1em;
+
+	font-size: 0.9em;
+
+	height: 1em;
+
 }
+
+
+
 .nazwa-dla-kodu {
-font-size: 0.9em;
+
+	font-size: 0.9em;
+
 }
+
+
+
 table.normalna, table.pouczenia, table.sposob-opodatkowania {
-width: 100%;
-margin: 0;
-border: 1px solid black;
+
+	width: 100%;
+
+	margin: 0;
+
+	border: 1px solid black;
+
 }
+
+
+
 h2.tekst {
-text-align: center;
-margin: 0.5em auto;
+
+	text-align: center;
+
+	margin: 0.5em auto;
+
 }
+
+
+
 .pouczenie {
-padding: 0.5em 2em;
-text-align: center;
+
+	padding: 0.5em 2em;
+
+	text-align: center;
+
 }
+
+
+
 p {
-padding: 0;
-margin: 0.2em 0;
+
+	padding: 0;
+
+	margin: 0.2em 0;
+
 }
+
+
+
 .objasnienie ol {
-list-style-type: decimal;
+
+	list-style-type: decimal;
+
 }
+
+
+
 .objasnienie ol ul {
-list-style-type: disc;
+
+	list-style-type: disc;
+
 }
+
+
+
 .taknie {
-text-transform: uppercase;
-text-align: center;
+
+	text-transform: uppercase;
+
+	text-align: center;
+
 }
+
+
+
 .normalna-tekstowa {
-width: 100%;
-border: 0px
+
+	width: 100%; 
+
+	border: 0px
+
 }
-.tekst {
-text-align: center;
+
+
+
+ .tekst {
+
+	text-align: center;
+
 }
+
+
+
 .wartosc {
-vertical-align: top;
+
+	vertical-align: top;
+
 }
+
+
+
 .miesiac {
-border: 1px solid black;
-font-size: 0.8em;
-font-weight: bold;
-padding: 1px;
-height: 2em;
-vertical-align: middle;
-text-align: center;
-background-color: #DDDDDD;
+
+	border: 1px solid black; 
+
+	font-size: 0.8em;
+
+	font-weight: bold;
+
+	padding: 1px; 
+
+	height: 2em;
+
+	vertical-align: middle; 
+
+	text-align: center;
+
+	background-color: #DDDDDD;
+
 }
+
+
+
 .podtytul {
-font-size: medium;
+
+	font-size: medium;
+
 }
+
+
+
 .tytulzalacznika {
-font-size: x-large;
-font-weight: bold;
-text-align: center;
+
+	font-size: x-large;
+
+	font-weight: bold;
+
+	text-align: center;
+
 }
+
+
+
 .opis {
-font-size: 1em;
-padding: 4px;
+
+	font-size: 1em;
+
+	padding: 4px; 
+
 }
+
+
+
 .opis-tabela {
-font-size: 1em;
-padding: 4px;
-border: 0;
+
+	font-size: 1em;
+
+	padding: 4px; 
+
+	border: 0;
+
 }
+
+
+
 .dodatkowe {
-background-color: white;
-border: 0;
+
+	background-color: white; 
+
+	border: 0;
+
 }
+
+
+
 .wypunktowane {
-font-size: 1em;
-padding: 1px;
-vertical-align: top;
+
+	font-size: 1em;
+
+	padding: 1px; 
+
+	vertical-align: top;
+
 }
+
+
+
 .tlo-formularza, .tlo-zalacznika {
-padding-bottom: 1px;
+
+	padding-bottom: 1px;
+
 }
+
+
+
 @media print {
-.lamstrone {
-page-break-before: always;
-}
-.sekcja {
-page-break-inside: avoid;
-}
-}</style><style xmlns:tns="http://crd.gov.pl/wzor/2022/11/09/11890/" type="text/css">
-.tlo-formularza { background-color:#D3D3D3; font-size:1.0em; }
-.rowdiv { height: 2em }
-.opis-tekstowy { font-weight: normal}
-.niewypelnianeopisy {font-weight: bold}
-.obok-daty {width: 100%}
-.pogrubiane { border: 3px solid black;}
-</style></head><body><div xmlns:tns="http://crd.gov.pl/wzor/2022/11/09/11890/" class="deklaracja"><div class="tlo-formularza"><h1 class="nazwa">
-PIT-11(29) INFORMACJA O PRZYCHODACH Z INNYCH &#377;R&#211;DE&#321; ORAZ O DOCHODACH
-I POBRANYCH ZALICZKACH NA PODATEK DOCHODOWY
-<div><span class="opis-tekstowy"> w roku<sup>2)</sup><span class="data"><span class="opisrubryki">Rok&#160;&#160;</span>2023</span></span></div></h1></div><div class="tlo-formularza"><table style="width: 100%"><tr style="height: 10px"/><tr style="width: 100%"><td style="width: 45%"/><td/><td style="width: 20%"><span class="data"><span class="opisrubryki">
-5. Nr informacji<sup>3)</sup></span></span></td></tr><tr style="height: 10px"/></table></div><div class="prawne"><table><tr><td class="etykieta" style="width: 15%" valign="top">Podstawa prawna:</td><td class="wartosc">
-Art. 35 ust. 6<sup>4)</sup>, art. 39 ust. 1, art. 42 ust. 2 pkt 1, art. 42a ust. 1, art. 42e ust. 6 ustawy z dnia 26 lipca 1991 r. o podatku dochodowym od os&#243;b fizycznych (Dz. U. z 2021 r. poz. 1128, z p&#243;&#378;n. zm.), zwanej dalej &#8222;ustaw&#261;&#8221;; art. 35a ust. 5 ustawy, w brzmieniu obowi&#261;zuj&#261;cym przed dniem 26 pa&#378;dziernika 2007 r.<sup>5)</sup></td></tr><tr><td class="etykieta" style="width: 15%" valign="top">Sk&#322;adaj&#261;cy:</td><td class="wartosc">
-P&#322;atnicy podatku dochodowego od os&#243;b fizycznych, a tak&#380;e nieb&#281;d&#261;cy p&#322;atnikami: rolnicy, osoby fizyczne prowadz&#261;ce dzia&#322;alno&#347;&#263; gospodarcz&#261;, osoby prawne i ich jednostki organizacyjne oraz jednostki organizacyjne niemaj&#261;ce osobowo&#347;ci prawnej.
-</td></tr><tr><td class="etykieta" style="width: 15%" valign="top">Terminy sk&#322;adania:</td><td class="wartosc">
-Do ko&#324;ca stycznia roku nast&#281;puj&#261;cego po roku podatkowym<sup>5)</sup> &#8211; dla informacji sk&#322;adanych urz&#281;dowi skarbowemu; do ko&#324;ca lutego roku nast&#281;puj&#261;cego po roku podatkowym &#8211; dla informacji przesy&#322;anych podatnikowi; w terminie 14 dni od z&#322;o&#380;enia pisemnego wniosku przez podatnika &#8211; w przypadku gdy w trakcie roku podatkowego usta&#322; obowi&#261;zek poboru zaliczki przez p&#322;atnik&#243;w, o kt&#243;rych mowa w art. 39 ust. 1 ustawy; do dnia zaprzestania dzia&#322;alno&#347;ci<sup>6)</sup> &#8211; w przypadku gdy sk&#322;adaj&#261;cy zaprzestali dzia&#322;alno&#347;ci przed ko&#324;cem stycznia lub odpowiednio przed ko&#324;cem lutego roku nast&#281;puj&#261;cego po roku podatkowym.
-</td></tr><tr><td class="etykieta" style="width: 15%" valign="top">Otrzymuje:</td><td class="wartosc">
-Podatnik oraz urz&#261;d skarbowy wed&#322;ug miejsca zamieszkania podatnika, a w przypadku podatnik&#243;w, o kt&#243;rych mowa w art. 3 ust. 2a ustawy, urz&#261;d skarbowy w sprawach opodatkowania os&#243;b zagranicznych.
-</td></tr></table></div><h2 class="tytul-sekcja-blok">A.
-MIEJSCE I CEL SK&#321;ADANIA INFORMACJI
-</h2><table class="normalna"><tr><td class="niewypelnianeopisy" style="width:33%">
-Urz&#261;d skarbowy, do kt&#243;rego adresowana jest informacja<sup>7)</sup></td><td class="wypelniane" style="width:auto"><div>2205&#160;
-<span class="nazwa-dla-kodu">PIERWSZY URZ&#260;D SKARBOWY W GDA&#323;SKU</span></div></td></tr><tr><td class="niewypelnianeopisy">Cel z&#322;o&#380;enia formularza:</td><td class="wypelniane"><input type="checkbox" checked="checked" disabled="disabled"/>
-1. z&#322;o&#380;enie informacji
-</td></tr></table><h2 class="tytul-sekcja-blok">B.
-&#160;DANE IDENTYFIKACYJNE SK&#321;ADAJ&#260;CEGO<br/><span class="opis-tekstowy">* - dotyczy sk&#322;adaj&#261;cego nieb&#281;d&#261;cego osob&#261; fizyczn&#261;, ** - dotyczy sk&#322;adaj&#261;cego b&#281;d&#261;cego osob&#261; fizyczn&#261;
-</span></h2><table class="normalna"><tr><td class="wypelniane"><div class="opisrubryki">Identyfikator podatkowy NIP / numer PESEL sk&#322;adaj&#261;cego</div>1234567890</td></tr><tr><td class="wypelniane" style="width: 100%"><div class="opisrubryki">8. Rodzaj sk&#322;adaj&#261;cego</div><input type="checkbox" checked="checked" disabled="disabled"/>
-1. sk&#322;adaj&#261;cy nieb&#281;d&#261;cy osob&#261; fizyczn&#261;
-</td></tr><tr><td class="wypelniane"><div class="opisrubryki">9. Nazwa pe&#322;na</div>Firma Sp. z o.o.</td></tr></table><h2 class="tytul-sekcja-blok">C.
-&#160;DANE IDENTYFIKACYJNE I ADRES ZAMIESZKANIA PODATNIKA
-</h2><table class="normalna"><tr><td class="wypelniane" style="width: 100%"><div class="opisrubryki">11. Rodzaj obowi&#261;zku podatkowego podatnika</div><input type="checkbox" checked="checked" disabled="disabled"/>
-1. nieograniczony
-obowi&#261;zek podatkowy (rezydent)
-</td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width: 50%"><div class="opisrubryki">12. Identyfikator podatkowy NIP / numer PESEL</div>12345678901</td><td class="wypelniane" style="width: 50%"><div class="rowdiv"><div class="opisrubryki">
-13. Zagraniczny numer identyfikacyjny podatnika <font style="font-weight: normal">(numer dokumentu stwierdzaj&#261;cego to&#380;samo&#347;&#263;)<sup>11)</sup></font></div></div></td></tr><tr><td class="wypelniane" style="width: 50%"><div class="rowdiv"><div class="opisrubryki">
-14. Rodzaj numeru identyfikacyjnego (dokumentu stwierdzaj&#261;cego
-to&#380;samo&#347;&#263;)<font style="font-weight: normal"><sup>12)</sup></font></div></div></td><td class="wypelniane" style="width: 50%"><div class="rowdiv"><div class="opisrubryki">
-15. Kraj wydania numeru identyfikacyjnego (dokumentu stwierdzaj&#261;cego to&#380;samo&#347;&#263;)
-<font style="font-weight: normal"><sup>12)</sup></font></div>PL&#160;
-<span class="nazwa-dla-kodu">(POLSKA)</span></div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width: 33%"><div class="opisrubryki">16. Nazwisko</div><div class="wype&#322;niane">Nazwisko</div></td><td class="wypelniane" style="width: 33%"><div class="opisrubryki">17. Pierwsze Imi&#281;</div><div class="wype&#322;niane">Imi&#281;</div></td><td class="wypelniane" style="width: 34%"><div class="opisrubryki">18. Data urodzenia</div><div class="wype&#322;niane">1234-56-78</div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:20%"><div class="opisrubryki">19. Kraj</div>PL&#160;
-<span class="nazwa-dla-kodu">(POLSKA)</span></td><td class="wypelniane" style="width:40%"><div class="opisrubryki">20. Wojew&#243;dztwo</div>Wojew&#243;dztwo</td><td class="wypelniane" style="width:40%"><div class="opisrubryki">21. Powiat</div>Powiat</td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:35%"><div class="opisrubryki">22. Gmina</div>Gmina</td><td class="wypelniane" style="width:45%"><div class="opisrubryki">23. Ulica</div>Ulica</td><td class="wypelniane" style="width:10%"><div class="opisrubryki">24. Numer domu</div>1</td><td class="wypelniane" style="width:10%"><div class="opisrubryki">25. Numer lokalu</div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:70%"><div class="opisrubryki">26. Miejscowo&#347;&#263;</div>Miejscowo&#347;&#263;</td><td class="wypelniane" style="width:30%"><div class="opisrubryki">27. Kod pocztowy</div>12-345</td></tr></table><div class="lamstrone"/><h2 class="tytul-sekcja-blok">D.
-&#160;INFORMACJA O KOSZTACH UZYSKANIA PRZYCHODU
-<font style="font-size: 0.8em">
-Z TYTU&#321;U STOSUNKU S&#321;U&#379;BOWEGO,
-STOSUNKU PRACY, SP&#211;&#321;DZIELCZEGO STOSUNKU PRACY ORAZ PRACY NAK&#321;ADCZEJ
-</font></h2><table class="normalna"><tr><td class="wypelniane" style="width:50%"><div class="opisrubryki">
-28. Koszty uzyskania przychod&#243;w, wykazane w poz. 30, zosta&#322;y
-uwzgl&#281;dnione do wysoko&#347;ci przys&#322;uguj&#261;cej podatnikowi
-</div><input type="checkbox" checked="checked" disabled="disabled"/>
-1. z jednego stosunku pracy (stosunk&#243;w pokrewnych)
-</td></tr></table><h2 class="tytul-sekcja-blok">E.
-&#160;DOCHODY PODATNIKA, POBRANE ZALICZKI ORAZ POBRANE SK&#321;ADKI NA UBEZPIECZENIA SPO&#321;ECZNE
-<div class="opis-tekstowy">
-(cz&#281;&#347;&#263; t&#281; wype&#322;niaj&#261; sk&#322;adaj&#261;cy b&#281;d&#261;cy p&#322;atnikami)
-</div></h2><table class="normalna"><tr><td class="niewypelniane" style="width: 35%"><b/>
-&#377;r&#243;d&#322;a przychod&#243;w
-</td><td class="niewypelniane" style="width: 12%">
-Przych&#243;d<font style="font-weight: normal"><sup>13)</sup></font></td><td class="niewypelniane" style="width: 12%">
-Koszty uzyskania przychod&#243;w<font style="font-weight: normal"><sup>14)</sup></font></td><td class="niewypelniane" style="width: 12%">
-Doch&#243;d<br/>
-(b - c)
-</td><td class="niewypelniane" style="width: 12%">
-Doch&#243;d zwolniony od podatku<font style="font-weight: normal"><sup>13)</sup></font></td><td class="niewypelniane" style="width: 12%">
-Zaliczka pobrana przez p&#322;atnika<font style="font-weight: normal"><sup>15)</sup></font></td></tr><tr><td class="niewypelniane" style="width: 35%">a</td><td class="niewypelniane" style="width: 12%">b</td><td class="niewypelniane" style="width: 12%">c</td><td class="niewypelniane" style="width: 12%">d</td><td class="niewypelniane" style="width: 12%">e</td><td class="niewypelniane" style="width: 12%">f</td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
-1. Nale&#380;no&#347;ci ze stosunku: pracy, s&#322;u&#380;bowego, sp&#243;&#322;dzielczego i z pracy nak&#322;adczej, wyp&#322;acone przez zak&#322;ad pracy oraz p&#322;atnik&#243;w, o kt&#243;rych mowa w art. 42e ust. 1 ustawy, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszu 2 albo 3<font style="font-weight: normal"><sup>16)</sup></font><div class="opis-tekstowy">
-W poz. 34 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano odliczenie koszt&#243;w uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 3 ustawy.
-</div></td><td class="wypelniane"><div class="opisrubryki">29.</div><div class="kwota">249525.40</div></td><td class="wypelniane pogrubiane" style="width: 12%"><div class="opisrubryki">30.</div><div class="kwota">3000.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">31.</div><div class="kwota">246525.40</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">32.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">33.</div><div class="kwota">41878</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">34.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">35.</div><div class="kwota">0.00</div></td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
-2. Nale&#380;no&#347;ci z tytu&#322;&#243;w wymienionych w wierszu 1, otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font><div class="opis-tekstowy">
-W poz. 41 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano odliczenie koszt&#243;w uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 3 ustawy.
-</div></td><td class="wypelniane"><div class="opisrubryki">36.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">37.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">38.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">39.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">40.</div><div class="kwota">0</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">41.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">42.</div><div class="kwota">0.00</div></td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
-3. Nale&#380;no&#347;ci z tytu&#322;&#243;w wymienionych w wierszu 1, otrzymane przez podatnik&#243;w od uko&#324;czenia wieku emerytalnego<font style="font-weight: normal"><sup>18)</sup></font><div class="opis-tekstowy">
-W poz. 48 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano odliczenie koszt&#243;w uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 3 ustawy.
-</div></td><td class="wypelniane"><div class="opisrubryki">43.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">44.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">45.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">46.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">47.</div><div class="kwota">0</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">48.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">49.</div><div class="kwota">0.00</div></td></tr><tr><td class="niewypelnianeopisy">4. Emerytury - renty zagraniczne</td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">50.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">51.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">52.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">53.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-5. Dzia&#322;alno&#347;&#263; wykonywana osobi&#347;cie, o kt&#243;rej mowa w art. 13 pkt 2, 4-9 ustawy, w tym z umowy o dzie&#322;o oraz czynno&#347;ci zwi&#261;zane z pe&#322;nieniem obowi&#261;zk&#243;w spo&#322;ecznych lub obywatelskich, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszach 6 i 7 albo 8
-</td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">54.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">55.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">56.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">57.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-6. Nale&#380;no&#347;ci z tytu&#322;u umowy zlecenia, o kt&#243;rej mowa w art. 13 pkt 8 ustawy, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszu 7 albo 8
-<font style="font-weight: normal"><sup>16)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">58.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">59.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">60.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">61.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-7. Nale&#380;no&#347;ci z tytu&#322;u wymienionego w wierszu 6, otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">62.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">63.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">64.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">65.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-8. Nale&#380;no&#347;ci z tytu&#322;u wymienionego w wierszu 6, otrzymane przez podatnik&#243;w od uko&#324;czenia wieku emerytalnego<font style="font-weight: normal"><sup>18)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">66.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">67.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">68.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">69.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
-9. Prawa autorskie i inne prawa, o kt&#243;rych mowa w art. 18 ustawy<br/><div class="opis-tekstowy">
-W poz. 73 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano koszty uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 1-3 ustawy.
-</div></td><td class="wypelniane"><div class="opisrubryki">70.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">71.</div><div class="kwota">0.00</div></td><td class="puste" rowspan="2"/><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">72.</div><div class="kwota">0</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">73.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">74.</div><div class="kwota">0.00</div></td></tr></table><div class="lamstrone"/><table class="normalna"><tr><td class="niewypelnianeopisy">
-10. Nale&#380;no&#347;ci z tytu&#322;u praktyk absolwenckich lub sta&#380;y uczniowskich, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszu 11
-</td><td class="wypelniane"><div class="opisrubryki">75.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">76.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">77.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-11. Nale&#380;no&#347;ci z tytu&#322;u wymienionego w wierszu 10, otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font></td><td class="wypelniane"><div class="opisrubryki">78.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">79.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">80.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-12. Zasi&#322;ki macierzy&#324;skie, z wyj&#261;tkiem zasi&#322;k&#243;w wykazanych w wierszu 13 albo 14
-</td><td class="wypelniane"><div class="opisrubryki">81.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">82.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">83.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-13. Zasi&#322;ki macierzy&#324;skie otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font></td><td class="wypelniane"><div class="opisrubryki">84.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">85.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">86.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-14. Zasi&#322;ki macierzy&#324;skie otrzymane przez podatnik&#243;w od uko&#324;czenia wieku emerytalnego<font style="font-weight: normal"><sup>18)</sup></font></td><td class="wypelniane"><div class="opisrubryki">87.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">88.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">89.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
-15. Inne &#378;r&#243;d&#322;a<font style="font-weight: normal"><sup>19)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">90.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">91.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">92.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">93.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">94.</div><div class="kwota">0</div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%">
-Sk&#322;adki na ubezpieczenia spo&#322;eczne, o kt&#243;rych mowa w przepisach ustawy, podlegaj&#261;ce odliczeniu od dochodu<font style="font-weight: normal"><sup>20)</sup></font>, w tym zagraniczne, o kt&#243;rych mowa w art. 26 ust. 1 pkt 2a ustawy, z wyj&#261;tkiem wykazanych w poz. 96
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">95.</div><div class="kwota">29403
-z&#322;, 26
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
-Sk&#322;adki na ubezpieczenia spo&#322;eczne, o kt&#243;rych mowa w przepisach ustawy<font style="font-weight: normal"><sup>20)</sup></font>,
-w tym zagraniczne, o kt&#243;rych mowa w art. 26 ust. 1 pkt 2a ustawy, kt&#243;rych podstaw&#281; wymiaru stanowi przych&#243;d wymieniony w wierszach 2, 3, 7, 8 i 11 cz&#281;&#347;ci E
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">96.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
-Sk&#322;adki na ubezpieczenia spo&#322;eczne, o kt&#243;rych mowa w przepisach ustawy, kt&#243;rych podstaw&#281; wymiaru stanowi przych&#243;d zwolniony na podstawie art. 21 ust. 1 pkt 148 oraz 152-154 ustawy, wykazane odpowiednio w poz. 110, 111, 112, 115 i 116
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">97.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr></table><div class="tytul-sekcja-blok"><h2>F.
-&#160;INFORMACJA O WYSOKO&#346;CI PRZYCHOD&#211;W, O KT&#211;RYCH MOWA W ART. 20 UST. 1 USTAWY
-<div class="opis-tekstowy">
-(cz&#281;&#347;&#263; t&#281; wype&#322;niaj&#261; sk&#322;adaj&#261;cy nieb&#281;d&#261;cy p&#322;atnikami, o kt&#243;rych mowa w art.
-42a ustawy, w tym rolnicy)
-</div></h2></div><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%; text-align: center">Rodzaj przychodu</td><td class="niewypelnianeopisy" style="width: 25%; text-align: center">Przych&#243;d</td></tr><tr><td class="niewypelnianeopisy">Wynagrodzenie z tytu&#322;u umowy o pomocy przy zbiorach</td><td class="wypelniane"><div class="opisrubryki">98.</div><div class="kwota">
-z&#322;,   gr
-</div></td></tr><tr><td class="wypelniane"><div class="opisrubryki">99.</div></td><td class="wypelniane"><div class="opisrubryki">100.</div><div class="kwota">
-z&#322;,   gr
-</div></td></tr><tr><td class="wypelniane"><div class="opisrubryki">101.</div></td><td class="wypelniane"><div class="opisrubryki">102.</div><div class="kwota">
-z&#322;,   gr
-</div></td></tr><tr><td class="wypelniane"><div class="opisrubryki">103.</div></td><td class="wypelniane"><div class="opisrubryki">104.</div><div class="kwota">
-z&#322;,   gr
-</div></td></tr><tr><td class="niewypelnianeopisy">
-Razem
-<div class="opis-tekstowy">Suma kwot z poz.: 98, 100, 102 i 104.</div></td><td class="wypelniane"><div class="opisrubryki">105.</div><div class="kwota">
-z&#322;,   gr
-</div></td></tr></table><div class="lamstrone"/><div class="tytul-sekcja-blok"><h2>G.
-&#160;INFORMACJA O PRZYCHODACH ZWOLNIONYCH OD PODATKU, ZA&#321;&#260;CZNIKU ORAZ O POBRANYCH PRZEZ P&#321;ATNIKA SK&#321;ADKACH: NA UBEZPIECZENIE ZDROWOTNE ORAZ CZ&#321;ONKOWSKICH NA RZECZ ZWI&#260;ZK&#211;W ZAWODOWYCH
-<div class="opis-tekstowy">
-(cz&#281;&#347;&#263; t&#281; wype&#322;niaj&#261; sk&#322;adaj&#261;cy b&#281;d&#261;cy p&#322;atnikami)
-</div></h2></div><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%">
-Przychody z tytu&#322;u stypendium, o kt&#243;rym mowa w art. 21 ust. 1 pkt 40b ustawy
-<div class="opis-tekstowy">Nale&#380;y wykaza&#263; kwot&#281; stypendium, do wysoko&#347;ci limitu zwolnienia<sup>21)</sup>.
-</div></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">106.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
-Przychody otrzymywane z zagranicy, o kt&#243;rych mowa w art. 21 ust. 1 pkt 74 ustawy, mi&#281;dzy innymi renty inwalidzkie z tytu&#322;u inwalidztwa wojennego
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">107.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
-Przychody pochodz&#261;ce ze &#347;rodk&#243;w bezzwrotnej pomocy zagranicznej, o kt&#243;rych mowa w art. 21 ust. 1 pkt 46 ustawy
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">108.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
-Przychody ze stosunku pracy i stosunk&#243;w pokrewnych, z um&#243;w zlecenia, praktyk absolwenckich lub sta&#380;y uczniowskich oraz z zasi&#322;k&#243;w macierzy&#324;skich, o kt&#243;rych mowa w art. 21 ust. 1 pkt 148 ustawy<font style="font-weight: normal"><div class="opis-tekstowy">Nale&#380;y wykaza&#263; kwot&#281; przychodu, do wysoko&#347;ci limitu zwolnienia<sup>22)</sup>.
-</div></font></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">109.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" rowspan="5" style="width:5%">
-w tym:
-</td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
-przychody ze stosunku pracy i stosunk&#243;w pokrewnych
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">110.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
-przychody z um&#243;w zlecenia
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">111.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
-przychody z tytu&#322;u praktyk absolwenckich lub sta&#380;y uczniowskich
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">112.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
-przychody z zasi&#322;k&#243;w macierzy&#324;skich
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">113.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%">
-Przychody ze stosunku pracy i stosunk&#243;w pokrewnych, z um&#243;w zlecenia oraz z zasi&#322;k&#243;w macierzy&#324;skich o kt&#243;rych mowa w art. 21 ust. 1 pkt 152-154 ustawy<font style="font-weight: normal"><div class="opis-tekstowy">Nale&#380;y wykaza&#263; kwot&#281; przychodu, do wysoko&#347;ci limitu zwolnienia<sup>22)</sup>.
-</div></font></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">114.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" rowspan="4" style="width:5%">
-w tym:
-</td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
-przychody ze stosunku pracy i stosunk&#243;w pokrewnych
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">115.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
-przychody z um&#243;w zlecenia
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">116.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
-przychody z zasi&#322;k&#243;w macierzy&#324;skich
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">117.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:25%" colspan="2"><div class="opisrubryki">Rodzaj (podstawa prawna) przychodu zwolnionego od podatku, wykazanego w poz. 114</div>
-118. <input type="checkbox" disabled="disabled"/>
-art. 21 ust. 1 pkt 152 ustawy<br/>
-119. <input type="checkbox" disabled="disabled"/>
-art. 21 ust. 1 pkt 153 ustawy<br/>
-120. <input type="checkbox" disabled="disabled"/>
-art. 21 ust. 1 pkt 154 ustawy
-</td></tr><tr><td class="wypelniane" style="width:25%" colspan="2"><div class="opisrubryki">121. Do niniejszej informacji do&#322;&#261;czono informacj&#281; PIT-R</div><input type="checkbox" checked="checked" disabled="disabled"/>
-2. nie
-</td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
-Sk&#322;adki na ubezpieczenie zdrowotne pobrane przez p&#322;atnika do wysoko&#347;ci 9% podstawy jej wymiaru
-<font style="font-weight: normal"><sup>23)</sup></font></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">122.</div><div class="kwota">19309
-z&#322;, 38
-gr
-</div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
-Sk&#322;adki cz&#322;onkowskie na rzecz zwi&#261;zk&#243;w zawodowych pobrane przez p&#322;atnika, podlegaj&#261;ce odliczeniu od dochodu, o kt&#243;rych mowa w art. 26 ust. 1 pkt 2c ustawy
-</td><td class="wypelniane" style="width:25%"><div class="opisrubryki">123.</div><div class="kwota">0
-z&#322;, 00
-gr
-</div></td></tr></table></div></body></html>
+
+	.lamstrone {
+
+		page-break-before: always;
+
+	}
+
+
+
+	.sekcja {
+
+		page-break-inside: avoid;
+
+	}
+
+}<style xmlns:tns="http://crd.gov.pl/wzor/2022/11/09/11890/" type="text/css">
+      .tlo-formularza { background-color:#D3D3D3; font-size:1.0em; }
+      .rowdiv { height: 2em }
+      .opis-tekstowy { font-weight: normal}
+      .niewypelnianeopisy {font-weight: bold}
+      .obok-daty {width: 100%}
+      .pogrubiane { border: 3px solid black;}
+    </style></head><body>
+<div xmlns:tns="http://crd.gov.pl/wzor/2022/11/09/11890/" class="deklaracja"><div class="tlo-formularza"><h1 class="nazwa">
+          PIT-11(29) INFORMACJA O PRZYCHODACH Z INNYCH &#377;R&#211;DE&#321; ORAZ O DOCHODACH
+          I POBRANYCH ZALICZKACH NA PODATEK DOCHODOWY
+          <div><span class="opis-tekstowy"> w roku<sup>2)</sup><span class="data"><span class="opisrubryki">Rok&#160;&#160;</span>2023</span></span></div></h1></div><div class="tlo-formularza"><table style="width: 100%"><tr style="height: 10px"/><tr style="width: 100%"><td style="width: 45%"/><td/><td style="width: 20%"><span class="data"><span class="opisrubryki">
+                5. Nr informacji<sup>3)</sup>&#160;&#160;
+              </span></span></td></tr><tr style="height: 10px"/></table></div><div class="prawne"><table><tr><td class="etykieta" style="width: 15%" valign="top">Podstawa prawna:</td><td class="wartosc">
+            Art. 35 ust. 6<sup>4)</sup>, art. 39 ust. 1, art. 42 ust. 2 pkt 1, art. 42a ust. 1, art. 42e ust. 6 ustawy z dnia 26 lipca 1991 r. o podatku dochodowym od os&#243;b fizycznych (Dz. U. z 2021 r. poz. 1128, z p&#243;&#378;n. zm.), zwanej dalej &#8222;ustaw&#261;&#8221;; art. 35a ust. 5 ustawy, w brzmieniu obowi&#261;zuj&#261;cym przed dniem 26 pa&#378;dziernika 2007 r.<sup>5)</sup></td></tr><tr><td class="etykieta" style="width: 15%" valign="top">Sk&#322;adaj&#261;cy:</td><td class="wartosc">
+            P&#322;atnicy podatku dochodowego od os&#243;b fizycznych, a tak&#380;e nieb&#281;d&#261;cy p&#322;atnikami: rolnicy, osoby fizyczne prowadz&#261;ce dzia&#322;alno&#347;&#263; gospodarcz&#261;, osoby prawne i ich jednostki organizacyjne oraz jednostki organizacyjne niemaj&#261;ce osobowo&#347;ci prawnej.
+          </td></tr><tr><td class="etykieta" style="width: 15%" valign="top">Terminy sk&#322;adania:</td><td class="wartosc">
+            Do ko&#324;ca stycznia roku nast&#281;puj&#261;cego po roku podatkowym<sup>5)</sup> &#8211; dla informacji sk&#322;adanych urz&#281;dowi skarbowemu; do ko&#324;ca lutego roku nast&#281;puj&#261;cego po roku podatkowym &#8211; dla informacji przesy&#322;anych podatnikowi; w terminie 14 dni od z&#322;o&#380;enia pisemnego wniosku przez podatnika &#8211; w przypadku gdy w trakcie roku podatkowego usta&#322; obowi&#261;zek poboru zaliczki przez p&#322;atnik&#243;w, o kt&#243;rych mowa w art. 39 ust. 1 ustawy; do dnia zaprzestania dzia&#322;alno&#347;ci<sup>6)</sup> &#8211; w przypadku gdy sk&#322;adaj&#261;cy zaprzestali dzia&#322;alno&#347;ci przed ko&#324;cem stycznia lub odpowiednio przed ko&#324;cem lutego roku nast&#281;puj&#261;cego po roku podatkowym.
+          </td></tr><tr><td class="etykieta" style="width: 15%" valign="top">Otrzymuje:</td><td class="wartosc">
+            Podatnik oraz urz&#261;d skarbowy wed&#322;ug miejsca zamieszkania podatnika, a w przypadku podatnik&#243;w, o kt&#243;rych mowa w art. 3 ust. 2a ustawy, urz&#261;d skarbowy w sprawach opodatkowania os&#243;b zagranicznych.
+          </td></tr></table></div><h2 class="tytul-sekcja-blok">A. MIEJSCE I CEL SK&#321;ADANIA INFORMACJI
+    </h2><table class="normalna"><tr><td class="niewypelnianeopisy" style="width:33%">
+          Urz&#261;d skarbowy, do kt&#243;rego adresowana jest informacja<sup>7)</sup></td><td class="wypelniane" style="width:auto"><div>2205&#160;
+
+		<span class="nazwa-dla-kodu">PIERWSZY URZ&#260;D SKARBOWY W GDA&#323;SKU</span></div></td></tr><tr><td class="niewypelnianeopisy">Cel z&#322;o&#380;enia formularza:</td><td class="wypelniane"><input type="checkbox" checked="checked" disabled="disabled"/>1. z&#322;o&#380;enie informacji
+            </td></tr></table><h2 class="tytul-sekcja-blok">B.&#160;DANE IDENTYFIKACYJNE SK&#321;ADAJ&#260;CEGO<br/><span class="opis-tekstowy">* - dotyczy sk&#322;adaj&#261;cego nieb&#281;d&#261;cego osob&#261; fizyczn&#261;, ** - dotyczy sk&#322;adaj&#261;cego b&#281;d&#261;cego osob&#261; fizyczn&#261;  
+            </span></h2><table class="normalna"><tr><td class="wypelniane"><div class="opisrubryki">Identyfikator podatkowy NIP / numer PESEL sk&#322;adaj&#261;cego</div>8511001482</td></tr><tr><td class="wypelniane" style="width: 100%"><div class="opisrubryki">8. Rodzaj sk&#322;adaj&#261;cego</div><input type="checkbox" checked="checked" disabled="disabled"/>1. sk&#322;adaj&#261;cy nieb&#281;d&#261;cy osob&#261; fizyczn&#261;
+            </td></tr><tr><td class="wypelniane"><div class="opisrubryki">9. Nazwa pe&#322;na</div>FARAONE POLAND Sp. z o.o.</td></tr></table><h2 class="tytul-sekcja-blok">C.&#160;DANE IDENTYFIKACYJNE I ADRES ZAMIESZKANIA PODATNIKA
+    </h2><table class="normalna"><tr><td class="wypelniane" style="width: 100%"><div class="opisrubryki">11. Rodzaj obowi&#261;zku podatkowego podatnika</div><input type="checkbox" checked="checked" disabled="disabled"/>1. nieograniczony
+                obowi&#261;zek podatkowy (rezydent)
+              </td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width: 50%"><div class="opisrubryki">12. Identyfikator podatkowy NIP / numer PESEL</div>60112102951</td><td class="wypelniane" style="width: 50%"><div class="rowdiv"><div class="opisrubryki">
+                  13. Zagraniczny numer identyfikacyjny podatnika <font style="font-weight: normal">(numer dokumentu stwierdzaj&#261;cego to&#380;samo&#347;&#263;)<sup>11)</sup></font></div></div></td></tr><tr><td class="wypelniane" style="width: 50%"><div class="rowdiv"><div class="opisrubryki">
+                  14. Rodzaj numeru identyfikacyjnego (dokumentu stwierdzaj&#261;cego
+                  to&#380;samo&#347;&#263;)<font style="font-weight: normal"><sup>12)</sup></font></div></div></td><td class="wypelniane" style="width: 50%"><div class="rowdiv"><div class="opisrubryki">
+                15. Kraj wydania numeru identyfikacyjnego (dokumentu stwierdzaj&#261;cego to&#380;samo&#347;&#263;)
+                <font style="font-weight: normal"><sup>12)</sup></font></div>PL&#160;
+
+		<span class="nazwa-dla-kodu">(POLSKA)</span></div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width: 33%"><div class="opisrubryki">16. Nazwisko</div><div class="wype&#322;niane">Zawada</div></td><td class="wypelniane" style="width: 33%"><div class="opisrubryki">17. Pierwsze Imi&#281;</div><div class="wype&#322;niane">Krzysztof</div></td><td class="wypelniane" style="width: 34%"><div class="opisrubryki">18. Data urodzenia</div><div class="wype&#322;niane">1960-11-21</div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:20%"><div class="opisrubryki">19. Kraj</div>PL&#160;
+
+		<span class="nazwa-dla-kodu">(POLSKA)</span></td><td class="wypelniane" style="width:40%"><div class="opisrubryki">20. Wojew&#243;dztwo</div>Pomorskie</td><td class="wypelniane" style="width:40%"><div class="opisrubryki">21. Powiat</div>Gda&#324;sk</td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:35%"><div class="opisrubryki">22. Gmina</div>Gda&#324;sk</td><td class="wypelniane" style="width:45%"><div class="opisrubryki">23. Ulica</div>Lublewska</td><td class="wypelniane" style="width:10%"><div class="opisrubryki">24. Numer domu</div>10</td><td class="wypelniane" style="width:10%"><div class="opisrubryki">25. Numer lokalu</div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:70%"><div class="opisrubryki">26. Miejscowo&#347;&#263;</div>Gda&#324;sk</td><td class="wypelniane" style="width:30%"><div class="opisrubryki">27. Kod pocztowy</div>80-178</td></tr></table><h2 class="tytul-sekcja-blok">D.&#160;INFORMACJA O KOSZTACH UZYSKANIA PRZYCHODU
+        <font style="font-size: 0.8em">
+          Z TYTU&#321;U STOSUNKU S&#321;U&#379;BOWEGO,
+          STOSUNKU PRACY, SP&#211;&#321;DZIELCZEGO STOSUNKU PRACY ORAZ PRACY NAK&#321;ADCZEJ
+        </font></h2><table class="normalna"><tr><td class="wypelniane" style="width:50%"><div class="opisrubryki">
+              28. Koszty uzyskania przychod&#243;w, wykazane w poz. 30, zosta&#322;y
+              uwzgl&#281;dnione do wysoko&#347;ci przys&#322;uguj&#261;cej podatnikowi
+            </div><input type="checkbox" checked="checked" disabled="disabled"/>1. z jednego stosunku pracy (stosunk&#243;w pokrewnych)
+              </td></tr></table><h2 class="tytul-sekcja-blok">E.&#160;DOCHODY PODATNIKA, POBRANE ZALICZKI ORAZ POBRANE SK&#321;ADKI NA UBEZPIECZENIA SPO&#321;ECZNE
+                <div class="opis-tekstowy">
+          (cz&#281;&#347;&#263; t&#281; wype&#322;niaj&#261; sk&#322;adaj&#261;cy b&#281;d&#261;cy p&#322;atnikami)
+        </div></h2><table class="normalna"><tr><td class="niewypelniane" style="width: 35%"><b/>&#377;r&#243;d&#322;a przychod&#243;w
+          </td><td class="niewypelniane" style="width: 12%">
+            Przych&#243;d<font style="font-weight: normal"><sup>13)</sup></font></td><td class="niewypelniane" style="width: 12%">
+            Koszty uzyskania przychod&#243;w<font style="font-weight: normal"><sup>14)</sup></font></td><td class="niewypelniane" style="width: 12%">
+            Doch&#243;d<br/>(b - c)
+          </td><td class="niewypelniane" style="width: 12%">
+            Doch&#243;d zwolniony od podatku<font style="font-weight: normal"><sup>13)</sup></font></td><td class="niewypelniane" style="width: 12%">
+            Zaliczka pobrana przez p&#322;atnika<font style="font-weight: normal"><sup>15)</sup></font></td></tr><tr><td class="niewypelniane" style="width: 35%">a</td><td class="niewypelniane" style="width: 12%">b</td><td class="niewypelniane" style="width: 12%">c</td><td class="niewypelniane" style="width: 12%">d</td><td class="niewypelniane" style="width: 12%">e</td><td class="niewypelniane" style="width: 12%">f</td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
+            1. Nale&#380;no&#347;ci ze stosunku: pracy, s&#322;u&#380;bowego, sp&#243;&#322;dzielczego i z pracy nak&#322;adczej, wyp&#322;acone przez zak&#322;ad pracy oraz p&#322;atnik&#243;w, o kt&#243;rych mowa w art. 42e ust. 1 ustawy, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszu 2 albo 3<font style="font-weight: normal"><sup>16)</sup></font><div class="opis-tekstowy">
+              W poz. 34 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano odliczenie koszt&#243;w uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 3 ustawy.
+            </div></td><td class="wypelniane"><div class="opisrubryki">29.</div><div class="kwota">249525.40</div></td><td class="wypelniane pogrubiane" style="width: 12%"><div class="opisrubryki">30.</div><div class="kwota">3000.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">31.</div><div class="kwota">246525.40</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">32.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">33.</div><div class="kwota">41878</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">34.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">35.</div><div class="kwota">0.00</div></td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
+            2. Nale&#380;no&#347;ci z tytu&#322;&#243;w wymienionych w wierszu 1, otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font><div class="opis-tekstowy">
+              W poz. 41 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano odliczenie koszt&#243;w uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 3 ustawy.
+            </div></td><td class="wypelniane"><div class="opisrubryki">36.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">37.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">38.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">39.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">40.</div><div class="kwota">0</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">41.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">42.</div><div class="kwota">0.00</div></td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
+            3. Nale&#380;no&#347;ci z tytu&#322;&#243;w wymienionych w wierszu 1, otrzymane przez podatnik&#243;w od uko&#324;czenia wieku emerytalnego<font style="font-weight: normal"><sup>18)</sup></font><div class="opis-tekstowy">
+              W poz. 48 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano odliczenie koszt&#243;w uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 3 ustawy.
+            </div></td><td class="wypelniane"><div class="opisrubryki">43.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">44.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">45.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">46.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">47.</div><div class="kwota">0</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">48.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">49.</div><div class="kwota">0.00</div></td></tr><tr><td class="niewypelnianeopisy">4. Emerytury - renty zagraniczne</td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">50.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">51.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">52.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">53.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            5. Dzia&#322;alno&#347;&#263; wykonywana osobi&#347;cie, o kt&#243;rej mowa w art. 13 pkt 2, 4-9 ustawy, w tym z umowy o dzie&#322;o oraz czynno&#347;ci zwi&#261;zane z pe&#322;nieniem obowi&#261;zk&#243;w spo&#322;ecznych lub obywatelskich, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszach 6 i 7 albo 8
+          </td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">54.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">55.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">56.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">57.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            6. Nale&#380;no&#347;ci z tytu&#322;u umowy zlecenia, o kt&#243;rej mowa w art. 13 pkt 8 ustawy, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszu 7 albo 8
+            <font style="font-weight: normal"><sup>16)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">58.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">59.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">60.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">61.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            7. Nale&#380;no&#347;ci z tytu&#322;u wymienionego w wierszu 6, otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">62.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">63.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">64.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">65.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            8. Nale&#380;no&#347;ci z tytu&#322;u wymienionego w wierszu 6, otrzymane przez podatnik&#243;w od uko&#324;czenia wieku emerytalnego<font style="font-weight: normal"><sup>18)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">66.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">67.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">68.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">69.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy" rowspan="2">
+            9. Prawa autorskie i inne prawa, o kt&#243;rych mowa w art. 18 ustawy<br/><div class="opis-tekstowy">
+              W poz. 73 nale&#380;y wykaza&#263; przychody, do kt&#243;rych zastosowano koszty uzyskania przychod&#243;w na podstawie art. 22 ust. 9 pkt 1-3 ustawy.
+            </div></td><td class="wypelniane"><div class="opisrubryki">70.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">71.</div><div class="kwota">0.00</div></td><td class="puste" rowspan="2"/><td class="wypelniane" style="width: 12%" rowspan="2"><div class="opisrubryki">72.</div><div class="kwota">0</div></td></tr><tr><td class="wypelniane" style="width: 12%"><div class="opisrubryki">73.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">74.</div><div class="kwota">0.00</div></td></tr></table><div class="lamstrone"/><table><tr><td class="niewypelnianeopisy">
+            10. Nale&#380;no&#347;ci z tytu&#322;u praktyk absolwenckich lub sta&#380;y uczniowskich, z wyj&#261;tkiem nale&#380;no&#347;ci wykazanych w wierszu 11
+          </td><td class="wypelniane"><div class="opisrubryki">75.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">76.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">77.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            11. Nale&#380;no&#347;ci z tytu&#322;u wymienionego w wierszu 10, otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font></td><td class="wypelniane"><div class="opisrubryki">78.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">79.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">80.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            12. Zasi&#322;ki macierzy&#324;skie, z wyj&#261;tkiem zasi&#322;k&#243;w wykazanych w wierszu 13 albo 14
+                    </td><td class="wypelniane"><div class="opisrubryki">81.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">82.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">83.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            13. Zasi&#322;ki macierzy&#324;skie otrzymane przez podatnik&#243;w do uko&#324;czenia 26. roku &#380;ycia<font style="font-weight: normal"><sup>17)</sup></font></td><td class="wypelniane"><div class="opisrubryki">84.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">85.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">86.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            14. Zasi&#322;ki macierzy&#324;skie otrzymane przez podatnik&#243;w od uko&#324;czenia wieku emerytalnego<font style="font-weight: normal"><sup>18)</sup></font></td><td class="wypelniane"><div class="opisrubryki">87.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">88.</div><div class="kwota">0.00</div></td><td class="puste"/><td class="wypelniane" style="width: 12%"><div class="opisrubryki">89.</div><div class="kwota">0</div></td></tr><tr><td class="niewypelnianeopisy">
+            15. Inne &#378;r&#243;d&#322;a<font style="font-weight: normal"><sup>19)</sup></font></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">90.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">91.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">92.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">93.</div><div class="kwota">0.00</div></td><td class="wypelniane" style="width: 12%"><div class="opisrubryki">94.</div><div class="kwota">0</div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Sk&#322;adki na ubezpieczenia spo&#322;eczne, o kt&#243;rych mowa w przepisach ustawy, podlegaj&#261;ce odliczeniu od dochodu<font style="font-weight: normal"><sup>20)</sup></font>, w tym zagraniczne, o kt&#243;rych mowa w art. 26 ust. 1 pkt 2a ustawy, z wyj&#261;tkiem wykazanych w poz. 96
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">95.</div><div class="kwota">29403 z&#322;, 26 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Sk&#322;adki na ubezpieczenia spo&#322;eczne, o kt&#243;rych mowa w przepisach ustawy<font style="font-weight: normal"><sup>20)</sup></font>,   
+            w tym zagraniczne, o kt&#243;rych mowa w art. 26 ust. 1 pkt 2a ustawy, kt&#243;rych podstaw&#281; wymiaru stanowi przych&#243;d wymieniony w wierszach 2, 3, 7, 8 i 11 cz&#281;&#347;ci E
+        </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">96.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Sk&#322;adki na ubezpieczenia spo&#322;eczne, o kt&#243;rych mowa w przepisach ustawy, kt&#243;rych podstaw&#281; wymiaru stanowi przych&#243;d zwolniony na podstawie art. 21 ust. 1 pkt 148 oraz 152-154 ustawy, wykazane odpowiednio w poz. 110, 111, 112, 115 i 116
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">97.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr></table><div class="tytul-sekcja-blok"><h2>F.&#160;INFORMACJA O WYSOKO&#346;CI PRZYCHOD&#211;W, O KT&#211;RYCH MOWA W ART. 20 UST. 1 USTAWY
+          <div class="opis-tekstowy">
+            (cz&#281;&#347;&#263; t&#281; wype&#322;niaj&#261; sk&#322;adaj&#261;cy nieb&#281;d&#261;cy p&#322;atnikami, o kt&#243;rych mowa w art.
+            42a ustawy, w tym rolnicy)
+          </div></h2></div><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%; text-align: center">Rodzaj przychodu</td><td class="niewypelnianeopisy" style="width: 25%; text-align: center">Przych&#243;d</td></tr><tr><td class="niewypelnianeopisy">Wynagrodzenie z tytu&#322;u umowy o pomocy przy zbiorach</td><td class="wypelniane"><div class="opisrubryki">98.</div><div class="kwota">
+            z&#322;,   gr
+          </div></td></tr><tr><td class="wypelniane"><div class="opisrubryki">99.</div></td><td class="wypelniane"><div class="opisrubryki">100.</div><div class="kwota">
+            z&#322;,   gr
+          </div></td></tr><tr><td class="wypelniane"><div class="opisrubryki">101.</div></td><td class="wypelniane"><div class="opisrubryki">102.</div><div class="kwota">
+            z&#322;,   gr
+          </div></td></tr><tr><td class="wypelniane"><div class="opisrubryki">103.</div></td><td class="wypelniane"><div class="opisrubryki">104.</div><div class="kwota">
+            z&#322;,   gr
+          </div></td></tr><tr><td class="niewypelnianeopisy">
+            Razem
+            <div class="opis-tekstowy">Suma kwot z poz.: 98, 100, 102 i 104.</div></td><td class="wypelniane"><div class="opisrubryki">105.</div><div class="kwota">
+            z&#322;,   gr
+          </div></td></tr></table><div class="tytul-sekcja-blok"><h2>G.&#160;INFORMACJA O PRZYCHODACH ZWOLNIONYCH OD PODATKU, ZA&#321;&#260;CZNIKU ORAZ O POBRANYCH PRZEZ P&#321;ATNIKA SK&#321;ADKACH: NA UBEZPIECZENIE ZDROWOTNE ORAZ CZ&#321;ONKOWSKICH NA RZECZ ZWI&#260;ZK&#211;W ZAWODOWYCH
+                     <div class="opis-tekstowy">
+            (cz&#281;&#347;&#263; t&#281; wype&#322;niaj&#261; sk&#322;adaj&#261;cy b&#281;d&#261;cy p&#322;atnikami)
+          </div></h2></div><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Przychody z tytu&#322;u stypendium, o kt&#243;rym mowa w art. 21 ust. 1 pkt 40b ustawy
+            <div class="opis-tekstowy">Nale&#380;y wykaza&#263; kwot&#281; stypendium, do wysoko&#347;ci limitu zwolnienia<sup>21)</sup>.</div></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">106.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Przychody otrzymywane z zagranicy, o kt&#243;rych mowa w art. 21 ust. 1 pkt 74 ustawy, mi&#281;dzy innymi renty inwalidzkie z tytu&#322;u inwalidztwa wojennego
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">107.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Przychody pochodz&#261;ce ze &#347;rodk&#243;w bezzwrotnej pomocy zagranicznej, o kt&#243;rych mowa w art. 21 ust. 1 pkt 46 ustawy
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">108.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Przychody ze stosunku pracy i stosunk&#243;w pokrewnych, z um&#243;w zlecenia, praktyk absolwenckich lub sta&#380;y uczniowskich oraz z zasi&#322;k&#243;w macierzy&#324;skich, o kt&#243;rych mowa w art. 21 ust. 1 pkt 148 ustawy<font style="font-weight: normal"><div class="opis-tekstowy">Nale&#380;y wykaza&#263; kwot&#281; przychodu, do wysoko&#347;ci limitu zwolnienia<sup>22)</sup>.</div></font></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">109.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" rowspan="5" style="width:5%">
+                        w tym:
+                        </td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
+            przychody ze stosunku pracy i stosunk&#243;w pokrewnych
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">110.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
+            przychody z um&#243;w zlecenia
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">111.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
+            przychody z tytu&#322;u praktyk absolwenckich lub sta&#380;y uczniowskich
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">112.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
+            przychody z zasi&#322;k&#243;w macierzy&#324;skich
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">113.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Przychody ze stosunku pracy i stosunk&#243;w pokrewnych, z um&#243;w zlecenia oraz z zasi&#322;k&#243;w macierzy&#324;skich o kt&#243;rych mowa w art. 21 ust. 1 pkt 152-154 ustawy<font style="font-weight: normal"><div class="opis-tekstowy">Nale&#380;y wykaza&#263; kwot&#281; przychodu, do wysoko&#347;ci limitu zwolnienia<sup>22)</sup>.</div></font></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">114.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr></table><table class="normalna"><tr><td class="niewypelnianeopisy" rowspan="4" style="width:5%">
+                        w tym:
+                        </td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
+            przychody ze stosunku pracy i stosunk&#243;w pokrewnych
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">115.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
+            przychody z um&#243;w zlecenia
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">116.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 70%">
+            przychody z zasi&#322;k&#243;w macierzy&#324;skich
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">117.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr></table><table class="normalna"><tr><td class="wypelniane" style="width:25%" colspan="2"><div class="opisrubryki">Rodzaj (podstawa prawna) przychodu zwolnionego od podatku, wykazanego w poz. 114</div>
+                                118. <input type="checkbox" disabled="disabled"/> art. 21 ust. 1 pkt 152 ustawy<br/>
+                                119. <input type="checkbox" disabled="disabled"/> art. 21 ust. 1 pkt 153 ustawy<br/>
+                                120. <input type="checkbox" disabled="disabled"/> art. 21 ust. 1 pkt 154 ustawy
+                            </td></tr><tr><td class="wypelniane" style="width:25%" colspan="2"><div class="opisrubryki">121. Do niniejszej informacji do&#322;&#261;czono informacj&#281; PIT-R</div><input type="checkbox" checked="checked" disabled="disabled"/>2. nie
+                        </td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Sk&#322;adki na ubezpieczenie zdrowotne pobrane przez p&#322;atnika do wysoko&#347;ci 9% podstawy jej wymiaru
+            <font style="font-weight: normal"><sup>23)</sup></font></td><td class="wypelniane" style="width:25%"><div class="opisrubryki">122.</div><div class="kwota">19309 z&#322;, 38 gr
+      </div></td></tr><tr><td class="niewypelnianeopisy" style="width: 75%">
+            Sk&#322;adki cz&#322;onkowskie na rzecz zwi&#261;zk&#243;w zawodowych pobrane przez p&#322;atnika, podlegaj&#261;ce odliczeniu od dochodu, o kt&#243;rych mowa w art. 26 ust. 1 pkt 2c ustawy
+          </td><td class="wypelniane" style="width:25%"><div class="opisrubryki">123.</div><div class="kwota">0 z&#322;, 00 gr
+      </div></td></tr></table></div>
+</body></html>

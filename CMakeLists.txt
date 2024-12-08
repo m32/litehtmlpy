@@ -9,7 +9,7 @@ project(litehtmlpy)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option(LITEHTMLPY_BUILD_TESTING "enable testing for litehtmlpy" OFF)
-option(LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS "include cairo containers" OFF)
+# option(LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS "include cairo containers" OFF)
 
 #find_package(Git)
 #
@@ -45,7 +45,7 @@ endif()
 
 add_subdirectory(pybind11)
 
-if(LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
+if(DEFINED LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS AND LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
     set(TEST_LITEHTMLPY_CONTAINERS
         src/cairo/cairo_borders.cpp
         src/cairo/container_cairo.cpp
@@ -63,10 +63,8 @@ pybind11_add_module(
     ${TEST_LITEHTMLPY_CONTAINERS}
 )
 
-if(LITEHTMLPY_BUILD_TESTING)
-    set_target_properties(litehtmlpy PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/src/litehtmlpy")
-endif()
+set_target_properties(litehtmlpy PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/src/litehtmlpy")
 
 #if(NOT CMAKE_CROSSCOMPILING)
 #    find_package(PythonLibs 3.6)
@@ -95,7 +93,7 @@ target_link_libraries(litehtmlpy PRIVATE
 #    ${PYTHON_LIBRARIES}
 )
 
-if(LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
+if(DEFINED LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS AND LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(CAIRO REQUIRED IMPORTED_TARGET "cairo")
     target_link_libraries(litehtmlpy PRIVATE PkgConfig::CAIRO)

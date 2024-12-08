@@ -722,6 +722,29 @@
 		media_feature_max_resolution,
 	};
 
+#define appearance_strings      "none;auto;menulist-button;textfield;button;checkbox;listbox;menulist;meter;progress-bar;push-button;radio;searchfield;slider-horizontal;square-button;textarea"
+
+	enum appearance
+	{
+		appearance_none,
+		appearance_auto,
+		appearance_menulist_button,
+		appearance_textfield,
+		appearance_button,
+		appearance_checkbox,
+		appearance_listbox,
+		appearance_menulist,
+		appearance_meter,
+		appearance_progress_bar,
+		appearance_push_button,
+		appearance_radio,
+		appearance_searchfield,
+		appearance_slider_horizontal,
+		appearance_square_button,
+		appearance_textarea,
+	};
+#endif
+#if 0
 #define box_sizing_strings		"content-box;border-box"
 
 	enum box_sizing

@@ -1,14 +1,14 @@
-#define PYBIND11_DETAILED_ERROR_MESSAGES
-#include "pybind11/pybind11.h"
-#include "pybind11/stl.h"
-
-#ifdef MS_WIN64
+#if defined(MS_WIN64)
 #define _hypot hypot
 #include <cmath>
 #else
 #include <signal.h>
 #define DebugBreak() raise(SIGTRAP)
 #endif
+
+#define PYBIND11_DETAILED_ERROR_MESSAGES
+#include "pybind11/pybind11.h"
+#include "pybind11/stl.h"
 
 #include <litehtml.h>
 #include <litehtml/render_item.h>
