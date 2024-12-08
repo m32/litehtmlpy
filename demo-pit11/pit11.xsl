@@ -49,8 +49,6 @@
             <xsl:call-template name="DaneIdentyfikacyjne">
                 <xsl:with-param name="sekcja">C.</xsl:with-param>
             </xsl:call-template>
-<!-- m32 -->
-            <div class="lamstrone"></div>
             <xsl:call-template name="KosztyUzyskaniaPrzychodu">
                 <xsl:with-param name="sekcja">D.</xsl:with-param>
             </xsl:call-template>
@@ -60,8 +58,6 @@
             <xsl:call-template name="InformacjaOPrzychodach1">
                 <xsl:with-param name="sekcja">F.</xsl:with-param>
             </xsl:call-template>
-<!-- m32 -->
-            <div class="lamstrone"></div>
             <xsl:call-template name="InformacjaOPrzychodach2">
                 <xsl:with-param name="sekcja">G.</xsl:with-param>
             </xsl:call-template>
