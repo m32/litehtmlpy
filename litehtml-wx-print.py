@@ -1,8 +1,9 @@
 #!/usr/bin/env vpython3
 import os
 
-import wxversion
-wxversion.select('3.0.2-ansi')
+import logme
+#import wxversion
+#wxversion.select('3.0.2-ansi')
 
 import wx
 from litehtmlpy import litehtmlwx, litehtmlpy
@@ -36,9 +37,7 @@ class HTMLPrinterPrintout(wx.Printout):
 
     def OnPrintPage(self, page):
         dc = self.GetDC()
-        dc.BeginDrawing()
         self.MakePage(dc, page)
-        dc.EndDrawing()
         return True
 
     def MakePage(self, dc, page):
@@ -48,13 +47,14 @@ class HTMLPrinterPrintout(wx.Printout):
         dc.SetMapMode(wx.MM_TEXT)
         dc.SetBackground(wx.Brush(wx.WHITE))
 
-        (w, h) = dc.GetSizeTuple()
+        (w, h) = dc.GetSize()
         print('DC:', 'w=', w, 'h=', h, 'ppi=', dc.GetPPI())
 
         html = self.html[self.htmlpages[page][0]:self.htmlpages[page][1]]
         html = self.htmlstart + html + self.htmlend
 
-        cntr = document_container(dc)
+        cntr = document_container()
+        cntr.SetDC(dc)
         doc = litehtmlpy.fromString(cntr, html, None, None)
         try:
             doc.render(cntr.size[0], litehtmlpy.render_all)
@@ -64,7 +64,7 @@ class HTMLPrinterPrintout(wx.Printout):
                 print('DOC:', 'w=', doc.width(), 'h=', doc.height())
                 maxX = doc.width() + (2*50) # marginesy 50 device units
                 maxY = doc.height() + (2*50) # marginesy 50 device units
-                (w, h) = dc.GetSizeTuple()
+                (w, h) = dc.GetSize()
                 scaleX = float(w) / maxX
                 scaleY = float(h) / maxY
                 actualScale = min(scaleX, scaleY)
@@ -76,6 +76,7 @@ class HTMLPrinterPrintout(wx.Printout):
             clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
             doc.draw(0, 0, 0, clip)
         finally:
+            cntr.SetDC(None)
             del doc
             del cntr
 
@@ -119,7 +120,7 @@ class Main:
     def demo(self):
         wxapp = wx.App(False)
 
-        cls = HTMLPrintDokument('pit-11-29.html')
+        cls = HTMLPrintDokument('demo.html')
         cls.Run()
 
 def main():

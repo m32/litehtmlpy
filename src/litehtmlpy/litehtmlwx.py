@@ -15,6 +15,10 @@ class document_container(litehtmlpy.document_container):
         v = 3.96 * 96 / 72
         self.size = [int(210 * v), int(297 * v)]
         self.clips = []
+        self.dc = None
+
+    def SetDC(self, dc):
+        self.dc = dc
 
     def reset(self):
         self.bmp = wx.Bitmap(self.size[0], self.size[1], 32)
@@ -132,19 +136,24 @@ class document_container(litehtmlpy.document_container):
                 size.height = sz[1]
 
     def draw_image(self, hdc, layer, url, base_url):
-        logger.debug('draw_image(%d, %s, %s, %s)', hdc, layer, url, base_url)
+        #logger.debug('draw_image(%d, %s, %s, %s)', hdc, layer, url, base_url)
+        pass
 
     def draw_solid_fill(self, hdc, layer, color):
-        logger.debug('draw_solid_fill(%d, %s, %s)', hdc, layer, color)
+        #logger.debug('draw_solid_fill(%d, %s, %s)', hdc, layer, color)
+        pass
 
     def draw_linear_gradient(self, hdc, layer, gradient):
-        logger.debug('draw_linear_gradient(%d, %s, %s)', hdc, layer, gradient)
+        #logger.debug('draw_linear_gradient(%d, %s, %s)', hdc, layer, gradient)
+        pass
 
     def draw_radial_gradient(self, hdc, layer, gradient):
-        logger.debug('draw_radial_gradient(%d, %s, %s)', hdc, layer, gradient)
+        #logger.debug('draw_radial_gradient(%d, %s, %s)', hdc, layer, gradient)
+        pass
 
     def draw_conic_gradient(self, hdc, layer, gradient):
-        logger.debug('draw_conic_gradient(%d, %s, %s)', hdc, layer, gradient)
+        #logger.debug('draw_conic_gradient(%d, %s, %s)', hdc, layer, gradient)
+        pass
 
     def draw_borders(self, hdc, borders, draw_pos, root):
         #logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
@@ -206,11 +215,11 @@ class document_container(litehtmlpy.document_container):
         pass
 
     def set_clip(self, pos, radius):
-        logger.debug('set_clip(%s, %s, %d, %d)', pos, radius)
-        self.clips.push((pos, radius))
+        #logger.debug('set_clip(%s, %s)', pos, radius)
+        self.clips.append((pos, radius))
 
     def del_clip(self):
-        logger.debug('del_clip()')
+        #logger.debug('del_clip()')
         if self.clips:
             self.clips.pop()
 

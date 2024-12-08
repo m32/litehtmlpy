@@ -108,6 +108,8 @@ class document_container(litehtmlwx.document_container):
             r = requests.get(url)
             if r.headers['Content-Type'] == 'text/css':
                 data = r.text
+        else:
+            data = None
         if data is None:
             print('unknown import_css', url)
             return
