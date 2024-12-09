@@ -10,4 +10,5 @@ cmake \
     -DLITEHTMLPY_BUILD_TESTING=OFF \
     -DLITEHTMLPY_INCLUDE_CAIRO_CONTAINERS=OFF \
     -Wno-dev \
+    -DCMAKE_BUILD_TYPE=Release \
     .
