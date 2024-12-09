@@ -34,7 +34,11 @@ class Main:
         del cntr
 
     def main(self):
-        html = open('demo.html', 'rt').read()
+        if len(sys.argv) > 1:
+            fname = sys.argv[1]
+        else:
+            fname = 'demo.html'
+        html = open(fname, 'rt').read()
         split='<body>'
         start = html.find(split) + len(split)
         start = html.find('>', start) + 1

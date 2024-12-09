@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<head>
+    <style type="text/css">
+        body {
+            background-color: #FFFFFF;
+            color: #000000;
+            font-family: 'Arial', sans-serif;
+            font-size: 11pt;
+            margin: 0;
+            padding: 1px 5%;
+        }
+
+        div.body {
+            width: 100%;
+            min-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        .normalna {
+            width: 100%;
+        }
+
+        .wypelniane {
+            background-color: white;
+            border: 1px solid black;
+            font-size: 1.2em;
+            padding: 1px;
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .opisrubryki {
+            font-size: 0.5em;
+            margin-bottom: 0.2em;
+            text-align: left;
+            font-weight: bold;
+            text-transform: none;
+        }
+
+        .nazwa-dla-kodu {
+            font-size: 0.9em;
+        }
+
+        table.normalna {
+            width: 100%;
+            margin: 0;
+            border: 1px solid black;
+        }
+        .rowdiv {
+<!--
+TODO:
+instead of height set min-height and it will look correct
+-->
+            height: 2em;
+        }
+    </style>
+</head>
+
+<body>
+    <div xmlns:tns="http://crd.gov.pl/wzor/2022/11/09/11890/" class="deklaracja">
+        <table class="normalna">
+            <tr>
+                <td class="wypelniane" style="width: 50%">
+                    <div class="opisrubryki">12. Identyfikator podatkowy NIP / numer PESEL</div>12345678901
+                </td>
+                <td class="wypelniane" style="width: 50%">
+                    <div class="rowdiv">
+                        <div class="opisrubryki">
+                            13. Zagraniczny numer identyfikacyjny podatnika <font style="font-weight: normal">(numer dokumentu stwierdzaj&#261;cego to&#380;samo&#347;&#263;)<sup>11)</sup></font>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="wypelniane" style="width: 50%">
+                    <div class="rowdiv">
+                        <div class="opisrubryki">
+                            14. Rodzaj numeru identyfikacyjnego (dokumentu stwierdzaj&#261;cego to&#380;samo&#347;&#263;)
+                        </div>
+                    </div>
+                </td>
+                <td class="wypelniane" style="width: 50%">
+                    <div class="rowdiv">
+                        <div class="opisrubryki">
+                            15. Kraj wydania numeru identyfikacyjnego (dokumentu stwierdzaj&#261;cego to&#380;samo&#347;&#263;)
+                        </div>PL&#160;
+                        <span class="nazwa-dla-kodu">(POLSKA)</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table class="normalna">
+            <tr>
+                <td class="wypelniane" style="width: 100%">
+                    <div class="opisrubryki">11. Rodzaj obowi&#261;zku podatkowego podatnika</div><input type="checkbox" checked="checked" disabled="disabled" />
+                    1. nieograniczony
+                    obowi&#261;zek podatkowy (rezydent)
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

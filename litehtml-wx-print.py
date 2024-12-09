@@ -1,11 +1,8 @@
 #!/usr/bin/env vpython3
-import os
+import sys
+import wx
 
 import logme
-#import wxversion
-#wxversion.select('3.0.2-ansi')
-
-import wx
 from litehtmlpy import litehtmlwx, litehtmlpy
 
 class document_container(litehtmlwx.document_container):
@@ -20,11 +17,10 @@ class HTMLPrinterPrintout(wx.Printout):
         self.htmlend = htmlend
         self.html = html
         self.htmlpages = htmlpages
-        print('htmlpages:', htmlpages)
         self.pageinfo = (1, self.npages, 1, self.npages)
 
     def OnBeginDocument(self, start, end):
-        return self.GetDC().StartDoc('PIT-11')
+        return self.GetDC().StartDoc('DEMO')
 
     def HasPage(self, page):
         return page <= self.npages
@@ -120,7 +116,11 @@ class Main:
     def demo(self):
         wxapp = wx.App(False)
 
-        cls = HTMLPrintDokument('demo.html')
+        if len(sys.argv) > 1:
+            fname = sys.argv[1]
+        else:
+            fname = 'demo.html'
+        cls = HTMLPrintDokument(fname)
         cls.Run()
 
 def main():
