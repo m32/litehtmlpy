@@ -12,9 +12,10 @@ class Main:
 
     def save(self, i, htmlstart, htmldata, htmlend):
         html = htmlstart+htmldata+htmlend
-        fp = open('demo-{i:04d}.html'.format(i=i), 'wt')
-        fp.write(html)
-        fp.close()
+        if 0:
+            fp = open('demo-{i:04d}.html'.format(i=i), 'wt')
+            fp.write(html)
+            fp.close()
 
         cntr = document_container()
         cntr.reset()
@@ -33,7 +34,7 @@ class Main:
         del cntr
 
     def main(self):
-        html = open('pit-11-29.html', 'rt').read()
+        html = open('demo.html', 'rt').read()
         split='<body>'
         start = html.find(split) + len(split)
         start = html.find('>', start) + 1

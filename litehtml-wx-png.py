@@ -1,9 +1,11 @@
 #!/usr/bin/env vpython3
+import logme
 import wx
 from litehtmlpy import litehtmlwx, litehtmlpy
 
 class document_container(litehtmlwx.document_container):
-    pass
+    def pt_to_px(self, pt):
+        return pt
 
 class Main:
     def __init__(self):
@@ -14,7 +16,8 @@ class Main:
 
         dc = wx.MemoryDC()
 
-        cntr = document_container(dc)
+        cntr = document_container()
+        cntr.SetDC(dc)
         doc = litehtmlpy.fromString(cntr, html, None, None)
         doc.render(cntr.size[0], litehtmlpy.render_all)
 
@@ -30,11 +33,12 @@ class Main:
 
         bmp.SaveFile('demo-{i:04d}.png'.format(i=i), wx.BITMAP_TYPE_PNG)
 
+        cntr.SetDC(None)
         del doc
         del cntr
 
     def main(self):
-        html = open('pit-11-29.html', 'rt').read()
+        html = open('demo.html', 'rt').read()
         split='<body>'
         start = html.find(split) + len(split)
         end = html.find('</body>')
