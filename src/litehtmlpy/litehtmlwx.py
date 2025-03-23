@@ -28,8 +28,14 @@ class document_container(litehtmlpy.document_container):
         self.dc.Clear()
         self.ppi = self.dc.GetPPI()
 
-    def create_font(self, face, size, weight, italic, decoration):
-        #logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
+    def create_font(self, descr):
+        face = descr.family
+        size = descr.size
+        weight = descr.weight
+        italic = descr.style == litehtmlpy.font_style_italic
+        #decoration = descr.decoration_style
+        decoration = 0
+        #logger.debug('create_font(%s)', face, size, weight, italic, decoration)
         if not face:
             face = 'Times New Roman'
         else:

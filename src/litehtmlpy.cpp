@@ -414,7 +414,7 @@ class py_document : public lh::document
 class py_document_container : public lh::document_container
 {
 public:
-    lh::uint_ptr create_font(const char* faceName, int size, int weight, lh::font_style italic, unsigned int decoration, lh::font_metrics* fm) override {
+    lh::uint_ptr create_font(const lh::font_description& descr, const lh::document* doc, lh::font_metrics* fm) override {
         if( debuglog ){
             ENTERWRAPPER
         }
@@ -423,7 +423,7 @@ public:
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "create_font");
         if (pyfunc) {
-            auto obj = pyfunc(faceName, size, weight, (int)italic, (int)decoration);
+            auto obj = pyfunc(descr);
             if (py::isinstance<py::list>(obj)) {
                 py::list l = obj.cast<py::list>();
                 result = l[0].cast<int>();
@@ -1132,6 +1132,7 @@ PYBIND11_MODULE(litehtmlpy, m) {
 #include "element.h"
 ////#include "flex_item.h"
 ////#include "flex_line.h"
+#include "font_description.h"
 ////#include "formatting_context.h"
 ////#include "html.h"
 #include "html_tag.h"

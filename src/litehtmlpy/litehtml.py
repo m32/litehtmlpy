@@ -14,8 +14,8 @@ class document_container(litehtmlpy.document_container):
         self.ppi = (96, 96)
         self.clips = []
 
-    def create_font(self, face, size, weight, italic, decoration):
-        logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
+    def create_font(self, descr):
+        logger.debug('create_font(%s)', descr)
         self.hfont += 1
         self.fonts[self.hfont] = None
         return [self.hfont, 15, 4, 19, 19]
