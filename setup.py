@@ -134,7 +134,7 @@ setup(
     description="LiteHtmlPy is a solution that helps python developers to create printouts and previews of html5/css3 pages without using a web browser.",
     long_description="",
     ext_modules=[
-        CMakeExtension("litehtmlpy")
+        CMakeExtension("litehtmlpy.litehtmlpy")
     ],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
