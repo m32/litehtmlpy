@@ -1,5 +1,6 @@
 #include "container_cairo.h"
 #include "cairo_borders.h"
+#include "conic_gradient.h"
 #include <cmath>
 
 #ifndef M_PI
@@ -31,6 +32,7 @@ void container_cairo::draw_list_marker(litehtml::uint_ptr hdc, const litehtml::l
 		{
 			draw_pixbuf((cairo_t*) hdc, img, marker.pos.x, marker.pos.y, cairo_image_surface_get_width(img),
 						cairo_image_surface_get_height(img));
+			cairo_surface_destroy(img);
 		}
 	} else
 	{
@@ -646,11 +648,11 @@ void container_cairo::draw_pixbuf(cairo_t* cr, cairo_surface_t* bmp, int x, int 
 
 void container_cairo::get_media_features(litehtml::media_features& media) const
 {
-	litehtml::position client;
-    get_client_rect(client);
+	litehtml::position viewport;
+    get_viewport(viewport);
 	media.type			= litehtml::media_type_screen;
-	media.width			= client.width;
-	media.height		= client.height;
+	media.width			= viewport.width;
+	media.height		= viewport.height;
 	media.device_width	= get_screen_width();
 	media.device_height	= get_screen_height();
 	media.color			= 8;
@@ -737,7 +739,7 @@ void container_cairo::draw_radial_gradient(litehtml::uint_ptr hdc, const litehtm
 }
 
 void container_cairo::draw_conic_gradient(litehtml::uint_ptr hdc, const litehtml::background_layer &layer,
-										  const litehtml::background_layer::conic_gradient &/*gradient*/)
+										  const litehtml::background_layer::conic_gradient &gradient)
 {
 	auto* cr = (cairo_t*) hdc;
 	cairo_save(cr);
@@ -745,6 +747,26 @@ void container_cairo::draw_conic_gradient(litehtml::uint_ptr hdc, const litehtml
 
 	clip_background_layer(cr, layer);
 
+	cairo_pattern_t* pattern = create_conic_gradient_pattern(gradient.angle * M_PI / 180.0 - M_PI / 2.0, gradient.radius, gradient.color_points);
+	if(!pattern) return;
 
+	// Translate a pattern to the (layer.origin_box.x, layer.origin_box.y) point
+	litehtml::pointF position = gradient.position;
+	position.x -= (float) layer.origin_box.x;
+	position.y -= (float) layer.origin_box.y;
+
+	draw_pattern(cr, pattern, layer, [&position](cairo_t* cr, cairo_pattern_t* pattern, int x, int y, int w, int h)
+				 {
+					 cairo_matrix_t flib_m;
+					 cairo_matrix_init_translate(&flib_m, -(position.x + (float ) x), -(position.y + (float ) y));
+					 cairo_pattern_set_matrix(pattern, &flib_m);
+
+					 cairo_set_source(cr, pattern);
+					 cairo_rectangle(cr, x, y, w, h);
+					 cairo_fill(cr);
+				 }
+	);
+
+	cairo_pattern_destroy(pattern);
 	cairo_restore(cr);
 }

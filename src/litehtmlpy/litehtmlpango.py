@@ -41,8 +41,8 @@ class document_container(litehtmlpy.container_cairo_pango):
     def import_css(self, text, url, base_url):
         logger.debug('import_css(%s, %s, %s)', text, url, base_url)
 
-    def get_client_rect(self, client):
-        #logger.debug('get_client_rect(%s)'%client)
-        client.clear()
-        client.width = self.size[0]
-        client.height = self.size[1]
+    def get_viewport(self, viewport):
+        logger.debug('get_viewport()')
+        viewport.clear()
+        viewport.width = self.size[0]
+        viewport.height = self.size[1]

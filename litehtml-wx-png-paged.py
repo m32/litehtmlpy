@@ -1,4 +1,5 @@
 #!/usr/bin/env vpython3
+import sys
 import logme
 import wx
 from litehtmlpy import litehtmlwx, litehtmlpy

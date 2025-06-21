@@ -751,7 +751,8 @@ public:
             // no arguments
         );
     }
-    void    get_client_rect(lh::position& client) const override
+
+    virtual void get_viewport(litehtml::position& viewport) const
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -759,10 +760,11 @@ public:
         PYBIND11_OVERRIDE_PURE(
             void,
             document_container,
-            get_client_rect,
-            &client
+            get_viewport,
+            &viewport
         );
     }
+
     lh::element::ptr create_element( const char* tag_name,
               const lh::string_map& attributes,
               const std::shared_ptr<lh::document>& doc) override
@@ -1076,7 +1078,8 @@ public:
         );
 #endif
     }
-    void    get_client_rect(lh::position& client) const override
+
+    virtual void get_viewport(litehtml::position& viewport) const
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -1084,8 +1087,8 @@ public:
         PYBIND11_OVERRIDE_PURE(
             void,
             container_cairo_pango,
-            get_client_rect,
-            &client
+            get_viewport,
+            &viewport
         );
     }
 

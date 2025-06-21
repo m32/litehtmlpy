@@ -48,6 +48,7 @@ add_subdirectory(pybind11)
 if(DEFINED LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS AND LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
     set(TEST_LITEHTMLPY_CONTAINERS
         src/cairo/cairo_borders.cpp
+        src/cairo/conic_gradient.cpp
         src/cairo/container_cairo.cpp
         src/cairo/container_cairo_pango.cpp
     )

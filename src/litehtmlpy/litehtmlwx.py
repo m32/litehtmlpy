@@ -229,11 +229,11 @@ class document_container(litehtmlpy.document_container):
         if self.clips:
             self.clips.pop()
 
-    def get_client_rect(self, client):
-        #logger.debug('get_client_rect(%s)'%client)
-        client.clear()
-        client.width = self.size[0]
-        client.height = self.size[1]
+    def get_viewport(self, viewport):
+        #logger.debug('get_viewport()')
+        viewport.clear()
+        viewport.width = self.size[0]
+        viewport.height = self.size[1]
 
     #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 

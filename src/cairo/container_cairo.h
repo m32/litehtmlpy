@@ -3,6 +3,7 @@
 
 #include <litehtml.h>
 #include <cairo.h>
+#include <vector>
 
 struct cairo_clip_box
 {
