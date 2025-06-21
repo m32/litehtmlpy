@@ -14,7 +14,6 @@ class Main:
             fname = sys.argv[1]
         else:
             fname = 'demo.html'
-            fname = 'litehtmlt.html'
         html = open(fname, 'rt').read()
 
         cntr = document_container()
