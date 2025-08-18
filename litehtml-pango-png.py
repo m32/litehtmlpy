@@ -75,6 +75,25 @@ class App:
 
 
 class Main:
+    def with_width(self, cntr, doc, width):
+        doc.render(width, litehtmlpy.render_all)
+        print('doc: width:', doc.width(), 'height:', doc.height())
+
+        cntr.size[1] = doc.height()
+        hdc = cntr.surface(int(doc.width()), int(doc.height()))
+
+        print('*'*10, 'draw')
+        clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
+        doc.draw(hdc, 0, 0, clip)
+
+        print('x-save')
+        cntr.save('demo.png')
+
+        print('x-save-stream')
+        with open(f'demo-{width:04d}.png', 'wb') as fpo:
+            rc = cntr.savestream(fpo.write)
+        print('save result:', rc)
+
     def demo(self):
         app = App()
         if len(sys.argv) > 1:
@@ -87,23 +106,11 @@ class Main:
         print('max size=', cntr.size)
 
         doc = cntr.fromString(html, None, None)
-        doc.render(cntr.size[0], litehtmlpy.render_all)
-        print('doc: width:', doc.width(), 'height:', doc.height())
-
-        cntr.size[1] = doc.height()
-        hdc = cntr.surface(doc.width(), doc.height())
-
-        print('*'*10, 'draw')
-        clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
-        doc.draw(hdc, 0, 0, clip)
-
-        print('x-save')
-        cntr.save('demo.png')
-
-        print('x-save-stream')
-        with open('demo-1.png', 'wb') as fpo:
-            rc = cntr.savestream(fpo.write)
-        print('save result:', rc)
+        if 1:
+            self.with_width(cntr, doc, int(cntr.size[0]))
+        else:
+            for w in range(1100, 1110):
+                self.with_width(cntr, doc, w)
 
         del doc
         cntr.clear_images()

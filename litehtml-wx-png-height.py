@@ -103,14 +103,15 @@ class Main:
         i = 0
         height = 1500
         y = 0
+        width = int(doc.width())
         while y < doc.height():
-            bmp = wx.Bitmap(doc.width(), height, 32)
+            bmp = wx.Bitmap(width, height, 32)
             dc.SelectObject(bmp)
             dc.SetBackground(wx.Brush(wx.WHITE))
             dc.Clear()
 
             print('*'*10, 'draw')
-            clip = litehtmlpy.position(0, 0, doc.width(), height)
+            clip = litehtmlpy.position(0, 0, width, height)
             doc.draw(0, 0, -y, clip)
 
             bmp.SaveFile('demo-{i:04d}.png'.format(i=i), wx.BITMAP_TYPE_PNG)

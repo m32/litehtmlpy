@@ -29,11 +29,11 @@ class document_container(litehtmlpy.document_container):
         return len(text)*12
 
     def draw_text(self, hdc, text, hFont, color, pos):
-        logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, pos)
+        logger.debug(f'draw_text({hdc}, {text}, {hFont}, {color}, ({pos.x},{pos.y}))')
 
     def pt_to_px(self, pt):
         logger.debug('pt_to_px(%d)', pt)
-        pt = int(pt * self.ppi[1] / 72)
+        pt = int(pt * self.ppi[1] / 72.0)
         return pt
 
     def get_default_font_size(self):
@@ -102,7 +102,7 @@ class document_container(litehtmlpy.document_container):
             self.clips.pop()
 
     def get_viewport(self, viewport):
-        logger.debug('get_viewport()')
+        logger.debug('get_viewport() -> %s', self.size)
         viewport.clear()
         viewport.width = self.size[0]
         viewport.height = self.size[1]

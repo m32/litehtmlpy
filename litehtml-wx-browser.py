@@ -64,10 +64,10 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
         h = pos.height
         css = self.css()
         fh = css.get_font_size()
-        lh = css.get_line_height()
+        lh = css.line_height()
         y = y + (h - lh) // 2
         h = pos.height
-        self.ctrl.SetSize(x, y, w, h)
+        self.ctrl.SetSize(int(x), int(y), int(w), int(h))
 
     def on_mouse_over(self):
         return False
@@ -243,7 +243,7 @@ class LiteWindow(wx.ScrolledWindow):
         self.doc.render(size[0], litehtmlwx.litehtmlpy.render_all)
         self.cntr.size = size
 
-        h = self.doc.height() + 20 # + statusline.height
+        h = int(self.doc.height() + 20) # + statusline.height
         if h < 0:
             h = 0
         self.SetScrollbar(wx.VERTICAL, 0, size.Height, h, True)
@@ -308,7 +308,7 @@ class LiteWindow(wx.ScrolledWindow):
         self.cntr.dc.SetBrush(b) 
 
         bpos = layer.clip_box
-        self.cntr.dc.DrawRectangle(bpos.x, bpos.y, bpos.width, bpos.height)
+        self.cntr.dc.DrawRectangle(int(bpos.x), int(bpos.y), int(bpos.width), int(bpos.height))
         self.cntr.dc.SetBrush(wx.NullBrush) 
 
 class LiteHtmlPanel(wx.Panel):
@@ -351,7 +351,7 @@ class LiteHtmlPanel(wx.Panel):
         self.location.AppendItems([
             'demo.html',
             'litehtmlt.html',
-            'demo-01.html',
+            'y-bug-td-width.html',
             'http://wxPython.org',
             'http://google.com'
         ])

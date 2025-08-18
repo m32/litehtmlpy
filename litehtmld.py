@@ -22,7 +22,7 @@ def main():
         doc = litehtmlpy.fromString(cntr, html, None, None)
         try:
             doc.render(cntr.size[0], litehtmlpy.render_all)
-            clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
+            clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
             doc.draw(0, 0, 0, clip)
             del clip
             print('done')

@@ -3,7 +3,8 @@ import logging
 import wx
 from . import litehtmlpy
 
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
+logger = None
 
 class document_container(litehtmlpy.document_container):
     def __init__(self, parent=None):
@@ -72,7 +73,7 @@ class document_container(litehtmlpy.document_container):
                 weight = wx.FONTWEIGHT_NORMAL
             
         underline = decoration != 0
-        font = wx.Font(size, wx.FONTFAMILY_DEFAULT, style, weight, underline, face)
+        font = wx.Font(int(size), wx.FONTFAMILY_DEFAULT, style, weight, underline, face)
         self.hfont += 1
         self.fonts[self.hfont] = font
         self.dc.SetFont(font)
@@ -86,48 +87,56 @@ class document_container(litehtmlpy.document_container):
         ]
 
     def delete_font(self, hFont):
-        #logger.debug('delete_font(%d)', hFont)
+        if logger:
+            logger.debug('delete_font(%d)', hFont)
         del self.fonts[hFont]
 
     def text_width(self, text, hFont):
-        #logger.debug('text_width(%s, %s)', text, hFont)
+        if logger:
+            logger.debug('text_width(%s, %s)', text, hFont)
         font = self.fonts[hFont]
         width = self.dc.GetFullTextExtent(text, font)[0]
         return width
 
     def draw_text(self, hdc, text, hFont, color, pos):
-        #logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, (pos.x, pos.y, pos.width, pos.height))
+        if logger:
+            logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, (pos.x, pos.y, pos.width, pos.height))
         font = self.fonts[hFont]
         color = wx.Colour(color.red, color.green, color.blue, color.alpha)
         #self.dc.SetTextForeground(color)
         self.dc.SetTextBackground(color)
         self.dc.SetFont(font)
-        self.dc.DrawText(text, pos.x, pos.y)
+        self.dc.DrawText(text, int(pos.x), int(pos.y))
 
     def pt_to_px(self, pt):
-        #logger.debug('pt_to_px(%d)', pt)
-        pt = int(pt * self.ppi[1] / 72)
+        if logger:
+            logger.debug('pt_to_px(%s)', pt)
+        pt = int(pt * self.ppi[1] / 72.0)
         return pt
 
     def get_default_font_size(self):
-        #logger.debug('get_default_font_size()')
+        if logger:
+            logger.debug('get_default_font_size()')
         return 12
 
     def get_default_font_name(self):
-        #logger.debug('get_default_font_name()')
+        if logger:
+            logger.debug('get_default_font_name()')
         return 'Times New Roman'
 
     def draw_list_marker(self, hdc, marker):
-        #logger.debug('draw_list_marker(%d, %s)', hdc, marker)
-        pass
+        if logger:
+            logger.debug('draw_list_marker(%d, %s)', hdc, marker)
 
     def load_image(self, src, baseurl, redraw_on_ready):
-        #logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
+        if logger:
+            logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
         if self.parent is not None:
             self.parent.HtmlLoadImage(src, baseurl, redraw_on_ready)
 
     def get_image_size(self, src, baseurl, size):
-        #logger.debug('get_image_size(%s, %s)', src, baseurl)
+        if logger:
+            logger.debug('get_image_size(%s, %s)', src, baseurl)
         if self.parent is None:
             size.width = 0
             size.height = 0
@@ -142,47 +151,48 @@ class document_container(litehtmlpy.document_container):
                 size.height = sz[1]
 
     def draw_image(self, hdc, layer, url, base_url):
-        #logger.debug('draw_image(%d, %s, %s, %s)', hdc, layer, url, base_url)
-        pass
+        if logger:
+            logger.debug('draw_image(%d, %s, %s, %s)', hdc, layer, url, base_url)
 
     def draw_solid_fill(self, hdc, layer, color):
-        #logger.debug('draw_solid_fill(%d, %s, %s)', hdc, layer, color)
-        pass
+        if logger:
+            logger.debug('draw_solid_fill(%d, %s, %s)', hdc, layer, color)
 
     def draw_linear_gradient(self, hdc, layer, gradient):
-        #logger.debug('draw_linear_gradient(%d, %s, %s)', hdc, layer, gradient)
-        pass
+        if logger:
+            logger.debug('draw_linear_gradient(%d, %s, %s)', hdc, layer, gradient)
 
     def draw_radial_gradient(self, hdc, layer, gradient):
-        #logger.debug('draw_radial_gradient(%d, %s, %s)', hdc, layer, gradient)
-        pass
+        if logger:
+            logger.debug('draw_radial_gradient(%d, %s, %s)', hdc, layer, gradient)
 
     def draw_conic_gradient(self, hdc, layer, gradient):
-        #logger.debug('draw_conic_gradient(%d, %s, %s)', hdc, layer, gradient)
-        pass
+        if logger:
+            logger.debug('draw_conic_gradient(%d, %s, %s)', hdc, layer, gradient)
 
     def draw_borders(self, hdc, borders, draw_pos, root):
-        #logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
-        left = draw_pos.x
-        top = draw_pos.y
-        right = left + draw_pos.width
-        bottom = top + draw_pos.height
+        if logger:
+            logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
+        left = int(draw_pos.x)
+        top = int(draw_pos.y)
+        right = int(left + draw_pos.width)
+        bottom = int(top + draw_pos.height)
 
         b = borders.left
         colorLeft = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthLeft = b.width
+        widthLeft = int(b.width)
 
         b = borders.top
         colorTop = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthTop = b.width
+        widthTop = int(b.width)
 
         b = borders.right
         colorRight = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthRight = b.width
+        widthRight = int(b.width)
 
         b = borders.bottom
         colorBottom = wx.Colour(b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthBottom = b.width
+        widthBottom = int(b.width)
 
         self.dc.SetPen(wx.Pen(colorLeft, widthLeft))
         self.dc.DrawLine(left, top, left, bottom)
@@ -194,51 +204,55 @@ class document_container(litehtmlpy.document_container):
         self.dc.DrawLine(left, bottom, right, bottom)
 
     def set_caption(self, caption):
-        #logger.debug('set_caption(%s)', caption)
-        pass
+        if logger:
+            logger.debug('set_caption(%s)', caption)
 
     def set_base_url(self, url):
-        #logger.debug('set_base_url(%s)', url)
-        pass
+        if logger:
+            logger.debug('set_base_url(%s)', url)
 
     #void    link(const std::shared_ptr<document>& doc, const element::ptr& el) override 
 
     #void    on_anchor_click(const char* url, const element::ptr& el) override 
     def on_mouse_event(self, el, event):
-        #logger.debug('on_mouse_event(%s, %s)', el, event)
-        pass
+        if logger:
+            logger.debug('on_mouse_event(%s, %s)', el, event)
 
     def set_cursor(self, cursor):
-        #logger.debug('set_cursor(%s)', cursor)
-        pass
+        if logger:
+            logger.debug('set_cursor(%s)', cursor)
 
     def transform_text(self, text, tt):
-        #logger.debug('transform_text(%s, %d)', text, tt)
-        pass
+        if logger:
+            logger.debug('transform_text(%s, %d)', text, tt)
 
     def import_css(self, text, url, base_url):
-        #logger.debug('import_css(%s, %s, %s)', text, url, base_url)
-        pass
+        if logger:
+            logger.debug('import_css(%s, %s, %s)', text, url, base_url)
 
     def set_clip(self, pos, radius):
-        #logger.debug('set_clip(%s, %s)', pos, radius)
+        if logger:
+            logger.debug('set_clip(%s, %s)', pos, radius)
         self.clips.append((pos, radius))
 
     def del_clip(self):
-        #logger.debug('del_clip()')
+        if logger:
+            logger.debug('del_clip()')
         if self.clips:
             self.clips.pop()
 
     def get_viewport(self, viewport):
-        #logger.debug('get_viewport()')
+        if logger:
+            logger.debug('get_viewport()')
         viewport.clear()
-        viewport.width = self.size[0]
-        viewport.height = self.size[1]
+        viewport.width = int(self.size[0])
+        viewport.height = int(self.size[1])
 
     #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 
     def get_media_features(self):
-        #logger.debug('get_media_features()')
+        if logger:
+            logger.debug('get_media_features()')
         return (
             2, # media_type_screen
             self.size[0],
@@ -252,5 +266,6 @@ class document_container(litehtmlpy.document_container):
         )
 
     def get_language(self):
-        #logger.debug('get_language()')
+        if logger:
+            logger.debug('get_language()')
         return ('en', '')

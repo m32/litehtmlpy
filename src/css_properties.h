@@ -49,8 +49,20 @@
         .def("set_offsets", &lh::css_properties::set_offsets)
         .def("get_text_indent", &lh::css_properties::get_text_indent)
         .def("set_text_indent", &lh::css_properties::set_text_indent)
-        .def("line_height", &lh::css_properties::line_height)
-        .def("line_height_w", &lh::css_properties::line_height_w)
+        //.def("line_height", &lh::css_properties::line_height)
+        .def("line_height", [](
+            lh::css_properties &self
+        ) {
+            const lh::css_line_height_t &line_height = self.line_height();
+            return line_height.computed_value;
+        })
+        //.def("line_height_w", &lh::css_properties::line_height_w)
+        .def("line_height_w", [](
+            lh::css_properties &self
+        ) {
+            const lh::css_line_height_t &line_height = self.line_height_w();
+            return line_height.computed_value;
+        })
         .def("get_list_style_type", &lh::css_properties::get_list_style_type)
         .def("set_list_style_type", &lh::css_properties::set_list_style_type)
         .def("get_list_style_position", &lh::css_properties::get_list_style_position)

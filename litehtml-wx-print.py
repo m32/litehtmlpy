@@ -69,7 +69,7 @@ class HTMLPrinterPrintout(wx.Printout):
                 #dc.SetDeviceOrigin(int(posX), int(posY))
 
             #bmp = wx.Bitmap(cntr.size[0], cntr.size[1], 32)
-            clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
+            clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
             doc.draw(0, 0, 0, clip)
         finally:
             cntr.SetDC(None)

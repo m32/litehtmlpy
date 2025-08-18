@@ -24,12 +24,12 @@ class Main:
         doc = litehtmlpy.fromString(cntr, html, None, None)
         doc.render(cntr.size[0], litehtmlpy.render_all)
 
-        cntr.size[1] = doc.height()
+        cntr.size[1] = int(doc.height())
         cntr.reset()
-        clip = litehtmlpy.position(0, 0, doc.width(), doc.height())
+        clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
         doc.draw(0, 0, 0, clip)
 
-        cntr.bmp.SaveFile('demo-{i:04d}.png'.format(i=i), wx.BITMAP_TYPE_PNG)
+        cntr.bmp.SaveFile(f'demo-{i:04d}.png', wx.BITMAP_TYPE_PNG)
 
         del doc
         del cntr

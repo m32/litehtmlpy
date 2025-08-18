@@ -126,7 +126,7 @@ public:
         bool                is_replaced() const override;
         void                compute_styles(bool recursive = true) override;
 */
-    void draw(lh::uint_ptr hdc, int x, int y, const lh::position *clip, const std::shared_ptr<lh::render_item> &ri) override
+    void draw(lh::uint_ptr hdc, lh::pixel_t x, lh::pixel_t y, const lh::position *clip, const std::shared_ptr<lh::render_item> &ri) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -138,7 +138,7 @@ public:
             hdc, x, y, clip, ri
         );
     }
-    void draw_background(lh::uint_ptr hdc, int x, int y, const lh::position *clip, const std::shared_ptr<lh::render_item> &ri) override
+    void draw_background(lh::uint_ptr hdc, lh::pixel_t x, lh::pixel_t y, const lh::position *clip, const std::shared_ptr<lh::render_item> &ri) override
     {
         if( debuglog ){
             ENTERWRAPPER
@@ -450,13 +450,13 @@ public:
             hFont
         );
     }
-    int     text_width(const char* text, lh::uint_ptr hFont) override
+    lh::pixel_t     text_width(const char* text, lh::uint_ptr hFont) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
         PYBIND11_OVERRIDE_PURE(
-            int,
+            lh::pixel_t,
             document_container,
             text_width,
             text, hFont
@@ -474,25 +474,25 @@ public:
             hdc, text, hFont, color, pos
         );
     }
-    int     pt_to_px(int pt) const override
+    lh::pixel_t     pt_to_px(float pt) const override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
         PYBIND11_OVERRIDE_PURE(
-            int,
+            lh::pixel_t,
             document_container,
             pt_to_px,
             pt
         );
     }
-    int     get_default_font_size() const override
+    lh::pixel_t     get_default_font_size() const override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
         PYBIND11_OVERRIDE_PURE(
-            int,
+            lh::pixel_t,
             document_container,
             get_default_font_size,
             // no arguments

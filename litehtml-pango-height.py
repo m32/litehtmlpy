@@ -93,11 +93,12 @@ class Main:
         i = 0
         height = 600
         y = 0
+        width = int(doc.width())
         while y < doc.height():
-            hdc = cntr.surface(doc.width(), height)
+            hdc = cntr.surface(width, height)
 
             print('*'*10, 'draw')
-            clip = litehtmlpy.position(0, 0, doc.width(), height)
+            clip = litehtmlpy.position(0, 0, width, height)
             doc.draw(hdc, 0, -y, clip)
 
             cntr.save(f'demo-{i:04d}.png')
