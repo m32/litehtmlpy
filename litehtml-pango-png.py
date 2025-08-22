@@ -109,7 +109,7 @@ class Main:
         if 1:
             self.with_width(cntr, doc, int(cntr.size[0]))
         else:
-            for w in range(1100, 1110):
+            for w in range(1100, 1150):
                 self.with_width(cntr, doc, w)
 
         del doc
