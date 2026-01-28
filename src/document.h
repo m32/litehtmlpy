@@ -24,8 +24,11 @@
         //int                                to_pixels(const css_length& val, int fontSize, int size = 0) const;
         .def("width", &lh::document::width)
         .def("height", &lh::document::height)
+/*
+undefined in C++
         .def("content_width", &lh::document::content_width)
         .def("content_height", &lh::document::content_height)
+*/
 /*
         void                            add_stylesheet(const char* str, const char* baseurl, const char* media);
 */
