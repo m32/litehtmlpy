@@ -6,7 +6,7 @@ LiteHtmlPy is a solution that helps python developers to create printouts and pr
   * [pybind11](https://github.com/pybind/pybind11)
 
 ## Cleanup repository
-./x-cleanup
+./x-cleanup [dist]
 
 ## Linux configure
 - ./x-build-cmake -DCMAKE_BUILD_TYPE=Debug
@@ -14,9 +14,6 @@ LiteHtmlPy is a solution that helps python developers to create printouts and pr
 
 ## Cross Mingw configure for python 2.7
 - ./x-build-cmake-mingw
-
-## Build for manylinux inside docker
-- ./x-build-docker
 
 ## Just setup.py build
 - ./x-build-python
