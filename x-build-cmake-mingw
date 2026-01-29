@@ -1,4 +1,6 @@
 #!/bin/bash
+mkdir build
+pushd build
 cmake \
     -DCMAKE_CROSSCOMPILING=ON \
     -DCMAKE_TOOLCHAIN_FILE=mingw-cross.cmake \
@@ -11,4 +13,6 @@ cmake \
     -DLITEHTMLPY_INCLUDE_CAIRO_CONTAINERS=OFF \
     -Wno-dev \
     -DCMAKE_BUILD_TYPE=Release \
-    .
+    ..
+make -j12
+popd

@@ -24,8 +24,11 @@
         //int                                to_pixels(const css_length& val, int fontSize, int size = 0) const;
         .def("width", &lh::document::width)
         .def("height", &lh::document::height)
+/*
+undefined in C++
         .def("content_width", &lh::document::content_width)
         .def("content_height", &lh::document::content_height)
+*/
 /*
         void                            add_stylesheet(const char* str, const char* baseurl, const char* media);
 */
@@ -44,6 +47,11 @@
 /*
         element::ptr                    create_element(const char* tag_name, const string_map& attributes);
         element::ptr                    root();
+		std::shared_ptr<render_item>	root_render();
+*/
+        .def("root", &lh::document::root)
+        .def("root_render", &lh::document::root_render)
+/*
         void                            get_fixed_boxes(position::vector& fixed_boxes);
         void                            add_fixed_box(const position& pos);
         void                            add_media_list(const media_query_list::ptr& list);

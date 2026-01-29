@@ -15,6 +15,8 @@
         .def("set_display", &lh::css_properties::set_display)
         .def("get_visibility", &lh::css_properties::get_visibility)
         .def("set_visibility", &lh::css_properties::set_visibility)
+        .def("get_appearance", &lh::css_properties::get_appearance)
+        .def("set_appearance", &lh::css_properties::set_appearance)
         .def("get_box_sizing", &lh::css_properties::get_box_sizing)
         .def("set_box_sizing", &lh::css_properties::set_box_sizing)
         .def("get_z_index", &lh::css_properties::get_z_index)
@@ -47,8 +49,20 @@
         .def("set_offsets", &lh::css_properties::set_offsets)
         .def("get_text_indent", &lh::css_properties::get_text_indent)
         .def("set_text_indent", &lh::css_properties::set_text_indent)
-        .def("get_line_height", &lh::css_properties::get_line_height)
-        .def("set_line_height", &lh::css_properties::set_line_height)
+        //.def("line_height", &lh::css_properties::line_height)
+        .def("line_height", [](
+            lh::css_properties &self
+        ) {
+            const lh::css_line_height_t &line_height = self.line_height();
+            return line_height.computed_value;
+        })
+        //.def("line_height_w", &lh::css_properties::line_height_w)
+        .def("line_height_w", [](
+            lh::css_properties &self
+        ) {
+            const lh::css_line_height_t &line_height = self.line_height_w();
+            return line_height.computed_value;
+        })
         .def("get_list_style_type", &lh::css_properties::get_list_style_type)
         .def("set_list_style_type", &lh::css_properties::set_list_style_type)
         .def("get_list_style_position", &lh::css_properties::get_list_style_position)
@@ -80,6 +94,7 @@
         .def("get_border_spacing_y", &lh::css_properties::get_border_spacing_y)
         .def("set_border_spacing_y", &lh::css_properties::set_border_spacing_y)
         .def("get_caption_side", &lh::css_properties::get_caption_side)
+        .def("set_caption_side", &lh::css_properties::set_caption_side)
         .def("get_flex_grow", &lh::css_properties::get_flex_grow)
         .def("get_flex_shrink", &lh::css_properties::get_flex_shrink)
         .def("get_flex_basis", &lh::css_properties::get_flex_basis)
@@ -91,4 +106,8 @@
         .def("get_flex_align_content", &lh::css_properties::get_flex_align_content)
         .def("get_order", &lh::css_properties::get_order)
         .def("set_order", &lh::css_properties::set_order)
+        .def("get_text_decoration_line", &lh::css_properties::get_text_decoration_line)
+        .def("get_text_decoration_style", &lh::css_properties::get_text_decoration_style)
+        .def("get_text_decoration_thickness", &lh::css_properties::get_text_decoration_thickness)
+        .def("get_text_decoration_color", &lh::css_properties::get_text_decoration_color)
     ;

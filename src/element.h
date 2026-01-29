@@ -13,9 +13,7 @@
 //		.def("parent", &lh::element::parent)
 //		void						parent(const element::ptr& par)
 		.def("is_table_skip", &lh::element::is_table_skip)
-
-//		std::shared_ptr<document>	.def("get_document", &lh::element::get_document)
-//		const std::list<std::shared_ptr<element>>& .def("children", &lh::element::children)
+		.def("children", &lh::element::children)
 
 //		virtual elements_list		select_all(const string& selector)
 //		virtual elements_list		select_all(const css_selector& selector)

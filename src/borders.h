@@ -1,7 +1,7 @@
     py::class_<lh::css_border>(m, "css_border")
 		.def_readwrite("width", &lh::css_border::width)
 		.def_readwrite("style", &lh::css_border::style)
-		.def_readwrite("style", &lh::css_border::color)
+		.def_readwrite("color", &lh::css_border::color)
         //
         .def(py::init<>())
         .def(py::init<const lh::css_border&>())

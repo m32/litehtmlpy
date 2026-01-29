@@ -14,8 +14,8 @@ class document_container(litehtmlpy.document_container):
         self.ppi = (96, 96)
         self.clips = []
 
-    def create_font(self, face, size, weight, italic, decoration):
-        logger.debug('create_font(%s, %s, %d, %d, %d)', face, size, weight, italic, decoration)
+    def create_font(self, descr):
+        logger.debug('create_font(%s)', descr)
         self.hfont += 1
         self.fonts[self.hfont] = None
         return [self.hfont, 15, 4, 19, 19]
@@ -29,11 +29,11 @@ class document_container(litehtmlpy.document_container):
         return len(text)*12
 
     def draw_text(self, hdc, text, hFont, color, pos):
-        logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, pos)
+        logger.debug(f'draw_text({hdc}, {text}, {hFont}, {color}, ({pos.x},{pos.y}))')
 
     def pt_to_px(self, pt):
         logger.debug('pt_to_px(%d)', pt)
-        pt = int(pt * self.ppi[1] / 72)
+        pt = int(pt * self.ppi[1] / 72.0)
         return pt
 
     def get_default_font_size(self):
@@ -101,11 +101,11 @@ class document_container(litehtmlpy.document_container):
         if self.clips:
             self.clips.pop()
 
-    def get_client_rect(self, client):
-        logger.debug('get_client_rect(%s, %s, %s, %s)', client.x, client.y, client.width, client.height)
-        client.clear()
-        client.width = self.size[0]
-        client.height = self.size[1]
+    def get_viewport(self, viewport):
+        logger.debug('get_viewport() -> %s', self.size)
+        viewport.clear()
+        viewport.width = self.size[0]
+        viewport.height = self.size[1]
 
     #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 
