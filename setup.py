@@ -108,7 +108,7 @@ class CMakeBuild(build_ext):
                 cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
 
         if sys.platform.startswith("linux"):
-            cmake_args += ["-DLITEHTMLPY_INCLUDE_CAIRO_CONTAINERS=YES"]
+            cmake_args += ["-DLITEHTMLPY_INCLUDE_CAIRO_CONTAINERS=ON"]
 
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
