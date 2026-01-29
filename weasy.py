@@ -7,6 +7,6 @@ def main():
         fname = sys.argv[1]
     else:
         fname = 'demo.html'
-        fname = 'litehtmlt.html'
+        #fname = 'litehtmlt.html'
     HTML(fname).write_pdf('demo.pdf')
 main()

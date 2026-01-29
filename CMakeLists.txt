@@ -64,8 +64,8 @@ pybind11_add_module(
     ${TEST_LITEHTMLPY_CONTAINERS}
 )
 
-set_target_properties(litehtmlpy PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/src/litehtmlpy")
+#set_target_properties(litehtmlpy PROPERTIES
+#    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/src/litehtmlpy")
 
 #if(NOT CMAKE_CROSSCOMPILING)
 #    find_package(PythonLibs 3.6)

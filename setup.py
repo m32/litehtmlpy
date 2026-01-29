@@ -107,6 +107,9 @@ class CMakeBuild(build_ext):
             if archs:
                 cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
 
+        if sys.platform.startswith("linux"):
+            cmake_args += ["-DLITEHTMLPY_INCLUDE_CAIRO_CONTAINERS=YES"]
+
         # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
         # across all generators.
         if "CMAKE_BUILD_PARALLEL_LEVEL" not in os.environ:
@@ -134,7 +137,7 @@ setup(
     description="LiteHtmlPy is a solution that helps python developers to create printouts and previews of html5/css3 pages without using a web browser.",
     long_description="",
     ext_modules=[
-        CMakeExtension("litehtmlpy.litehtmlpy")
+        CMakeExtension("litehtmlpy")
     ],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
