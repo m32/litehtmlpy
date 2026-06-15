@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <style>
+      div {
+        display: inline-block;        
+        vertical-align: top;
+      }
+      .foo {
+        font-size: 3rem;
+      }
+	  .bar {
+	    font-size: 4rem;
+	  }
+	  .color1 {
+	    background-color: lightgray;
+	  }
+	  .color2 {
+	    background-color: lightblue;
+	  }
+	  .color3 {
+	    background-color: pink;
+	  }
+	  .color4 {
+	    background-color: lightgreen;
+	  }
+    </style>
+  </head>
+  <body>
+    <div class="color1"><span class="foo">A<br/><br/>C</span></div>
+    <div class="color1"><span class="foo">A<br/>B<br/>C</span></div>
+    <div class="color2 foo"><span>A<br/><br/>C</span></div>
+    <div class="color2 foo"><span>A<br/>B<br/>C</span></div>
+    <div class="color3 foo"><span class="foo">A<br/><br/>C</span></div>
+    <div class="color3 foo"><span class="foo">A<br/>B<br/>C</span></div>
+    <div class="color4 bar"><span class="foo">A<br/><br/>C</span></div>
+    <div class="color4 bar"><span class="foo">A<br/>B<br/>C</span></div>
+  </body>
+</html>
