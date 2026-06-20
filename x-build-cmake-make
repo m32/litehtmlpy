@@ -1,9 +1,4 @@
 #!/bin/bash
-if [ ! -d build ]; then
-    echo "first run x-build-cmake"
-    exit 1
-fi
-pushd build
-make $*
-popd
+cmake \
+--build build
 cp build/litehtmlpy.cpython-*.so src/litehtmlpy/

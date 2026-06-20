@@ -107,7 +107,9 @@ class Main:
 
         doc = cntr.fromString(html, None, None)
         if 0:
-            self.with_width(cntr, doc, int(cntr.size[0]))
+            w = 1108
+            #self.with_width(cntr, doc, int(cntr.size[0]))
+            self.with_width(cntr, doc, w)
         else:
             for w in range(1100, 1150):
                 self.with_width(cntr, doc, w)

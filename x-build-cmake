@@ -1,9 +1,7 @@
 #!/bin/bash
-if [ ! -d build ]; then
-    mkdir build
-fi
-pushd build
 cmake \
+-B build \
+-S . \
     $* \
     -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
     -DLITEHTML_BUILD_TESTING=OFF \
@@ -11,5 +9,3 @@ cmake \
     -DLITEHTMLPY_INCLUDE_CAIRO_CONTAINERS=ON \
     -Wno-dev \
     -DCMAKE_BUILD_TYPE=Debug \
-    ..
-popd
