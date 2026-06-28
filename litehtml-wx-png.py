@@ -8,7 +8,7 @@ from litehtmlpy import litehtmlwx, litehtmlpy
 
 class document_container(litehtmlwx.document_container):
     def pt_to_px(self, pt):
-        return pt
+        return litehtmlpy.pixel_float_t(pt)
 
 class Main:
     def __init__(self):
@@ -22,17 +22,17 @@ class Main:
         cntr = document_container()
         cntr.SetDC(dc)
         doc = litehtmlpy.fromString(cntr, html, None, None)
-        doc.render(int(cntr.size[0]), litehtmlpy.render_all)
+        doc.render(cntr.size.width, litehtmlpy.render_all)
 
-        cntr.size[1] = int(doc.height())
+        cntr.size.height.value = int(doc.height().value)
 
-        bmp = wx.Bitmap(int(cntr.size[0]), int(cntr.size[1]), 32)
+        bmp = wx.Bitmap(int(cntr.size.width.value), int(cntr.size.height.value), 32)
         dc.SelectObject(bmp)
         dc.SetBackground(wx.Brush(wx.WHITE))
         dc.Clear()
 
-        clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
-        doc.draw(0, 0, 0, clip)
+        clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
+        doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
 
         bmp.SaveFile(f'demo-{i:04d}.png', wx.BITMAP_TYPE_PNG)
 

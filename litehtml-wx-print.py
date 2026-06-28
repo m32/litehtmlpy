@@ -7,7 +7,7 @@ from litehtmlpy import litehtmlwx, litehtmlpy
 
 class document_container(litehtmlwx.document_container):
     def pt_to_px(self, pt):
-        return pt
+        return litehtmlpy.pixel_float_t(pt)
 
 class HTMLPrinterPrintout(wx.Printout):
     def __init__(self, htmlstart, htmlend, html, htmlpages):
@@ -53,13 +53,13 @@ class HTMLPrinterPrintout(wx.Printout):
         cntr.SetDC(dc)
         doc = litehtmlpy.fromString(cntr, html, None, None)
         try:
-            doc.render(cntr.size[0], litehtmlpy.render_all)
-            cntr.size[1] = doc.height()
+            doc.render(cntr.size.width, litehtmlpy.render_all)
+            cntr.size.height.value = int(doc.height().value)
 
             if 1:
-                print('DOC:', 'w=', doc.width(), 'h=', doc.height())
-                maxX = doc.width() + (2*50) # marginesy 50 device units
-                maxY = doc.height() + (2*50) # marginesy 50 device units
+                print('DOC:', 'w=', doc.width().value, 'h=', doc.height().value)
+                maxX = doc.width().value + (2*50) # marginesy 50 device units
+                maxY = doc.height().value + (2*50) # marginesy 50 device units
                 (w, h) = dc.GetSize()
                 scaleX = float(w) / maxX
                 scaleY = float(h) / maxY
@@ -69,8 +69,8 @@ class HTMLPrinterPrintout(wx.Printout):
                 #dc.SetDeviceOrigin(int(posX), int(posY))
 
             #bmp = wx.Bitmap(cntr.size[0], cntr.size[1], 32)
-            clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
-            doc.draw(0, 0, 0, clip)
+            clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
+            doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
         finally:
             cntr.SetDC(None)
             del doc

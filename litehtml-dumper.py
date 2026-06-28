@@ -5,8 +5,6 @@ import logging
 import logme
 from litehtmlpy import litehtml, litehtmlpy
 
-litehtmlpy.debuglog(0)
-
 logger = logging.getLogger(__name__)
 
 class document_container(litehtml.document_container):
@@ -53,8 +51,8 @@ class Main:
         print('max size=', cntr.size)
 
         doc = litehtmlpy.fromString(cntr, html, None, None)
-        doc.render(cntr.size[0], litehtmlpy.render_all)
-        print('doc: width:', doc.width(), 'height:', doc.height())
+        doc.render(cntr.size.width, litehtmlpy.render_all)
+        print('doc: width:', doc.width().value, 'height:', doc.height().value)
 
         dump = dumper()
         doc.dump(dump)

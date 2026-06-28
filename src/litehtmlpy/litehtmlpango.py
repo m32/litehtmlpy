@@ -10,13 +10,13 @@ class document_container(litehtmlpy.container_cairo_pango):
         self.parent = parent
         v = 3.96 * 96 / 72
         self.set_dpi(96)
-        self.size = [int(210 * v), int(297 * v)]
+        self.size = litehtmlpy.size(int(210 * v), int(297 * v))
 
     def get_screen_width(self):
-        return self.size[0]
+        return int(self.size.width.value)
 
     def get_screen_height(self):
-        return self.size[1]
+        return int(self.size.height.value)
 
     def load_image(self, src, baseurl, redraw_on_ready):
         logger.debug('load_image(%s, %s, %s)', src, baseurl, redraw_on_ready)
@@ -44,5 +44,4 @@ class document_container(litehtmlpy.container_cairo_pango):
     def get_viewport(self, viewport):
         logger.debug('get_viewport()')
         viewport.clear()
-        viewport.width = self.size[0]
-        viewport.height = self.size[1]
+        viewport.set_size(self.size.width, self.size.height)

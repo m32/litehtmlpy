@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class document_container(litehtmlwx.document_container):
     def pt_to_px(self, pt):
-        return pt
+        return litehtmlpy.pixel_float_t(pt)
 
     def import_css(self, text, url, base_url):
         url = urllib.parse.urljoin(base_url, url)
@@ -94,17 +94,17 @@ class Main:
 
         cntr = document_container()
         cntr.SetDC(dc)
-        print('max size=', cntr.size)
+        print('max size=', cntr.size.width.value, cntr.size.height.value)
 
         doc = litehtmlpy.fromString(cntr, html, None, None)
-        doc.render(cntr.size[0], litehtmlpy.render_all)
-        print('doc: width:', doc.width(), 'height:', doc.height())
+        doc.render(cntr.size.width, litehtmlpy.render_all)
+        print('doc: width:', doc.width().value, 'height:', doc.height().value)
 
         i = 0
         height = 1500
         y = 0
-        width = int(doc.width())
-        while y < doc.height():
+        width = int(doc.width().value)
+        while y < doc.height().value:
             bmp = wx.Bitmap(width, height, 32)
             dc.SelectObject(bmp)
             dc.SetBackground(wx.Brush(wx.WHITE))
@@ -112,7 +112,7 @@ class Main:
 
             print('*'*10, 'draw')
             clip = litehtmlpy.position(0, 0, width, height)
-            doc.draw(0, 0, -y, clip)
+            doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(-y), clip)
 
             bmp.SaveFile('demo-{i:04d}.png'.format(i=i), wx.BITMAP_TYPE_PNG)
 

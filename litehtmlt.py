@@ -10,7 +10,7 @@ class Button(litehtml.litehtmlpy.html_tag):
     def draw(self, hdc, x, y, clip, ri):
         super().draw(hdc, x, y, clip, ri)
         pos = ri.pos()
-        print(f'Button.draw({hdc}, {x}, {y}, ({clip.x}, {clip.y}, {clip.width}, {clip.height}), ({pos.x}, {pos.y})')
+        print(f'Button.draw({hdc}, {x.value}, {y.value}, ({clip.x.value}, {clip.y.value}, {clip.width.value}, {clip.height.value}), ({pos.x.value}, {pos.y.value})')
 
 
 class Input(litehtml.litehtmlpy.html_tag):
@@ -25,15 +25,15 @@ class Input(litehtml.litehtmlpy.html_tag):
         #print('input.draw', ri.left(), ri.top(), ri.right(), ri.bottom())
         x += pos.x
         y += pos.y
-        w = pos.width
-        h = pos.height
+        w = pos.width.value
+        h = pos.height.value
         css = self.css()
-        lh = css.line_height()
-        fh = css.get_font_size()
-        lh = css.line_height()
-        y = y + (h - lh) // 2
-        h = pos.height
-        print('Input.draw', hdc, x, y, w, h)
+        lh = css.line_height().value
+        fh = css.get_font_size().value
+        lh = css.line_height().value
+        y = y.value + (h - lh) // 2
+        h = pos.height.value
+        print('Input.draw', hdc, x.value, y, w, h)
 
 
 class document_container(litehtml.document_container):
@@ -77,9 +77,9 @@ def main():
     cntr = document_container()
 
     doc = litehtmlpy.fromString(cntr, html, None, None)
-    doc.render(cntr.size[0], litehtmlpy.render_all)
-    clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
-    doc.draw(0, 0, 0, clip)
+    doc.render(cntr.size.width, litehtmlpy.render_all)
+    clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
+    doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
     del doc, cntr
 
 main()

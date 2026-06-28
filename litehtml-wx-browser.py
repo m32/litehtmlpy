@@ -5,9 +5,9 @@ import logme
 import requests
 import urllib.parse
 import wx
-from litehtmlpy import litehtmlwx
+from litehtmlpy import litehtmlwx, litehtmlpy
 
-class Button(litehtmlwx.litehtmlpy.html_tag):
+class Button(litehtmlpy.html_tag):
     def __init__(self, parent, attributes, doc):
         super().__init__(doc)
         self.parent = parent
@@ -23,7 +23,7 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
         y += pos.y
         w = pos.width
         h = pos.height
-        print('Button.draw', x, y, w, h, self.attributes)
+        print('Button.draw', x.value, y.value, w.value, h.value, self.attributes)
 
     def on_mouse_over(self):
         return False
@@ -43,7 +43,7 @@ class Button(litehtmlwx.litehtmlpy.html_tag):
         print('Button.on_click')
         self.parent.HtmlClick(self)
 
-class Input(litehtmlwx.litehtmlpy.html_tag):
+class Input(litehtmlpy.html_tag):
     def __init__(self, parent, attributes, doc):
         super().__init__(doc)
         self.parent = parent
@@ -60,14 +60,14 @@ class Input(litehtmlwx.litehtmlpy.html_tag):
         #print('input.draw', ri.left(), ri.top(), ri.right(), ri.bottom())
         x += pos.x
         y += pos.y
-        w = pos.width
-        h = pos.height
+        w = pos.width.value
+        h = pos.height.value
         css = self.css()
-        fh = css.get_font_size()
-        lh = css.line_height()
-        y = y + (h - lh) // 2
-        h = pos.height
-        self.ctrl.SetSize(int(x), int(y), int(w), int(h))
+        fh = css.get_font_size().value
+        lh = css.line_height().value
+        y = y.value + (h - lh) // 2
+        h = pos.height.value
+        self.ctrl.SetSize(int(x.value), int(y), int(w), int(h))
 
     def on_mouse_over(self):
         return False
@@ -166,23 +166,31 @@ class LiteWindow(wx.ScrolledWindow):
 
     def OnMouseDown(self, evt):
         if self.doc is not None:
-            cx = self.GetScrollPos(wx.HORIZONTAL)
-            cy = self.GetScrollPos(wx.VERTICAL)
-            self.doc.on_lbutton_down(evt.x, evt.y, cx, cy, [])
+            x = litehtmlpy.pixel_float_t(evt.x)
+            y = litehtmlpy.pixel_float_t(evt.x)
+            cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
+            cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
+            self.doc.on_lbutton_down(x, y, cx, cy, [])
         evt.Skip()
 
     def OnMouseUp(self, evt):
         if self.doc is not None:
-            cx = self.GetScrollPos(wx.HORIZONTAL)
-            cy = self.GetScrollPos(wx.VERTICAL)
-            self.doc.on_lbutton_up(evt.x, evt.y, cx, cy, [])
+            x = litehtmlpy.pixel_float_t(evt.x)
+            y = litehtmlpy.pixel_float_t(evt.x)
+            cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
+            cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
+            self.doc.on_lbutton_up(x, y, cx, cy, [])
         evt.Skip()
 
     def OnMouseMove(self, evt):
         if self.doc is not None:
-            cx = self.GetScrollPos(wx.HORIZONTAL)
-            cy = self.GetScrollPos(wx.VERTICAL)
-            self.doc.on_mouse_over(evt.x, evt.y, cx, cy, [])
+            x = litehtmlpy.pixel_float_t(evt.x)
+            y = litehtmlpy.pixel_float_t(evt.x)
+            cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
+            cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
+            def proc(box):
+                print('proc', box)
+            self.doc.on_mouse_over(x, y, cx, cy, proc)
         evt.Skip()
 
     def OnSize(self, event):
@@ -233,17 +241,17 @@ class LiteWindow(wx.ScrolledWindow):
             return
         self.url = url
 
-        self.doc = litehtmlwx.litehtmlpy.fromString(self.cntr, html, None, None)
+        self.doc = litehtmlpy.fromString(self.cntr, html, None, None)
         self.HtmlRender()
         self.HtmlPaint()
         self.Refresh(True)
 
     def HtmlRender(self):
         size = self.GetClientSize()
-        self.doc.render(size[0], litehtmlwx.litehtmlpy.render_all)
-        self.cntr.size = size
+        self.doc.render(litehtmlpy.pixel_float_t(size.width), litehtmlpy.render_all)
+        self.cntr.size = litehtmlpy.size(size.Width, size.Height)
 
-        h = int(self.doc.height() + 20) # + statusline.height
+        h = int(self.doc.height().value + 20) # + statusline.height
         if h < 0:
             h = 0
         self.SetScrollbar(wx.VERTICAL, 0, size.Height, h, True)
@@ -254,8 +262,8 @@ class LiteWindow(wx.ScrolledWindow):
         y = self.GetScrollPos(wx.VERTICAL)
         print('*'*20, 'HtmlPaint')
         try:
-            clip = litehtmlwx.litehtmlpy.position(0, 0, size.Width, size.Height)
-            self.doc.draw(0, 0, -y, clip)
+            clip = litehtmlpy.position(0, 0, size.Width, size.Height)
+            self.doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(-y), clip)
         finally:
             print('*'*20, '/HtmlPaint')
 
@@ -296,7 +304,7 @@ class LiteWindow(wx.ScrolledWindow):
         bpos = layer.border_box
         #cpos = layer.clip_box
         #print('DrawImage', url, (bpos.x, bpos.y, bpos.width, bpos.height))
-        img = img.Scale(bpos.width, bpos.height, wx.IMAGE_QUALITY_HIGH)
+        img = img.Scale(int(bpos.width.value), int(bpos.height.value), wx.IMAGE_QUALITY_HIGH)
         bmp = wx.Bitmap(img)
         #gc = wx.GraphicsContext.Create(dc)
         self.cntr.dc.DrawBitmap(bmp, wx.Point(bpos.x, bpos.y))
@@ -308,7 +316,7 @@ class LiteWindow(wx.ScrolledWindow):
         self.cntr.dc.SetBrush(b) 
 
         bpos = layer.clip_box
-        self.cntr.dc.DrawRectangle(int(bpos.x), int(bpos.y), int(bpos.width), int(bpos.height))
+        self.cntr.dc.DrawRectangle(int(bpos.x.value), int(bpos.y.value), int(bpos.width.value), int(bpos.height.value))
         self.cntr.dc.SetBrush(wx.NullBrush) 
 
 class LiteHtmlPanel(wx.Panel):

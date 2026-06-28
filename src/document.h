@@ -17,6 +17,15 @@
         //document_container*                container()    { return m_container; }
         //uint_ptr                        get_font(const char* name, int size, const char* weight, const char* style, const char* decoration, font_metrics* fm);
         .def("render", &lh::document::render)
+        /*
+        .def("render", [](
+            py_document &self,
+            int max_width,
+            lh::render_type rt = lh::render_all
+        ) {
+            self.render(max_width, rt);
+        })
+        */
         .def("draw", &lh::document::draw)
         //web_color                        get_def_color()    { return m_def_color; }
         //int                                to_pixels(const char* str, int fontSize, bool* is_percent = nullptr) const;

@@ -21,9 +21,9 @@ def main():
     try:
         doc = litehtmlpy.fromString(cntr, html, None, None)
         try:
-            doc.render(cntr.size[0], litehtmlpy.render_all)
-            clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
-            doc.draw(0, 0, 0, clip)
+            doc.render(cntr.size.width, litehtmlpy.render_all)
+            clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
+            doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
             del clip
             print('done')
         finally:

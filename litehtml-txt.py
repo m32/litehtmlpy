@@ -11,8 +11,8 @@ class Dokument(litehtmltxt.document_container):
         self.fname = fname
 
     def pt_to_px(self, pt):
-        return 1
-        return pt
+        return litehtmlpy.pixel_float_t(1)
+        #return litehtmlpy.pixel_float_t(pt)
 
     def Run(self):
         with open(self.fname, 'rt') as fp:
@@ -20,13 +20,13 @@ class Dokument(litehtmltxt.document_container):
 
         doc = litehtmlpy.fromString(self, html, None, None)
         try:
-            doc.render(self.size[0], litehtmlpy.render_all)
-            self.size[1] = doc.height()
+            doc.render(self.size.width, litehtmlpy.render_all)
+            self.size = litehtmlpy.size(int(self.size.width.value), int(doc.height().value))
             self.reset()
 
-            print('DOC:', 'w=', doc.width(), 'h=', doc.height())
-            clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
-            doc.draw(0, 0, 0, clip)
+            print('DOC:', 'w=', doc.width().value, 'h=', doc.height().value)
+            clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
+            doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
             for y in self.dc.lines():
                 line = self.dc.line(y)
                 print(line)

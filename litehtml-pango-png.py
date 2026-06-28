@@ -10,8 +10,6 @@ from PIL import Image
 import logme
 from litehtmlpy import litehtmlpango, litehtmlpy
 
-litehtmlpy.debuglog(1)
-
 logger = logging.getLogger(__name__)
 
 class document_container(litehtmlpango.document_container):
@@ -76,21 +74,21 @@ class App:
 
 class Main:
     def with_width(self, cntr, doc, width):
-        doc.render(width, litehtmlpy.render_all)
-        print('doc: width:', doc.width(), 'height:', doc.height())
+        doc.render(litehtmlpy.pixel_float_t(width), litehtmlpy.render_all)
+        print('doc: width:', doc.width().value, 'height:', doc.height().value)
 
-        cntr.size[1] = doc.height()
-        hdc = cntr.surface(int(doc.width()), int(doc.height()))
+        cntr.height = doc.height
+        hdc = cntr.surface(int(doc.width().value), int(doc.height().value))
 
         print('*'*10, 'draw')
-        clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
-        doc.draw(hdc, 0, 0, clip)
+        clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
+        doc.draw(hdc, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
 
         print('x-save')
         cntr.save('demo.png')
 
         print('x-save-stream')
-        with open(f'demo-{width:04d}.png', 'wb') as fpo:
+        with open(f'demo-{int(width):04d}.png', 'wb') as fpo:
             rc = cntr.savestream(fpo.write)
         print('save result:', rc)
 
@@ -107,9 +105,8 @@ class Main:
 
         doc = cntr.fromString(html, None, None)
         if 0:
-            w = 1108
-            #self.with_width(cntr, doc, int(cntr.size[0]))
-            self.with_width(cntr, doc, w)
+            self.with_width(cntr, doc, int(cntr.size.width.value))
+            #self.with_width(cntr, doc, 1108)
         else:
             for w in range(1100, 1150):
                 self.with_width(cntr, doc, w)

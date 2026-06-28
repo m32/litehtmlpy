@@ -9,6 +9,7 @@
 #define PYBIND11_DETAILED_ERROR_MESSAGES
 #include "pybind11/pybind11.h"
 #include "pybind11/stl.h"
+#include <pybind11/operators.h>
 
 #include <litehtml.h>
 #include <litehtml/render_item.h>
@@ -1146,6 +1147,7 @@ PYBIND11_MODULE(litehtmlpy, m) {
 ////#include "media_query.h"
 ////#include "num_cvt.h"
 ////#include "os_types.h"
+#include "pixel_type.h"
 ////#include "render_block.h"
 ////#include "render_block_context.h"
 ////#include "render_flex.h"

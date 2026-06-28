@@ -10,7 +10,7 @@ class document_container(litehtmlpy.document_container):
         self.hfont = 0
         self.fonts = {}
         v = 3.96 * 96 / 72
-        self.size = [int(210 * v), int(297 * v)]
+        self.size = litehtmlpy.size(int(210 * v), int(297 * v))
         self.ppi = (96, 96)
         self.clips = []
 
@@ -26,7 +26,7 @@ class document_container(litehtmlpy.document_container):
 
     def text_width(self, text, hFont):
         logger.debug('text_width(%s, %s)', text, hFont)
-        return len(text)*12
+        return litehtmlpy.pixel_float_t(len(text)*12)
 
     def draw_text(self, hdc, text, hFont, color, pos):
         logger.debug(f'draw_text({hdc}, {text}, {hFont}, {color}, ({pos.x},{pos.y}))')
@@ -34,10 +34,10 @@ class document_container(litehtmlpy.document_container):
     def pt_to_px(self, pt):
         logger.debug('pt_to_px(%d)', pt)
         pt = int(pt * self.ppi[1] / 72.0)
-        return pt
+        return litehtmlpy.pixel_float_t(pt)
 
     def get_default_font_size(self):
-        return 12
+        return litehtmlpy.pixel_float_t(12)
 
     def get_default_font_name(self):
         return 'Times New Roman'
@@ -50,8 +50,8 @@ class document_container(litehtmlpy.document_container):
 
     def get_image_size(self, src, baseurl, size):
         logger.debug('get_image_size(%s, %s)', src, baseurl)
-        size.width = 0
-        size.height = 0
+        size.width.value = 0
+        size.height.value = 0
 
     def draw_image(self, hdc, layer, url, base_url):
         logger.debug('draw_image(%d, %s, %s, %s)', hdc, layer, url, base_url)
@@ -104,8 +104,7 @@ class document_container(litehtmlpy.document_container):
     def get_viewport(self, viewport):
         logger.debug('get_viewport() -> %s', self.size)
         viewport.clear()
-        viewport.width = self.size[0]
-        viewport.height = self.size[1]
+        viewport.set_size(self.size.width, self.size.height)
 
     #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 
@@ -113,8 +112,8 @@ class document_container(litehtmlpy.document_container):
         logger.debug('get_media_features()')
         return (
             2, # media_type_screen
-            self.size[0],
-            self.size[1],
+            int(self.size.width.value),
+            int(self.size.height.value),
             1024, # device width (screen width)
             800, # device height (screen height)
             8, # color

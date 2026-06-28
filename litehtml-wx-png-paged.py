@@ -22,12 +22,12 @@ class Main:
         cntr.reset()
 
         doc = litehtmlpy.fromString(cntr, html, None, None)
-        doc.render(cntr.size[0], litehtmlpy.render_all)
+        doc.render(cntr.size.width, litehtmlpy.render_all)
 
-        cntr.size[1] = int(doc.height())
+        cntr.size.height.value = int(doc.height().value)
         cntr.reset()
-        clip = litehtmlpy.position(0, 0, int(doc.width()), int(doc.height()))
-        doc.draw(0, 0, 0, clip)
+        clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
+        doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
 
         cntr.bmp.SaveFile(f'demo-{i:04d}.png', wx.BITMAP_TYPE_PNG)
 

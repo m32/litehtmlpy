@@ -10,8 +10,6 @@ from PIL import Image
 import logme
 from litehtmlpy import litehtmlpango, litehtmlpy
 
-litehtmlpy.debuglog(1)
-
 logger = logging.getLogger(__name__)
 
 class document_container(litehtmlpango.document_container):
@@ -87,19 +85,19 @@ class Main:
         print('max size=', cntr.size)
 
         doc = cntr.fromString(html, None, None)
-        doc.render(cntr.size[0], litehtmlpy.render_all)
-        print('doc: width:', doc.width(), 'height:', doc.height())
+        doc.render(cntr.size.width, litehtmlpy.render_all)
+        print('doc: width:', doc.width().value, 'height:', doc.height().value)
 
         i = 0
         height = 600
         y = 0
-        width = int(doc.width())
-        while y < doc.height():
+        width = int(doc.width().value)
+        while y < doc.height().value:
             hdc = cntr.surface(width, height)
 
             print('*'*10, 'draw')
             clip = litehtmlpy.position(0, 0, width, height)
-            doc.draw(hdc, 0, -y, clip)
+            doc.draw(hdc, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(-y), clip)
 
             cntr.save(f'demo-{i:04d}.png')
             y += height

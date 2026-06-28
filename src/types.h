@@ -45,9 +45,17 @@
         .def("top", &lh::position::top)
         //.def(py::self += margins)
         //.def(py::self -= margins)
-        //=size
+        //.def(py::self = size)
         .def("clear", &lh::position::clear)
         .def("move_to", &lh::position::move_to)
+        .def("set_size", [](
+            lh::position &self,
+            lh::pixel_float_t width,
+            lh::pixel_float_t height
+        ) {
+            lh::size size(width, height);
+            self=size;
+        })
         .def("does_intersect", &lh::position::does_intersect)
         .def("empty", &lh::position::empty)
         .def("is_point_inside", &lh::position::is_point_inside)

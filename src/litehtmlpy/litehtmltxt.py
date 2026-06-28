@@ -2,8 +2,8 @@
 import logging
 from . import litehtmlpy
 
-#logger = logging.getLogger(__name__)
-logger = None
+logger = logging.getLogger(__name__)
+#logger = None
 
 class Font:
     def __init__(self, face, size, weight, style):
@@ -76,7 +76,7 @@ class document_container(litehtmlpy.document_container):
         self.parent = parent
         self.hfont = 0
         self.fonts = {}
-        self.size = [80, 250]
+        self.size = litehtmlpy.size(int(80), int(250))
         self.clips = []
         self.reset()
 
@@ -84,7 +84,7 @@ class document_container(litehtmlpy.document_container):
         self.dc = dc
 
     def reset(self):
-        self.dc = DC(self.size[0], self.size[1])
+        self.dc = DC(self.size.width, self.size.height)
 
     def create_font(self, descr):
         face = descr.family
@@ -114,26 +114,26 @@ class document_container(litehtmlpy.document_container):
             logger.debug('text_width(%s, %s)', text, hFont)
         font = self.fonts[hFont]
         width = self.dc.GetFullTextExtent(text, font)[0]
-        return width
+        return litehtmlpy.pixel_float_t(width)
 
     def draw_text(self, hdc, text, hFont, color, pos):
         if logger:
-            logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, (pos.x, pos.y, pos.width, pos.height))
+            logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, (pos.x.value, pos.y.value, pos.width.value, pos.height.value))
         font = self.fonts[hFont]
         self.dc.SetTextBackground((color.red, color.green, color.blue, color.alpha))
         self.dc.SetFont(font)
-        self.dc.DrawText(text, int(pos.x), int(pos.y))
+        self.dc.DrawText(text, int(pos.x.value), int(pos.y.value))
 
     def pt_to_px(self, pt):
         if logger:
-            logger.debug('pt_to_px(%s)', pt)
+            logger.debug('pt_to_px(%s)', pt.value)
         pt = int(pt * self.ppi[1] / 72.0)
-        return pt
+        return litehtmlpy.pixel_float_t(pt)
 
     def get_default_font_size(self):
         if logger:
             logger.debug('get_default_font_size()')
-        return 12
+        return litehtmlpy.pixel_float_t(12)
 
     def get_default_font_name(self):
         if logger:
@@ -153,18 +153,19 @@ class document_container(litehtmlpy.document_container):
     def get_image_size(self, src, baseurl, size):
         if logger:
             logger.debug('get_image_size(%s, %s)', src, baseurl)
+        print(siez, size.width, size.height)
         if self.parent is None:
-            size.width = 0
-            size.height = 0
+            size.width.value = 0
+            size.height.value = 0
         else:
             img = self.parent.HtmlGetImage(src, baseurl)
             if img is None:
-                size.width = 0
-                size.height = 0
+                size.width.value = 0
+                size.height.value = 0
             else:
                 sz = img.GetSize()
-                size.width = sz[0]
-                size.height = sz[1]
+                size.width.value = sz[0]
+                size.height.value = sz[1]
 
     def draw_image(self, hdc, layer, url, base_url):
         if logger:
@@ -189,26 +190,26 @@ class document_container(litehtmlpy.document_container):
     def draw_borders(self, hdc, borders, draw_pos, root):
         if logger:
             logger.debug('draw_borders(%d, %s, %s, %s)', hdc, borders, draw_pos, root)
-        left = int(draw_pos.x)
-        top = int(draw_pos.y)
-        right = int(left + draw_pos.width)
-        bottom = int(top + draw_pos.height)
+        left = int(draw_pos.x.value)
+        top = int(draw_pos.y.value)
+        right = int(left + draw_pos.width.value)
+        bottom = int(top + draw_pos.height.value)
 
         b = borders.left
         colorLeft = (b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthLeft = int(b.width)
+        widthLeft = int(b.width.value)
 
         b = borders.top
         colorTop = (b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthTop = int(b.width)
+        widthTop = int(b.width.value)
 
         b = borders.right
         colorRight = (b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthRight = int(b.width)
+        widthRight = int(b.width.value)
 
         b = borders.bottom
         colorBottom = (b.color.red, b.color.green, b.color.blue, b.color.alpha)
-        widthBottom = int(b.width)
+        widthBottom = int(b.width.value)
 
         self.dc.SetPen(colorLeft, widthLeft)
         self.dc.DrawLine(left, top, left, bottom)
@@ -261,8 +262,7 @@ class document_container(litehtmlpy.document_container):
         if logger:
             logger.debug('get_viewport()')
         viewport.clear()
-        viewport.width = int(self.size[0])
-        viewport.height = int(self.size[1])
+        viewport.set_size(self.size.width, self.size.height)
 
     #element::ptr create_element( const char* tag_name, const string_map& attributes, const std::shared_ptr<document>& doc) override 
 
@@ -271,8 +271,8 @@ class document_container(litehtmlpy.document_container):
             logger.debug('get_media_features()')
         return (
             2, # media_type_screen
-            self.size[0],
-            self.size[1],
+            self.size.width,
+            self.size.height,
             1024, # device width (screen width)
             800, # device height (screen height)
             8, # color
