@@ -104,7 +104,7 @@ class Main:
         print('max size=', cntr.size)
 
         doc = cntr.fromString(html, None, None)
-        if 0:
+        if 1:
             self.with_width(cntr, doc, int(cntr.size.width.value))
             #self.with_width(cntr, doc, 1108)
         else:
