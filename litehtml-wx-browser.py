@@ -26,10 +26,12 @@ class Button(litehtmlpy.html_tag):
         print('Button.draw', x.value, y.value, w.value, h.value, self.attributes)
 
     def on_mouse_over(self):
-        return False
+        print('Button.on_mouse_over')
+        return True
 
     def on_mouse_leave(self):
-        return False
+        print('Button.on_mouse_leave')
+        return True
 
     def on_lbutton_down(self):
         print('Button.on_lbutton_down')
@@ -166,31 +168,17 @@ class LiteWindow(wx.ScrolledWindow):
 
     def OnMouseDown(self, evt):
         if self.doc is not None:
-            print('OnMouseDown', evt.x, evt.y)
-            def proc(box):
-                print('proc', box)
             rc = self.doc.on_lbutton_down(evt.x, evt.y, evt.x, evt.y)
-            print('result=', rc)
         evt.Skip()
 
     def OnMouseUp(self, evt):
         if self.doc is not None:
-            x = litehtmlpy.pixel_float_t(evt.x)
-            y = litehtmlpy.pixel_float_t(evt.x)
-            cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
-            cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
-            print('OnMouseUp', evt.x, evt.y)
-            #self.doc.on_lbutton_up(x, y, cx, cy, [])
+            rc = self.doc.on_lbutton_up(evt.x, evt.y, evt.x, evt.y)
         evt.Skip()
 
     def OnMouseMove(self, evt):
         if self.doc is not None:
-            x = litehtmlpy.pixel_float_t(evt.x)
-            y = litehtmlpy.pixel_float_t(evt.x)
-            cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
-            cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
-            #print('OnMouseMove', evt.x, evt.y)
-            #self.doc.on_mouse_over(x, y, cx, cy, [])
+            rc = self.doc.on_mouse_over(evt.x, evt.y, evt.x, evt.y)
         evt.Skip()
 
     def OnSize(self, event):
@@ -248,24 +236,17 @@ class LiteWindow(wx.ScrolledWindow):
 
     def HtmlRender(self):
         size = self.GetClientSize()
-        self.doc.render(litehtmlpy.pixel_float_t(size.width), litehtmlpy.render_all)
-        self.cntr.size = litehtmlpy.size(size.Width, size.Height)
-
+        self.doc.render(litehtmlpy.pixel_float_t(size.Width), litehtmlpy.render_all)
         h = int(self.doc.height().value + 20) # + statusline.height
-        if h < 0:
-            h = 0
+        self.cntr.size = litehtmlpy.size(size.Width, h)
         self.SetScrollbar(wx.VERTICAL, 0, size.Height, h, True)
 
     def HtmlPaint(self):
         self.cntr.reset()
         size = self.GetClientSize()
         y = self.GetScrollPos(wx.VERTICAL)
-        print('*'*20, 'HtmlPaint')
-        try:
-            clip = litehtmlpy.position(0, 0, size.Width, size.Height)
-            self.doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(-y), clip)
-        finally:
-            print('*'*20, '/HtmlPaint')
+        clip = litehtmlpy.position(0, 0, size.Width, size.Height)
+        self.doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(-y), clip)
 
     def HtmlClickHRef(self, url, element):
         url = urllib.parse.urljoin(self.url, url)

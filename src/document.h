@@ -41,32 +41,57 @@ undefined in C++
 /*
         void                            add_stylesheet(const char* str, const char* baseurl, const char* media);
 */
-        .def("on_mouse_over", &lh::document::on_mouse_over)
-        .def("on_lbutton_down", [] (
+        .def("on_mouse_over", [] (
             py_document &self,
             int x, int y, int cx, int cy
         ) {
-            printf("in: %d,%d,%d,%d\n", x, y, cx, cy);
             auto res = self.on_lbutton_down(x, y, cx, cy, 
                 [](auto& box) -> void {
-                    printf("x=%d y=%d l=%d t=%d r=%d b=%d\n",
+                    printf("on_mouse_over: x=%d y=%d l=%d t=%d r=%d b=%d\n",
                         box.x, box.y, box.left(), box.right(), box.top(), box.bottom()
                     );
                 }
             );
-            printf("out: %d\n", res);
             return res;
         })
-        .def("on_lbutton_up", &lh::document::on_lbutton_up)
-/*
-        .def("on_lbutton_up", [](py_document &self, int x, int y, int cx, int cy, lh::position::vector& redraw_boxes){
-            DebugBreak();
-            py::gil_scoped_release release;
-            bool rc = self.on_lbutton_up(x, y, cx, cy, redraw_boxes);
-            return rc;
+        .def("on_lbutton_down", [] (
+            py_document &self,
+            int x, int y, int cx, int cy
+        ) {
+            auto res = self.on_lbutton_down(x, y, cx, cy, 
+                [](auto& box) -> void {
+                    printf("on_lbutton_down: x=%d y=%d l=%d t=%d r=%d b=%d\n",
+                        box.x, box.y, box.left(), box.right(), box.top(), box.bottom()
+                    );
+                }
+            );
+            return res;
         })
-*/
-        .def("on_mouse_leave", &lh::document::on_mouse_leave)
+        .def("on_lbutton_up", [] (
+            py_document &self,
+            int x, int y, int cx, int cy
+        ) {
+            auto res = self.on_lbutton_up(x, y, cx, cy, 
+                [](auto& box) -> void {
+                    printf("on_lbutton_up: x=%d y=%d l=%d t=%d r=%d b=%d\n",
+                        box.x, box.y, box.left(), box.right(), box.top(), box.bottom()
+                    );
+                }
+            );
+            return res;
+        })
+        .def("on_mouse_leave", [] (
+            py_document &self
+        ) {
+            auto res = self.on_mouse_leave(
+                [](auto& box) -> void {
+                    printf("on_mouse_leave: x=%d y=%d l=%d t=%d r=%d b=%d\n",
+                        box.x, box.y, box.left(), box.right(), box.top(), box.bottom()
+                    );
+                }
+            );
+            return res;
+        })
 /*
         element::ptr                    create_element(const char* tag_name, const string_map& attributes);
         element::ptr                    root();
