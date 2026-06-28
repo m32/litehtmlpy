@@ -42,7 +42,21 @@ undefined in C++
         void                            add_stylesheet(const char* str, const char* baseurl, const char* media);
 */
         .def("on_mouse_over", &lh::document::on_mouse_over)
-        .def("on_lbutton_down", &lh::document::on_lbutton_down)
+        .def("on_lbutton_down", [] (
+            py_document &self,
+            int x, int y, int cx, int cy
+        ) {
+            printf("in: %d,%d,%d,%d\n", x, y, cx, cy);
+            auto res = self.on_lbutton_down(x, y, cx, cy, 
+                [](auto& box) -> void {
+                    printf("x=%d y=%d l=%d t=%d r=%d b=%d\n",
+                        box.x, box.y, box.left(), box.right(), box.top(), box.bottom()
+                    );
+                }
+            );
+            printf("out: %d\n", res);
+            return res;
+        })
         .def("on_lbutton_up", &lh::document::on_lbutton_up)
 /*
         .def("on_lbutton_up", [](py_document &self, int x, int y, int cx, int cy, lh::position::vector& redraw_boxes){

@@ -8,7 +8,7 @@
       "program": "/devel/bin/python3/bin/python",
       "stopAtEntry": true,
       "cwd": "${workspaceFolder}",
-      "args": ["litehtml-wx-png.py"],
+      "args": ["litehtml-wx-browser.py"],
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
@@ -40,13 +40,6 @@
       "justMyCode": false,
       "cwd": "${workspaceFolder}",
       "program": "${file}"
-    },
-    {
-      "name": "Python C++ Debug",
-      "type": "pythoncpp",
-      "request": "launch",
-      "pythonConfig": "default",
-      "cppConfig": "default (gdb) Attach",
     }
   ]
 }

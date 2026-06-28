@@ -166,11 +166,11 @@ class LiteWindow(wx.ScrolledWindow):
 
     def OnMouseDown(self, evt):
         if self.doc is not None:
-            x = litehtmlpy.pixel_float_t(evt.x)
-            y = litehtmlpy.pixel_float_t(evt.x)
-            cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
-            cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
-            self.doc.on_lbutton_down(x, y, cx, cy, [])
+            print('OnMouseDown', evt.x, evt.y)
+            def proc(box):
+                print('proc', box)
+            rc = self.doc.on_lbutton_down(evt.x, evt.y, evt.x, evt.y)
+            print('result=', rc)
         evt.Skip()
 
     def OnMouseUp(self, evt):
@@ -179,7 +179,8 @@ class LiteWindow(wx.ScrolledWindow):
             y = litehtmlpy.pixel_float_t(evt.x)
             cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
             cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
-            self.doc.on_lbutton_up(x, y, cx, cy, [])
+            print('OnMouseUp', evt.x, evt.y)
+            #self.doc.on_lbutton_up(x, y, cx, cy, [])
         evt.Skip()
 
     def OnMouseMove(self, evt):
@@ -188,9 +189,8 @@ class LiteWindow(wx.ScrolledWindow):
             y = litehtmlpy.pixel_float_t(evt.x)
             cx = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.HORIZONTAL))
             cy = litehtmlpy.pixel_float_t(self.GetScrollPos(wx.VERTICAL))
-            def proc(box):
-                print('proc', box)
-            self.doc.on_mouse_over(x, y, cx, cy, proc)
+            #print('OnMouseMove', evt.x, evt.y)
+            #self.doc.on_mouse_over(x, y, cx, cy, [])
         evt.Skip()
 
     def OnSize(self, event):
