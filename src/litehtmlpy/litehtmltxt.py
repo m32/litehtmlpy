@@ -43,13 +43,12 @@ class DC:
         class FontMetrics:
             ascent = 1
             descent = 1
-            height = 10
+            height = 1
         fm = FontMetrics()
-        fm.height = 10
         return fm
 
     def GetFullTextExtent(self, text, font):
-        return len(text), 10
+        return len(text), 1
 
     def SetTextBackground(self, colour):
         self.colour = colour
@@ -70,13 +69,14 @@ class DC:
         pass
 
 class document_container(litehtmlpy.document_container):
+    classDC = DC
     def __init__(self, parent=None):
         #super().__init__()
         litehtmlpy.document_container.__init__(self)
         self.parent = parent
         self.hfont = 0
         self.fonts = {}
-        self.size = litehtmlpy.size(int(80), int(250))
+        self.size = litehtmlpy.size(80, 25)
         self.clips = []
         self.reset()
 
@@ -84,11 +84,11 @@ class document_container(litehtmlpy.document_container):
         self.dc = dc
 
     def reset(self):
-        self.dc = DC(self.size.width, self.size.height)
+        self.dc = self.classDC(self.size.width, self.size.height)
 
     def create_font(self, descr):
         face = descr.family
-        size = descr.size
+        size = int(descr.size.value)
         weight = descr.weight
         style = descr.style
         font = Font(face, size, weight, style)
@@ -119,21 +119,22 @@ class document_container(litehtmlpy.document_container):
     def draw_text(self, hdc, text, hFont, color, pos):
         if logger:
             logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, (pos.x.value, pos.y.value, pos.width.value, pos.height.value))
+        x = int(pos.x.value)
+        y = int(pos.y.value)
         font = self.fonts[hFont]
         self.dc.SetTextBackground((color.red, color.green, color.blue, color.alpha))
         self.dc.SetFont(font)
-        self.dc.DrawText(text, int(pos.x.value), int(pos.y.value))
+        self.dc.DrawText(text, x, y - font.size)
 
     def pt_to_px(self, pt):
         if logger:
             logger.debug('pt_to_px(%s)', pt.value)
-        pt = int(pt * self.ppi[1] / 72.0)
         return litehtmlpy.pixel_float_t(pt)
 
     def get_default_font_size(self):
         if logger:
             logger.debug('get_default_font_size()')
-        return litehtmlpy.pixel_float_t(12)
+        return litehtmlpy.pixel_float_t(1)
 
     def get_default_font_name(self):
         if logger:
