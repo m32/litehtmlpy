@@ -153,17 +153,21 @@ class LiteWindow(wx.ScrolledWindow):
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SCROLLWIN, self.OnScroll)
+        self.Bind(wx.EVT_IDLE, self.OnIdle)
         self.url = None
+        self.doc = None
+        self.resizing = False
         self.images = {}
         self.cntr = document_container(self)
         self.cntr.reset()
-        self.doc = None
 
     def Cleanup(self):
         print('Cleanup')
-        self.cntr.destroy()
         self.url = None
         self.doc = None
+        self.resizing = False
+        self.images = {}
+        self.cntr.destroy()
         self.cntr = None
 
     def OnMouseDown(self, evt):
@@ -181,10 +185,14 @@ class LiteWindow(wx.ScrolledWindow):
             rc = self.doc.on_mouse_over(evt.x, evt.y, evt.x, evt.y)
         evt.Skip()
 
+    def OnIdle(self, event):
+        if self.resizing:
+            self.Render()
+            self.resizing = False
+        event.Skip()
+
     def OnSize(self, event):
-        if self.url is not None:
-            self.HtmlRender()
-            self.HtmlPaint()
+        self.resizing = True
         event.Skip()
 
     def OnPaint(self, event):
@@ -195,7 +203,8 @@ class LiteWindow(wx.ScrolledWindow):
 
     def OnScroll(self, event):
         if self.url is not None:
-            self.HtmlPaint()
+            print('OnScroll')
+            wx.CallAfter(self.Render)
         event.Skip()
 
     def GetUrlData(self, url, html=True):
@@ -219,34 +228,41 @@ class LiteWindow(wx.ScrolledWindow):
         return data
 
     def LoadURL(self, url):
-        self.doc = None
-        self.cntr.destroy()
+        self.Cleanup()
+        self.cntr = document_container(self)
         self.cntr.reset()
-        self.url = None
-        self.images = {}
         html = self.GetUrlData(url, True)
         if html is None:
             return
         self.url = url
 
         self.doc = litehtmlpy.fromString(self.cntr, html, None, None)
-        self.HtmlRender()
-        self.HtmlPaint()
-        self.Refresh(True)
+        self.resizing = True
+        self.Render()
+        self.resizing = False
 
-    def HtmlRender(self):
+    def Render(self):
+        if self.url is None:
+            return
+
         size = self.GetClientSize()
-        self.doc.render(litehtmlpy.pixel_float_t(size.Width), litehtmlpy.render_all)
-        h = int(self.doc.height().value + 20) # + statusline.height
-        self.cntr.size = litehtmlpy.size(size.Width, h)
-        self.SetScrollbar(wx.VERTICAL, 0, size.Height, h, True)
+        scrollrate = size.Height // 3
 
-    def HtmlPaint(self):
+        if self.resizing:
+            self.doc.render(litehtmlpy.pixel_float_t(size.Width), litehtmlpy.render_all)
+            h = int(self.doc.height().value + 20) # + statusline.height
+            self.cntr.size = litehtmlpy.size(size.Width, h)
+
+            self.SetVirtualSize((size.Width, h))
+            self.SetScrollRate(scrollrate, scrollrate)
+
+        y = self.GetViewStart()[1] * scrollrate
+
         self.cntr.reset()
-        size = self.GetClientSize()
-        y = self.GetScrollPos(wx.VERTICAL)
         clip = litehtmlpy.position(0, 0, size.Width, size.Height)
         self.doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(-y), clip)
+
+        self.Refresh(False)
 
     def HtmlClickHRef(self, url, element):
         url = urllib.parse.urljoin(self.url, url)
