@@ -48,6 +48,21 @@ static cairo_status_t write_png_stream_to_byte_array (void *in_closure, const un
             cairo_status_t status = cairo_surface_write_to_png_stream(surface, &cairosavestream, &st);
             return (int)status;
         })
+        .def("get_data", [](
+            py_document_container_cairo_pango &self
+        ) {
+            // Zero-copy view of the raw ARGB32 pixels of the last
+            // surface(w, h)/draw() call, avoiding a PNG encode on our
+            // side and decode on the Python side - both of which get
+            // expensive fast on long documents. The buffer is only
+            // valid until the next surface() call replaces it.
+            cairo_surface_t *surface = self.getsurface();
+            cairo_surface_flush(surface);
+            unsigned char *data = cairo_image_surface_get_data(surface);
+            int stride = cairo_image_surface_get_stride(surface);
+            int height = cairo_image_surface_get_height(surface);
+            return py::memoryview::from_memory(data, (size_t)stride * height, false);
+        })
         .def("clear_images", [](
             py_document_container_cairo_pango &self
         ) {
