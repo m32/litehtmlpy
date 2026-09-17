@@ -10,7 +10,7 @@
 		.def("is_float", &lh::element::is_float)
 		.def("is_block_formatting_context", &lh::element::is_block_formatting_context)
 		.def("is_root", &lh::element::is_root)
-//		.def("parent", &lh::element::parent)
+		.def("parent", static_cast<lh::element::ptr (lh::element::*)() const>(&lh::element::parent))
 //		void						parent(const element::ptr& par)
 		.def("is_table_skip", &lh::element::is_table_skip)
 		.def("children", &lh::element::children)
@@ -32,7 +32,7 @@
 //		virtual void				set_data(const char* data);
 
 //		virtual void				set_attr(const char* name, const char* val);
-//		virtual const char*			get_attr(const char* name, const char* def = nullptr) const;
+		.def("get_attr", &lh::element::get_attr, "name"_a, "def"_a = nullptr)
 //		virtual void				apply_stylesheet(const litehtml::css& stylesheet);
 		.def("refresh_styles", &lh::element::refresh_styles)
 		.def("is_white_space", &lh::element::is_white_space)
