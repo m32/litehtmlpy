@@ -68,6 +68,18 @@ static cairo_status_t write_png_stream_to_byte_array (void *in_closure, const un
         ) {
             self.set_dpi(dpi);
         })
+        .def("set_font_options", [](
+            py_document_container_cairo_pango &self,
+            int antialias,
+            int hint_style,
+            int subpixel_order
+        ) {
+            self.set_font_options(
+                (cairo_antialias_t)antialias,
+                (cairo_hint_style_t)hint_style,
+                (cairo_subpixel_order_t)subpixel_order
+            );
+        })
         .def("fromString", [](
             py_document_container_cairo_pango &self,
             char *html,
