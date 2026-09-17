@@ -65,7 +65,11 @@
 //		virtual size_vector			get_size_vector_property  (string_id name, bool inherited, const size_vector&   default_value, uint_ptr css_properties_member_offset) const;
 //		virtual string				get_custom_property(string_id name, const string& default_value) const;
 
-//		virtual void				get_text(string& text);
+		.def("get_text", [](const lh::element &self) {
+			std::string text;
+			self.get_text(text);
+			return text;
+		})
 //		virtual void				parse_attributes();
 //		virtual int					select(const string& selector);
 //		virtual int					select(const css_selector& selector, bool apply_pseudo = true);
