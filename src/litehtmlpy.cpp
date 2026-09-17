@@ -1039,7 +1039,7 @@ public:
         }
         PYBIND11_OVERRIDE_PURE(
             void,
-            document_container,
+            container_cairo_pango,
             on_mouse_event,
             el, event
         );
