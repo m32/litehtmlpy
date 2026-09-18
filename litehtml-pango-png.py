@@ -89,7 +89,16 @@ class Main:
 
         print('x-save-stream')
         with open(f'demo-{int(width):04d}.png', 'wb') as fpo:
-            rc = cntr.savestream(fpo.write)
+            if 0:
+                # get_data() is raw BGRa pixels, not a PNG stream - decode before saving
+                data = cntr.get_data()
+                w = int(doc.width().value)
+                h = int(doc.height().value)
+                img = Image.frombuffer('RGBA', (w, h), data, 'raw', 'BGRa', 0, 1)
+                img.save(fpo, format='PNG')
+                rc = 0
+            else:
+                rc = cntr.savestream(fpo.write)
         print('save result:', rc)
 
     def demo(self):
