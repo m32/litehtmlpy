@@ -444,122 +444,133 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            delete_font,
-            hFont
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "delete_font");
+        if (pyfunc) {
+            pyfunc(hFont);
+        }
     }
     lh::pixel_t     text_width(const char* text, lh::uint_ptr hFont) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            lh::pixel_t,
-            document_container,
-            text_width,
-            text, hFont
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "text_width");
+        if (pyfunc) {
+            auto obj = pyfunc(text, hFont);
+            if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
+                return obj.cast<lh::pixel_t>();
+            }
+        }
+        return 0;
     }
     void    draw_text(lh::uint_ptr hdc, const char* text, lh::uint_ptr hFont, lh::web_color color, const lh::position& pos) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_text,
-            hdc, text, hFont, color, pos
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_text");
+        if (pyfunc) {
+            pyfunc(hdc, text, hFont, color, pos);
+        }
     }
     lh::pixel_t     pt_to_px(float pt) const override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            lh::pixel_t,
-            document_container,
-            pt_to_px,
-            pt
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "pt_to_px");
+        if (pyfunc) {
+            auto obj = pyfunc(pt);
+            if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
+                return obj.cast<lh::pixel_t>();
+            }
+        }
+        return 0;
     }
     lh::pixel_t     get_default_font_size() const override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            lh::pixel_t,
-            document_container,
-            get_default_font_size,
-            // no arguments
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "get_default_font_size");
+        if (pyfunc) {
+            auto obj = pyfunc();
+            if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
+                return obj.cast<lh::pixel_t>();
+            }
+        }
+        return 0;
     }
     const char*   get_default_font_name() const override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            char*,
-            document_container,
-            get_default_font_name,
-            // no arguments
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "get_default_font_name");
+        if (pyfunc) {
+            auto obj = pyfunc();
+            if (py::isinstance<py::str>(obj)) {
+                static std::string cached;
+                cached = obj.cast<std::string>();
+                return cached.c_str();
+            }
+        }
+        static const char* fallback = "";
+        return fallback;
     }
     void    draw_list_marker(lh::uint_ptr hdc, const lh::list_marker& marker) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-#if 0
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_list_marker,
-            hdc, marker
-        );
-#endif
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_list_marker");
+        if (pyfunc) {
+            pyfunc(hdc, marker);
+        }
     }
     void    load_image(const char* src, const char* baseurl, bool redraw_on_ready) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            load_image,
-            src, baseurl, redraw_on_ready
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "load_image");
+        if (pyfunc) {
+            pyfunc(src, baseurl, redraw_on_ready);
+        }
     }
     void    get_image_size(const char* src, const char* baseurl, lh::size& sz) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            get_image_size,
-            src, baseurl, &sz
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "get_image_size");
+        if (pyfunc) {
+            auto obj = pyfunc(src, baseurl, sz);
+            if (obj.is_none()) {
+                sz.width = 0;
+                sz.height = 0;
+            }
+        }
     }
     void draw_image(lh::uint_ptr hdc, const lh::background_layer& layer, const std::string& url, const std::string& base_url) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_image,
-            hdc, layer, url, base_url
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_image");
+        if (pyfunc) {
+            pyfunc(hdc, layer, url, base_url);
+        }
     }
 
 	void draw_solid_fill(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::web_color& color) override
@@ -567,12 +578,11 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_solid_fill,
-            hdc, layer, color
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_solid_fill");
+        if (pyfunc) {
+            pyfunc(hdc, layer, color);
+        }
     }
 
 	void draw_linear_gradient(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::background_layer::linear_gradient& gradient) override
@@ -580,12 +590,11 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_linear_gradient,
-            hdc, layer, gradient
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_linear_gradient");
+        if (pyfunc) {
+            pyfunc(hdc, layer, gradient);
+        }
     }
 
 	void draw_radial_gradient(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::background_layer::radial_gradient& gradient) override
@@ -593,12 +602,11 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_radial_gradient,
-            hdc, layer, gradient
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_radial_gradient");
+        if (pyfunc) {
+            pyfunc(hdc, layer, gradient);
+        }
     }
 
 	void draw_conic_gradient(lh::uint_ptr hdc, const lh::background_layer& layer, const lh::background_layer::conic_gradient& gradient) override
@@ -606,12 +614,11 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_background,
-            hdc, layer, gradient
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_conic_gradient");
+        if (pyfunc) {
+            pyfunc(hdc, layer, gradient);
+        }
     }
 
     void    draw_borders(lh::uint_ptr hdc, const lh::borders& borders, const lh::position& draw_pos, bool root) override
@@ -619,12 +626,11 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            draw_borders,
-            hdc, borders, draw_pos, root
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "draw_borders");
+        if (pyfunc) {
+            pyfunc(hdc, borders, draw_pos, root);
+        }
     }
 
     void    set_caption(const char* caption) override
@@ -632,29 +638,32 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            set_caption,
-            caption
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "set_caption");
+        if (pyfunc) {
+            pyfunc(caption);
+        }
     }
     void    set_base_url(const char* base_url) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            set_base_url,
-            base_url
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "set_base_url");
+        if (pyfunc) {
+            pyfunc(base_url);
+        }
     }
     void    link(const std::shared_ptr<lh::document>& doc, const lh::element::ptr& el) override
     {
         if( debuglog ){
             ENTERWRAPPER
+        }
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "link");
+        if (pyfunc) {
+            pyfunc(doc, el);
         }
     }
     void    on_anchor_click(const char* url, const lh::element::ptr& el) override
@@ -662,55 +671,50 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            on_anchor_click,
-            url, el
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "on_anchor_click");
+        if (pyfunc) {
+            pyfunc(url, el);
+        }
     }
     void    on_mouse_event(const litehtml::element::ptr& el, litehtml::mouse_event event) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            on_mouse_event,
-            el, event
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "on_mouse_event");
+        if (pyfunc) {
+            pyfunc(el, event);
+        }
     }
     void    set_cursor(const char* cursor) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            set_cursor,
-            cursor
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "set_cursor");
+        if (pyfunc) {
+            pyfunc(cursor);
+        }
     }
     void    transform_text(std::string& text, lh::text_transform tt) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            transform_text,
-            text, tt
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "transform_text");
+        if (pyfunc) {
+            pyfunc(text, tt);
+        }
     }
     void    import_css(std::string& text, const std::string& url, std::string& baseurl) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-#if 1
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "import_css");
         if (pyfunc) {
@@ -719,38 +723,28 @@ public:
                 text = obj.cast<std::string>();
             }
         }
-#else
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            import_css,
-            text, url, baseurl
-        );
-#endif
     }
     void    set_clip(const lh::position& pos, const lh::border_radiuses& bdr_radius) override
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            set_clip,
-            pos, bdr_radius
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "set_clip");
+        if (pyfunc) {
+            pyfunc(pos, bdr_radius);
+        }
     }
     void    del_clip() override 
     {
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            del_clip,
-            // no arguments
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "del_clip");
+        if (pyfunc) {
+            pyfunc();
+        }
     }
 
     virtual void get_viewport(litehtml::position& viewport) const
@@ -758,12 +752,14 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            document_container,
-            get_viewport,
-            &viewport
-        );
+        py::gil_scoped_acquire gil;
+        py::function pyfunc = pybind11::get_override(this, "get_viewport");
+        if (pyfunc) {
+            auto obj = pyfunc(viewport);
+            if (obj.is_none()) {
+                viewport = lh::position{};
+            }
+        }
     }
 
     lh::element::ptr create_element( const char* tag_name,
@@ -773,11 +769,9 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-#if 1
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "create_element");
         if (pyfunc) {
-            //DebugBreak();
             auto obj = pyfunc(tag_name, attributes, doc);
             if( obj.is_none() )
                 return nullptr;
@@ -789,14 +783,6 @@ public:
             }
         }
         return nullptr;
-#else
-        PYBIND11_OVERRIDE_PURE(
-            lh::element::ptr,
-            document_container,
-            create_element,
-            tag_name, attributes, doc
-        );
-#endif
     }
     void    get_media_features(lh::media_features& media) const override
     {
@@ -826,18 +812,16 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-/*
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "get_language");
         if (pyfunc) {
             auto obj = pyfunc();
-            if (py::isinstance<py::list>(obj)) {
-                py::list l = obj.cast<py::list>();
-                language = l[0].cast<string&>();
-                culture = l[1].cast<string&>();
+            if (py::isinstance<py::tuple>(obj) && py::len(obj) == 2) {
+                auto tup = obj.cast<py::tuple>();
+                language = tup[0].cast<std::string>();
+                culture = tup[1].cast<std::string>();
             }
         }
-*/
     }
 #if 0
     string resolve_color(const string& color) const {
@@ -1061,7 +1045,6 @@ public:
         if( debuglog ){
             ENTERWRAPPER
         }
-#if 1
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "import_css");
         if (pyfunc) {
@@ -1070,14 +1053,6 @@ public:
                 text = obj.cast<std::string>();
             }
         }
-#else
-        PYBIND11_OVERRIDE_PURE(
-            void,
-            container_cairo_pango,
-            import_css,
-            text, url, baseurl
-        );
-#endif
     }
 
     virtual void get_viewport(litehtml::position& viewport) const
