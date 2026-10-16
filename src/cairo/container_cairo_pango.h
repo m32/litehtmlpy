@@ -44,10 +44,10 @@ class container_cairo_pango : public container_cairo
     void draw_text(litehtml::uint_ptr hdc, const char* text, litehtml::uint_ptr hFont, litehtml::web_color color,
                    const litehtml::position& pos) override;
 
-    // Lets callers (e.g. a GTK-embedding Python container) mirror the host
+    // Lets a host application (e.g. a GTK-embedding container) mirror the
     // desktop's actual Xft/fontconfig antialiasing/hinting settings instead
     // of falling back to Cairo's generic defaults, which look noticeably
-    // different from the rest of a GTK/WebKit-themed UI.
+    // different from the rest of a themed UI.
     void set_font_options(cairo_antialias_t antialias, cairo_hint_style_t hint_style,
                           cairo_subpixel_order_t subpixel_order);
 

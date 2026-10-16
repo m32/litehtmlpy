@@ -43,7 +43,9 @@ if(CMAKE_CROSSCOMPILING)
     )
 endif()
 
-add_subdirectory(pybind11)
+#add_subdirectory(pybind11)
+# 2. Znajdź zainstalowaną w systemie bibliotekę pybind11
+find_package(pybind11 REQUIRED)
 
 if(DEFINED LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS AND LITEHTMLPY_INCLUDE_CAIRO_CONTAINERS)
     set(TEST_LITEHTMLPY_CONTAINERS
