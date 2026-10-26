@@ -1,6 +1,10 @@
     py::class_<lh::element, py_element, std::shared_ptr<lh::element>>(m, "element")
         .def(py::init<const std::shared_ptr<py_document>&>())
-        .def("css", &lh::element::css)
+//        .def("css", &lh::element::css)
+		.def("css", [](const lh::element &self) {
+			const lh::css_properties& props = self.css();
+			return props;
+		})
 		.def("in_normal_flow", &lh::element::in_normal_flow)
 		.def("is_inline", &lh::element::is_inline)
 		.def("is_inline_box", &lh::element::is_inline_box)

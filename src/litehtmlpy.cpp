@@ -429,10 +429,15 @@ public:
                 py::list l = obj.cast<py::list>();
                 result = l[0].cast<int>();
                 if( fm ) {
-                    fm->ascent   = l[1].cast<int>();
-                    fm->descent  = l[2].cast<int>();
-                    fm->height   = l[3].cast<int>();
-                    fm->x_height = l[4].cast<int>();
+                    fm->font_size= l[1].cast<int>();
+                    fm->height   = l[2].cast<int>();
+                    fm->ascent   = l[3].cast<int>();
+                    fm->descent  = l[4].cast<int>();
+                    fm->x_height = l[5].cast<int>();
+                    fm->ch_width = l[6].cast<int>();
+                    fm->draw_spaces = true;
+                    fm->sub_shift = 0;
+                    fm->super_shift = 0;
                 }
             }
         }

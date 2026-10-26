@@ -18,7 +18,16 @@ class document_container(litehtmlpy.document_container):
         logger.debug('create_font(%s)', descr)
         self.hfont += 1
         self.fonts[self.hfont] = None
-        return [self.hfont, 15, 4, 19, 19]
+        result = [
+            self.hfont,
+            15, # font size
+            15, # height
+            4,  # ascent
+            4,  # descent
+            15, # x height
+            4,  # 0 width
+        ]
+        return result
 
     def delete_font(self, hFont):
         logger.debug('delete_font(%d)', hFont)

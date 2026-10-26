@@ -1,7 +1,7 @@
 #!/usr/bin/env vpython3
 import logme
 
-from litehtmlpy import litehtml, litehtmlpy
+from litehtmlpy import litehtml, litehtmltxt, litehtmlpy
 
 class Button(litehtml.litehtmlpy.html_tag):
     def __init__(self, attributes, doc):
@@ -10,7 +10,18 @@ class Button(litehtml.litehtmlpy.html_tag):
     def draw(self, hdc, x, y, clip, ri):
         super().draw(hdc, x, y, clip, ri)
         pos = ri.pos()
-        print(f'Button.draw({hdc}, {x.value}, {y.value}, ({clip.x.value}, {clip.y.value}, {clip.width.value}, {clip.height.value}), ({pos.x.value}, {pos.y.value})')
+        #print('ri', ri.left().value, ri.top().value, ri.right().value, ri.bottom().value)
+        x += pos.x
+        y += pos.y
+        w = pos.width.value
+        h = pos.height.value
+        css = self.css()
+        lh = css.line_height().value
+        fh = css.get_font_size().value
+        lh = css.line_height().value
+        y = y.value + (h - lh) // 2
+        h = pos.height.value
+        print(f'Button.draw({hdc}, x={x.value}, y={y}, w={w}, h={h})')
 
 
 class Input(litehtml.litehtmlpy.html_tag):
@@ -22,7 +33,7 @@ class Input(litehtml.litehtmlpy.html_tag):
     def draw(self, hdc, x, y, clip, ri):
         super().draw(hdc, x, y, clip, ri)
         pos = ri.pos()
-        #print('input.draw', ri.left(), ri.top(), ri.right(), ri.bottom())
+        #print('ri', ri.left().value, ri.top().value, ri.right().value, ri.bottom().value)
         x += pos.x
         y += pos.y
         w = pos.width.value
@@ -33,10 +44,10 @@ class Input(litehtml.litehtmlpy.html_tag):
         lh = css.line_height().value
         y = y.value + (h - lh) // 2
         h = pos.height.value
-        print('Input.draw', hdc, x.value, y, w, h)
+        print(f'Input.draw({hdc}, x={x.value}, y={y}, w={w}, h={h})')
 
 
-class document_container(litehtml.document_container):
+class document_container(litehtmltxt.document_container):
     def __init__(self):
         super().__init__()
         self.handlers = []
@@ -78,6 +89,7 @@ def main():
 
     doc = litehtmlpy.fromString(cntr, html, None, None)
     doc.render(cntr.size.width, litehtmlpy.render_all)
+    print('size:', int(doc.width().value), int(doc.height().value))
     clip = litehtmlpy.position(0, 0, int(doc.width().value), int(doc.height().value))
     doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0), clip)
     del doc, cntr
