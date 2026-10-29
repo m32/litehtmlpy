@@ -408,6 +408,18 @@ public:
     }
 };
 
+// accept pixel_float_t, float or int returned from python overrides
+static lh::pixel_t to_pixel(const py::object& obj)
+{
+    if (py::isinstance<lh::pixel_float_t>(obj)) {
+        return obj.cast<lh::pixel_float_t>();
+    }
+    if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
+        return lh::pixel_t(obj.cast<float>());
+    }
+    return 0;
+}
+
 class py_document : public lh::document
 {
 };
@@ -464,9 +476,7 @@ public:
         py::function pyfunc = pybind11::get_override(this, "text_width");
         if (pyfunc) {
             auto obj = pyfunc(text, hFont);
-            if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
-                return obj.cast<lh::pixel_t>();
-            }
+            return to_pixel(obj);
         }
         return 0;
     }
@@ -490,9 +500,7 @@ public:
         py::function pyfunc = pybind11::get_override(this, "pt_to_px");
         if (pyfunc) {
             auto obj = pyfunc(pt);
-            if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
-                return obj.cast<lh::pixel_t>();
-            }
+            return to_pixel(obj);
         }
         return 0;
     }
@@ -505,9 +513,7 @@ public:
         py::function pyfunc = pybind11::get_override(this, "get_default_font_size");
         if (pyfunc) {
             auto obj = pyfunc();
-            if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
-                return obj.cast<lh::pixel_t>();
-            }
+            return to_pixel(obj);
         }
         return 0;
     }

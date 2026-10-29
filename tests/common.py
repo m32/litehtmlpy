@@ -14,7 +14,15 @@ class DummyContainer(litehtml.document_container):
 
     def create_font(self, descr):
         self._font_id += 1
-        return [self._font_id, 15, 4, 19, 19]
+        return [
+            self._font_id,
+            15, # font size
+            19, # height
+            15, # ascent
+            4,  # descent
+            8,  # x height
+            12, # 0 width
+        ]
 
     def delete_font(self, hFont):
         pass

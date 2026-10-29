@@ -25,7 +25,7 @@ def test_render_css_block_and_inline_examples():
 def test_font_metrics_are_positive():
     container = DummyContainer()
     font = container.create_font(None)
-    assert len(font) == 5
+    assert len(font) == 7
     assert font[0] > 0
     assert font[1] > 0
     assert litehtmlpy.pixel_float_t(12).value > 0

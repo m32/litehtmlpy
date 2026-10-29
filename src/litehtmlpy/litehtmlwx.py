@@ -78,6 +78,8 @@ class document_container(litehtmlpy.document_container):
             
         underline = decoration != 0
         font = wx.Font(size, wx.FONTFAMILY_DEFAULT, style, weight, underline, face)
+        # css px is em-size; font point size is em-size too, so convert px -> pt
+        font.SetFractionalPointSize(descr.size.value * 72.0 / self.ppi[1])
         self.hfont += 1
         self.fonts[self.hfont] = font
         self.dc.SetFont(font)
@@ -88,8 +90,8 @@ class document_container(litehtmlpy.document_container):
             fm.height, # height
             fm.ascent, # ascent
             fm.descent,# descent
-            font.GetTextHeight('x'), # x height
-            font.GetTextWidth('0'),  # 0 width
+            fm.ascent // 2,          # x height (approximation)
+            self.dc.GetTextExtent('0')[0],  # 0 width
         ]
         return result
 
@@ -107,8 +109,7 @@ class document_container(litehtmlpy.document_container):
         logger.debug('draw_text(%d, %s, %d, %s, %s)', hdc, text, hFont, color, (pos.x, pos.y, pos.width, pos.height))
         font = self.fonts[hFont]
         color = wx.Colour(color.red, color.green, color.blue, color.alpha)
-        #self.dc.SetTextForeground(color)
-        self.dc.SetTextBackground(color)
+        self.dc.SetTextForeground(color)
         self.dc.SetFont(font)
         self.dc.DrawText(text, int(pos.x.value), int(pos.y.value))
 
