@@ -53,7 +53,8 @@ class Input(litehtmlpy.html_tag):
         self.ctrl = wx.TextCtrl(parent, -1)
 
     def destroy(self):
-        self.ctrl.Destroy()
+        if self.ctrl:
+            self.ctrl.Destroy()
         self.ctrl = None
 
     def draw(self, hdc, x, y, clip, ri):
@@ -134,12 +135,6 @@ class document_container(litehtmlwx.document_container):
                 self.handlers.append(tagh)
                 return tagh
         return None
-
-    def draw_image(self, hdc, layer, url, base_url):
-        self.parent.DrawImage(layer, url, base_url)
-
-    def draw_solid_fill(self, hdc, layer, color):
-        self.parent.DrawSolidFill(layer, color)
 
 class LiteWindow(wx.ScrolledWindow):
     def __init__(self, parent, ID):
@@ -273,7 +268,7 @@ class LiteWindow(wx.ScrolledWindow):
         print('HtmlClick', element.attributes)
 
     def HtmlLoadImage(self, src, baseurl, redraw_on_ready):
-        if baseurl is not None:
+        if baseurl:
             url = urllib.parse.urljoin(baseurl, src)
         else:
             url = urllib.parse.urljoin(self.url, src)
@@ -287,34 +282,12 @@ class LiteWindow(wx.ScrolledWindow):
         return None
 
     def HtmlGetImage(self, src, baseurl):
-        if baseurl is not None:
+        if baseurl:
             url = urllib.parse.urljoin(baseurl, src)
         else:
             url = urllib.parse.urljoin(self.url, src)
         #print('HtmlGetImage', src, baseurl)
         return self.images.get(url, None)
-
-    def DrawImage(self, layer, url, base_url):
-        img = self.HtmlGetImage(url, base_url)
-        if img is None:
-            return
-        bpos = layer.border_box
-        #cpos = layer.clip_box
-        #print('DrawImage', url, (bpos.x, bpos.y, bpos.width, bpos.height))
-        img = img.Scale(int(bpos.width.value), int(bpos.height.value), wx.IMAGE_QUALITY_HIGH)
-        bmp = wx.Bitmap(img)
-        #gc = wx.GraphicsContext.Create(dc)
-        self.cntr.dc.DrawBitmap(bmp, wx.Point(bpos.x, bpos.y))
-
-    def DrawSolidFill(self, layer, color):
-        
-        color = wx.Colour(color.red, color.green, color.blue)
-        b = wx.Brush(color) 
-        self.cntr.dc.SetBrush(b) 
-
-        bpos = layer.clip_box
-        self.cntr.dc.DrawRectangle(int(bpos.x.value), int(bpos.y.value), int(bpos.width.value), int(bpos.height.value))
-        self.cntr.dc.SetBrush(wx.NullBrush) 
 
 class LiteHtmlPanel(wx.Panel):
     def __init__(self, parent, url):

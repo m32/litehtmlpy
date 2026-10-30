@@ -31,6 +31,25 @@
         .def_readwrite("height", &lh::size::height)
     ;
 
+    py::class_<lh::pointF>(m, "pointF")
+        .def(py::init<>())
+        .def(py::init<float, float>())
+        .def_readwrite("x", &lh::pointF::x)
+        .def_readwrite("y", &lh::pointF::y)
+    ;
+
+    py::class_<lh::list_marker>(m, "list_marker")
+        .def_readwrite("image", &lh::list_marker::image)
+        .def_property_readonly("baseurl", [](const lh::list_marker& self) {
+            return self.baseurl ? py::object(py::str(self.baseurl)) : py::object(py::none());
+        })
+        .def_readwrite("marker_type", &lh::list_marker::marker_type)
+        .def_readwrite("color", &lh::list_marker::color)
+        .def_readwrite("pos", &lh::list_marker::pos)
+        .def_readwrite("index", &lh::list_marker::index)
+        .def_readwrite("font", &lh::list_marker::font)
+    ;
+
     py::class_<lh::position>(m, "position")
         .def_readwrite("x", &lh::position::x)
         .def_readwrite("y", &lh::position::y)

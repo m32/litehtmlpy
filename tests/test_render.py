@@ -92,3 +92,62 @@ def test_cairo_container_can_render_png_bytes():
     rc = container.savestream(buffer.write)
     assert rc == 0
     assert buffer.getbuffer()[:8]
+
+
+class RecordingContainer(DummyContainer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.calls = []
+
+    def draw_list_marker(self, hdc, marker):
+        self.calls.append(('marker', marker.marker_type))
+
+    def draw_linear_gradient(self, hdc, layer, gradient):
+        self.calls.append(('linear', len(gradient.color_points)))
+
+    def draw_radial_gradient(self, hdc, layer, gradient):
+        self.calls.append(('radial', gradient.radius.x > 0))
+
+    def draw_conic_gradient(self, hdc, layer, gradient):
+        self.calls.append(('conic', len(gradient.color_points)))
+
+
+def draw_calls(html):
+    container = RecordingContainer()
+    doc = litehtmlpy.fromString(container, html, None, None)
+    doc.render(container.size.width, litehtmlpy.render_all)
+    doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0),
+             litehtmlpy.position(0, 0, 800, 1000))
+    return container.calls
+
+
+def test_list_markers_are_passed_to_python():
+    calls = draw_calls('<ul><li>a</li><li style="list-style-type: square">b</li></ul>')
+    assert calls == [
+        ('marker', litehtmlpy.list_style_type_disc),
+        ('marker', litehtmlpy.list_style_type_square),
+    ]
+
+
+def test_gradients_are_passed_to_python():
+    calls = draw_calls(
+        '<div style="height:10px; background: linear-gradient(red, blue)"></div>'
+        '<div style="height:10px; background: radial-gradient(red, blue)"></div>'
+        '<div style="height:10px; background: conic-gradient(red, lime, blue)"></div>'
+    )
+    assert calls == [('linear', 2), ('radial', True), ('conic', 3)]
+
+
+@pytest.mark.parametrize("set_size", ["in_place", "return_tuple"])
+def test_get_image_size_is_used_for_layout(set_size):
+    class ImageContainer(DummyContainer):
+        def get_image_size(self, src, baseurl, size):
+            if set_size == "return_tuple":
+                return (40, 30)
+            size.width.value = 40
+            size.height.value = 30
+
+    container = ImageContainer()
+    doc = litehtmlpy.fromString(container, '<div style="display:inline-block"><img src="x.png"></div>', None, None)
+    doc.render(container.size.width, litehtmlpy.render_all)
+    assert doc.height().value >= 30

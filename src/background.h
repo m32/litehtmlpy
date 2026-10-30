@@ -24,39 +24,22 @@
     py::class_<lh::background_layer::color>(m, "background_layer_color")
         .def_readwrite("color", &lh::background_layer::color::color)
     ;
-    /*
-        class gradient_base
-        {
-        public:
-            vector<color_point>  color_points;
-            color_space_t        color_space       = color_space_none;
-            hue_interpolation_t  hue_interpolation = hue_interpolation_none;
-
-            void color_points_transparent_fix();
-            bool prepare_color_points(float len, string_id grad_type, const vector<gradient::color_stop>& colors);
-        };
-
-        class linear_gradient : public gradient_base
-        {
-        public:
-            pointF start;
-            pointF end;
-        };
-
-        class radial_gradient : public gradient_base
-        {
-        public:
-            pointF position;
-            pointF radius;
-        };
-
-        class conic_gradient : public gradient_base
-        {
-        public:
-            pointF position;
-            float angle = 0;
-        };
-    */
+    py::class_<lh::background_layer::gradient_base>(m, "background_layer_gradient_base")
+        .def_readwrite("color_points", &lh::background_layer::gradient_base::color_points)
+    ;
+    py::class_<lh::background_layer::linear_gradient, lh::background_layer::gradient_base>(m, "background_layer_linear_gradient")
+        .def_readwrite("start", &lh::background_layer::linear_gradient::start)
+        .def_readwrite("end", &lh::background_layer::linear_gradient::end)
+    ;
+    py::class_<lh::background_layer::radial_gradient, lh::background_layer::gradient_base>(m, "background_layer_radial_gradient")
+        .def_readwrite("position", &lh::background_layer::radial_gradient::position)
+        .def_readwrite("radius", &lh::background_layer::radial_gradient::radius)
+    ;
+    py::class_<lh::background_layer::conic_gradient, lh::background_layer::gradient_base>(m, "background_layer_conic_gradient")
+        .def_readwrite("position", &lh::background_layer::conic_gradient::position)
+        .def_readwrite("angle", &lh::background_layer::conic_gradient::angle)
+        .def_readwrite("radius", &lh::background_layer::conic_gradient::radius)
+    ;
     py::enum_<lh::background::layer_type>(m, "layer_type")
         .value("type_none", lh::background::layer_type::type_none)
         .value("type_color", lh::background::layer_type::type_color)

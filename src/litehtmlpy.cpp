@@ -590,10 +590,12 @@ public:
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "get_image_size");
         if (pyfunc) {
-            auto obj = pyfunc(src, baseurl, sz);
-            if (obj.is_none()) {
-                sz.width = 0;
-                sz.height = 0;
+            // python sets size in place and returns None, or returns (width, height)
+            auto obj = pyfunc(src, baseurl, py::cast(&sz, py::return_value_policy::reference));
+            if (!obj.is_none()) {
+                py::sequence wh = to_sequence(obj, 2, "get_image_size", "(width, height) or None");
+                sz.width = to_pixel(wh[0], "get_image_size");
+                sz.height = to_pixel(wh[1], "get_image_size");
             }
         }
     }
