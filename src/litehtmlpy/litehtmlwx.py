@@ -19,16 +19,30 @@ class document_container(litehtmlpy.document_container):
 
     def SetDC(self, dc):
         if dc is None:
-            self.dc.SelectObject(wx.NullBitmap)
+            if isinstance(self.dc, wx.MemoryDC):
+                self.dc.SelectObject(wx.NullBitmap)
             self.dc.SetBackground(wx.NullBrush)
             self.dc = None
             return
         self.dc = dc
-        self.bmp = wx.Bitmap(int(self.size.width.value), int(self.size.height.value), 32)
-        self.dc.SelectObject(self.bmp)
+        # only memory dc needs its own bitmap, printer dc draws on the page
+        if isinstance(dc, wx.MemoryDC):
+            self.bmp = wx.Bitmap(int(self.size.width.value), int(self.size.height.value), 32)
+            self.dc.SelectObject(self.bmp)
         self.dc.SetBackground(wx.Brush(wx.WHITE))
         self.dc.Clear()
         self.ppi = self.dc.GetPPI()
+        self.px_per_pt = self.measure_px_per_pt()
+
+    def measure_px_per_pt(self):
+        # device pixels per font point; GetPPI() is not reliable for that
+        # (wxGTK printer dc), so compare with a screen memory dc (ppi/72)
+        font = wx.Font(wx.FontInfo(100))
+        self.dc.SetFont(font)
+        height = self.dc.GetFontMetrics().height
+        ref = wx.MemoryDC(wx.Bitmap(1, 1))
+        ref.SetFont(font)
+        return height / ref.GetFontMetrics().height * ref.GetPPI()[1] / 72.0
 
     def reset(self):
         self.SetDC(wx.MemoryDC())
@@ -79,7 +93,7 @@ class document_container(litehtmlpy.document_container):
         underline = decoration != 0
         font = wx.Font(size, wx.FONTFAMILY_DEFAULT, style, weight, underline, face)
         # css px is em-size; font point size is em-size too, so convert px -> pt
-        font.SetFractionalPointSize(descr.size.value * 72.0 / self.ppi[1])
+        font.SetFractionalPointSize(descr.size.value / self.px_per_pt)
         self.hfont += 1
         self.fonts[self.hfont] = font
         self.dc.SetFont(font)

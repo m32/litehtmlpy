@@ -21,6 +21,7 @@ class document_container(litehtmlwx.document_container):
 
     def import_css(self, text, url, base_url):
         url = urllib.parse.urljoin(base_url, url)
+        data = None
         if os.path.exists(url):
             with open(url, 'rt') as fp:
                 data = fp.read()

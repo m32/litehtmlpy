@@ -31,6 +31,7 @@ class Main:
 
         cntr.bmp.SaveFile(f'demo-{i:04d}.png', wx.BITMAP_TYPE_PNG)
 
+        cntr.SetDC(None)
         del doc
         del cntr
 
