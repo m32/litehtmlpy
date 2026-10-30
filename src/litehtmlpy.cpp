@@ -408,8 +408,15 @@ public:
     }
 };
 
+// wrong return type from python override: raise TypeError instead of silently using 0
+[[noreturn]] static void bad_return(const char* method, const char* expected, const py::handle& obj)
+{
+    throw py::type_error(std::string(method) + "() must return " + expected
+        + ", not " + std::string(py::str(py::type::handle_of(obj).attr("__name__"))));
+}
+
 // accept pixel_float_t, float or int returned from python overrides
-static lh::pixel_t to_pixel(const py::object& obj)
+static lh::pixel_t to_pixel(const py::handle& obj, const char* method)
 {
     if (py::isinstance<lh::pixel_float_t>(obj)) {
         return obj.cast<lh::pixel_float_t>();
@@ -417,7 +424,24 @@ static lh::pixel_t to_pixel(const py::object& obj)
     if (py::isinstance<py::float_>(obj) || py::isinstance<py::int_>(obj)) {
         return lh::pixel_t(obj.cast<float>());
     }
-    return 0;
+    bad_return(method, "int, float or pixel_float_t", obj);
+}
+
+static int to_int(const py::handle& obj, const char* method)
+{
+    if (py::isinstance<py::int_>(obj)) {
+        return obj.cast<int>();
+    }
+    bad_return(method, "int", obj);
+}
+
+// list or tuple of exactly n items
+static py::sequence to_sequence(const py::object& obj, size_t n, const char* method, const char* expected)
+{
+    if ((py::isinstance<py::list>(obj) || py::isinstance<py::tuple>(obj)) && py::len(obj) == n) {
+        return obj.cast<py::sequence>();
+    }
+    bad_return(method, expected, obj);
 }
 
 class py_document : public lh::document
@@ -437,20 +461,20 @@ public:
         py::function pyfunc = pybind11::get_override(this, "create_font");
         if (pyfunc) {
             auto obj = pyfunc(descr);
-            if (py::isinstance<py::list>(obj)) {
-                py::list l = obj.cast<py::list>();
-                result = l[0].cast<int>();
-                if( fm ) {
-                    fm->font_size= l[1].cast<int>();
-                    fm->height   = l[2].cast<int>();
-                    fm->ascent   = l[3].cast<int>();
-                    fm->descent  = l[4].cast<int>();
-                    fm->x_height = l[5].cast<int>();
-                    fm->ch_width = l[6].cast<int>();
-                    fm->draw_spaces = true;
-                    fm->sub_shift = 0;
-                    fm->super_shift = 0;
-                }
+            const char* m = "create_font";
+            py::sequence l = to_sequence(obj, 7, m,
+                "[hfont, font_size, height, ascent, descent, x_height, ch_width]");
+            result = to_int(l[0], m);
+            if( fm ) {
+                fm->font_size= to_pixel(l[1], m);
+                fm->height   = to_pixel(l[2], m);
+                fm->ascent   = to_pixel(l[3], m);
+                fm->descent  = to_pixel(l[4], m);
+                fm->x_height = to_pixel(l[5], m);
+                fm->ch_width = to_pixel(l[6], m);
+                fm->draw_spaces = true;
+                fm->sub_shift = 0;
+                fm->super_shift = 0;
             }
         }
         return result;
@@ -476,7 +500,7 @@ public:
         py::function pyfunc = pybind11::get_override(this, "text_width");
         if (pyfunc) {
             auto obj = pyfunc(text, hFont);
-            return to_pixel(obj);
+            return to_pixel(obj, "text_width");
         }
         return 0;
     }
@@ -500,7 +524,7 @@ public:
         py::function pyfunc = pybind11::get_override(this, "pt_to_px");
         if (pyfunc) {
             auto obj = pyfunc(pt);
-            return to_pixel(obj);
+            return to_pixel(obj, "pt_to_px");
         }
         return 0;
     }
@@ -513,7 +537,7 @@ public:
         py::function pyfunc = pybind11::get_override(this, "get_default_font_size");
         if (pyfunc) {
             auto obj = pyfunc();
-            return to_pixel(obj);
+            return to_pixel(obj, "get_default_font_size");
         }
         return 0;
     }
@@ -526,11 +550,12 @@ public:
         py::function pyfunc = pybind11::get_override(this, "get_default_font_name");
         if (pyfunc) {
             auto obj = pyfunc();
-            if (py::isinstance<py::str>(obj)) {
-                static std::string cached;
-                cached = obj.cast<std::string>();
-                return cached.c_str();
+            if (!py::isinstance<py::str>(obj)) {
+                bad_return("get_default_font_name", "str", obj);
             }
+            static std::string cached;
+            cached = obj.cast<std::string>();
+            return cached.c_str();
         }
         static const char* fallback = "";
         return fallback;
@@ -718,7 +743,13 @@ public:
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "transform_text");
         if (pyfunc) {
-            pyfunc(text, tt);
+            // str replaces text, None leaves it unchanged
+            auto obj = pyfunc(text, tt);
+            if (py::isinstance<py::str>(obj)) {
+                text = obj.cast<std::string>();
+            } else if (!obj.is_none()) {
+                bad_return("transform_text", "str or None", obj);
+            }
         }
     }
     void    import_css(std::string& text, const std::string& url, std::string& baseurl) override
@@ -729,9 +760,12 @@ public:
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "import_css");
         if (pyfunc) {
+            // str is the css text, None means not found
             auto obj = pyfunc(text, url, baseurl);
             if (py::isinstance<py::str>(obj)) {
                 text = obj.cast<std::string>();
+            } else if (!obj.is_none()) {
+                bad_return("import_css", "str or None", obj);
             }
         }
     }
@@ -804,18 +838,18 @@ public:
         py::function pyfunc = pybind11::get_override(this, "get_media_features");
         if (pyfunc) {
             auto obj = pyfunc();
-            if (py::isinstance<py::list>(obj)) {
-                py::list l = obj.cast<py::list>();
-                media.type              = (lh::media_type)l[0].cast<int>();
-                media.width             = l[1].cast<int>();
-                media.height            = l[2].cast<int>();
-                media.device_width      = l[3].cast<int>();
-                media.device_height     = l[4].cast<int>();
-                media.color             = l[5].cast<int>();
-                media.monochrome        = l[6].cast<int>();
-                media.color_index       = l[7].cast<int>();
-                media.resolution        = l[8].cast<int>();
-            }
+            const char* m = "get_media_features";
+            py::sequence l = to_sequence(obj, 9, m,
+                "(type, width, height, device_width, device_height, color, monochrome, color_index, resolution)");
+            media.type              = (lh::media_type)to_int(l[0], m);
+            media.width             = to_pixel(l[1], m);
+            media.height            = to_pixel(l[2], m);
+            media.device_width      = to_pixel(l[3], m);
+            media.device_height     = to_pixel(l[4], m);
+            media.color             = to_int(l[5], m);
+            media.monochrome        = to_int(l[6], m);
+            media.color_index       = to_int(l[7], m);
+            media.resolution        = to_pixel(l[8], m);
         }
     }
     void    get_language(std::string& language, std::string& culture) const override
@@ -827,11 +861,9 @@ public:
         py::function pyfunc = pybind11::get_override(this, "get_language");
         if (pyfunc) {
             auto obj = pyfunc();
-            if (py::isinstance<py::tuple>(obj) && py::len(obj) == 2) {
-                auto tup = obj.cast<py::tuple>();
-                language = tup[0].cast<std::string>();
-                culture = tup[1].cast<std::string>();
-            }
+            py::sequence tup = to_sequence(obj, 2, "get_language", "(language, culture)");
+            language = tup[0].cast<std::string>();
+            culture = tup[1].cast<std::string>();
         }
     }
 #if 0
@@ -1059,9 +1091,12 @@ public:
         py::gil_scoped_acquire gil;
         py::function pyfunc = pybind11::get_override(this, "import_css");
         if (pyfunc) {
+            // str is the css text, None means not found
             auto obj = pyfunc(text, url, baseurl);
             if (py::isinstance<py::str>(obj)) {
                 text = obj.cast<std::string>();
+            } else if (!obj.is_none()) {
+                bad_return("import_css", "str or None", obj);
             }
         }
     }

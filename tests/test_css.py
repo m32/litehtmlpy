@@ -106,3 +106,42 @@ def test_background_position_border_radius_and_box_shadow_render_stably():
     assert doc is not None
     assert doc.width().value > 0
     assert doc.height().value > 0
+
+
+class TextRecorder(DummyContainer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.texts = []
+
+    def draw_text(self, hdc, text, hFont, color, pos):
+        self.texts.append((text, (color.red, color.green, color.blue)))
+
+    def transform_text(self, text, tt):
+        if tt == litehtmlpy.text_transform_uppercase:
+            return text.upper()
+
+
+def draw_texts(html, width=800):
+    container = TextRecorder(width=width)
+    doc = litehtmlpy.fromString(container, html, None, None)
+    doc.render(container.size.width, litehtmlpy.render_all)
+    doc.draw(0, litehtmlpy.pixel_float_t(0), litehtmlpy.pixel_float_t(0),
+             litehtmlpy.position(0, 0, width, 1000))
+    return container.texts
+
+
+def test_media_query_uses_container_width():
+    html = """
+    <style>
+      p { color: red; }
+      @media (min-width: 500px) { p { color: blue; } }
+    </style>
+    <p>X</p>
+    """
+    assert draw_texts(html, width=800) == [('X', (0, 0, 255))]
+    assert draw_texts(html, width=400) == [('X', (255, 0, 0))]
+
+
+def test_transform_text_return_value_is_used():
+    texts = draw_texts('<p style="text-transform: uppercase">abc</p><p>def</p>')
+    assert [t for t, _ in texts] == ['ABC', 'def']

@@ -1,3 +1,4 @@
+import pytest
 from tests.common import DummyContainer, render_html
 from litehtmlpy import litehtmlpy
 
@@ -104,3 +105,17 @@ def test_image_tag_with_dimensions_renders():
     assert doc is not None
     assert doc.width().value > 0
     assert doc.height().value > 0
+
+
+@pytest.mark.parametrize("method, value", [
+    ("text_width", lambda self, text, hFont: "oops"),
+    ("get_default_font_size", lambda self: None),
+    ("create_font", lambda self, descr: [1, 15, 19, 15, 4]),
+    ("get_media_features", lambda self: [2, 800]),
+])
+def test_wrong_return_type_raises_type_error(method, value):
+    container_cls = type("BadContainer", (DummyContainer,), {method: value})
+    container = container_cls()
+    with pytest.raises(TypeError, match=method):
+        doc = litehtmlpy.fromString(container, "<p>Hello</p>", None, None)
+        doc.render(container.size.width, litehtmlpy.render_all)
