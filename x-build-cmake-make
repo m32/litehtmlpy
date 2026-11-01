@@ -1,4 +1,5 @@
 #!/bin/bash
 cmake \
---build build
+--build build \
+$*
 cp build/litehtmlpy.cpython-*.so src/litehtmlpy/
